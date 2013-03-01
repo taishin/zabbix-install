@@ -1,0 +1,4 @@
+05 2 * * * root /usr/bin/psql -p 5432 -h localhost -d zabbix -w postgres -c 'VACUUM ANALYZE;' > /dev/null
+35 2 * * * root /usr/bin/psql -p 5432 -h localhost -d zabbix -w postgres -f /var/lib/pgsql/data/reindex > /dev/null
+45 2 * * * root /usr/bin/find /var/lib/pgsql/data/pg_log -mtime 7 -exec rm {} \; > /dev/null
+
