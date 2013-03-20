@@ -68,7 +68,7 @@ resolve_value_ip_addresses = 0
 # Set to 0 to disable the use of the Perl module from the UCD-SNMP / NET-SNMP package.
 # Note: Enabling this with stand-alone mode can cause SNMPTT to run very slowly due to
 #       the loading of the MIBS at startup.
-net_snmp_perl_enable = 0
+net_snmp_perl_enable = 1
 
 # Set to 1 to enable caching of OID and ENUM translations when net_snmp_perl_enable is 
 # enabled.  Enabling this should result in faster translations.
@@ -100,7 +100,7 @@ net_snmp_perl_best_guess = 0
 #       -net_snmp_perl_enable *must* be enabled
 #       -If using database logging, ensure the trapoid column is large enough to hold the
 #        entire line
-translate_log_trap_oid = 0
+translate_log_trap_oid = 1
 
 # Configures how OIDs contained in the VALUE of the variable bindings are handled.
 # This only applies to the values for $n, $+n, $-n, $vn, $+*, $-*.  For substitutions
@@ -621,6 +621,10 @@ DEBUGGING_FILE_HANDLER = /var/log/snmptt/snmptthandler.debug
 # A list of snmptt.conf files (this is NOT the snmptrapd.conf file).  The COMPLETE path 
 # and filename.  Ex: '/etc/snmp/snmptt.conf'
 snmptt_conf_files = <<END
+/etc/snmp/snmpttconf/snmptt.conf.netsnmp
+/etc/snmp/snmpttconf/snmptt.conf.netapp
+/etc/snmp/snmpttconf/snmptt.conf.cisco
+/etc/snmp/snmpttconf/snmptt.conf.imm
 /etc/snmp/snmptt.conf
 END
 

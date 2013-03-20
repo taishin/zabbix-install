@@ -7,11 +7,38 @@
 # All rights reserved - Do Not Redistribute
 #
 
-execute "disable selinux enforcement" do
-  only_if "which selinuxenabled && selinuxenabled"
-  command "setenforce 0"
-  action :run
-  notifies :create, "template[/etc/selinux/config]"
+remote_file "#{Chef::Config[:file_cache_path]}/zabbix-release-2.0-1.noarch.rpm" do
+  source "http://repo.zabbix.com/zabbix/2.0/rhel/#{node[:platform_version].to_i}/#{node[:kernel][:machine]}/zabbix-release-2.0-1.el#{node[:platform_version].to_i}.noarch.rpm"
+end
+
+
+package "zabbix-release" do
+  action :install
+  source "#{Chef::Config[:file_cache_path]}/zabbix-release-2.0-1.noarch.rpm"
+  provider Chef::Provider::Package::Rpm
+end
+
+remote_file "#{Chef::Config[:file_cache_path]}/epel-release.noarch.rpm" do
+  source "http://dl.fedoraproject.org/pub/epel/#{node[:platform_version].to_i}/#{node[:kernel][:machine]}/epel-release-#{node[:platform_version].to_i}-8.noarch.rpm"
+end
+
+package "epel-release" do
+  action :install
+  source "#{Chef::Config[:file_cache_path]}/epel-release.noarch.rpm"
+  provider Chef::Provider::Package::Rpm
+end
+
+packages = %w{zabbix zabbix-agent zabbix-get zabbix-java-gateway zabbix-sender zabbix-server-pgsql zabbix-web zabbix-web-japanese zabbix-web-pgsql snmptt postgresql-server crontabs net-snmp-utils net-snmp-perl ntp tcpdump telnet vim-common bind-utils man}
+
+packages.each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
+execute "selinux" do
+  command "/usr/sbin/setenforce 0"
+  only_if { `/usr/sbin/getenforce` =~ /Enforcing/ }
 end
 
 template "/etc/selinux/config" do
@@ -20,107 +47,9 @@ template "/etc/selinux/config" do
   mode 0644
 end
 
-remote_file "/tmp/zabbix-release-2.0-1.el6.noarch.rpm" do
-  source "http://repo.zabbix.com/zabbix/2.0/rhel/6/x86_64/zabbix-release-2.0-1.el6.noarch.rpm"
-  mode "0644"
-end
+#zbx_version = `rpm -q zabbix-server-pgsql`.scan(/^(zabbix-server-pgsql-\d\.\d\.\d)/)[0]
+#zbx_version = `rpm -q zabbix-server-pgsql`.scan(/^(zabbix-server-pgsql-\d\.\d\.\d)/)[0][0]
 
-package "zabbix-release" do
-  action :install
-  source "/tmp/zabbix-release-2.0-1.el6.noarch.rpm"
-  provider Chef::Provider::Package::Rpm
-end
-
-remote_file "/tmp/epel-release-6-8.noarch.rpm" do
-  source "http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm"
-  mode "0644"
-end
-
-package "epel-release" do
-  action :install
-  source "/tmp/epel-release-6-8.noarch.rpm"
-  provider Chef::Provider::Package::Rpm
-end
-
-package "zabbix" do
-  action :install
-end
-
-package "zabbix-agent" do
-  action :install
-end
-
-package "zabbix-get" do
-  action :install
-end
-
-package "zabbix-java-gateway" do
-  action :install
-end
-
-package "zabbix-sender" do
-  action :install
-end
-
-package "zabbix-server-pgsql" do
-  action :install
-end
-
-package "zabbix-web" do
-  action :install
-end
-
-package "zabbix-web-japanese" do
-  action :install
-end
-
-package "zabbix-web-pgsql" do
-  action :install
-end
-
-package "snmptt" do
-  action :install
-end
-
-package "postgresql-server" do
-  action :install
-end
-
-package "crontabs" do
-  action :install
-end
-
-package "net-snmp-utils" do
-  action :install
-end
-
-package "ntp" do
-  action :install
-end
-
-package "tcpdump" do
-  action :install
-end
-
-package "telnet" do
-  action :install
-end
-
-package "telnet" do
-  action :install
-end
-
-package "vim" do
-  action :install
-end
-
-package "bind-utils" do
-  action :install
-end
-
-package "man" do
-  action :install
-end
 
 execute "/sbin/service postgresql initdb" do
   not_if { ::FileTest.exist?("/var/lib/pgsql/data/postgresql.conf") }
@@ -144,34 +73,55 @@ service "postgresql" do
 end
 
 execute "create-database-user" do
-	 code = <<-EOH
-	 psql -U postgres -c "select * from pg_user where usename='zabbix'" | grep -c zabbix
-	 EOH
-   command "createuser -U postgres -S -d -R zabbix"
-   not_if code 
+  code = <<-EOH
+  psql -U postgres -c "select * from pg_user where usename='zabbix'" | grep -c zabbix
+  EOH
+  command "createuser -U postgres zabbix -S -d -R"
+  not_if code 
 end
 
 execute "create-database-user" do
-	 exists = <<-EOH
-	 psql -U postgres -c "select * from pg_database WHERE datname='zabbix'" | grep -c zabbix
-	 EOH
-   command "createdb -U zabbix zabbix"
-    not_if exists
+  exists = <<-EOH
+  psql -U postgres -c "select * from pg_database WHERE datname='zabbix'" | grep -c zabbix
+  EOH
+  command "createdb -U zabbix zabbix"
+  not_if exists
 end
 
+#ruby_block "zbx_version" do
+#  zbx_version = `rpm -q zabbix-server-pgsql`.scan(/^(zabbix-server-pgsql-\d\.\d\.\d)/)[0][0]
+#end
 
-execute "create-schema" do
-   command "psql -f /usr/share/doc/zabbix-server-pgsql-2.0.5/create/schema.sql -U zabbix zabbix"
+#execute "zbx_version" do
+#  command "rpm -q zabbix-server-pgsql"
+#  action :nothing
+#end
+
+#execute "create-schema" do
+#   command "psql -f /usr/share/doc/#{zbx_version}/create/schema.sql -U zabbix zabbix"
+#  zbx_version = "execute[zbx_version]"
+#   command "psql -f /usr/share/doc/#{zbx_version}/create/schema.sql -U zabbix zabbix"
+#end
+
+script "create_zabbix_table" do
+  interpreter "bash"
+  user "root"
+  code <<-EOH
+  psql -f /usr/share/doc/`rpm -q zabbix-server-pgsql | sed -e s/-.\.el.\.x86_64//`/create/schema.sql -U zabbix zabbix
+  psql -f /usr/share/doc/`rpm -q zabbix-server-pgsql | sed -e s/-.\.el.\.x86_64//`/create/images.sql -U zabbix zabbix
+  psql -f /usr/share/doc/`rpm -q zabbix-server-pgsql | sed -e s/-.\.el.\.x86_64//`/create/data.sql -U zabbix zabbix
+  EOH
+end
+
+=begin
+execute "create-schema-data" do
+   command "psql -f /usr/share/doc/#{zbx_version}/create/data.sql -U zabbix zabbix"
 end
 
 execute "create-schema-images" do
-   command "psql -f /usr/share/doc/zabbix-server-pgsql-2.0.5/create/images.sql -U zabbix zabbix"
+   command "psql -f /usr/share/doc/#{zbx_version}/create/images.sql -U zabbix zabbix"
 end
-
-
-# execute "selinux" do
-#    command "/usr/sbin/setenforce 0"
-# end
+=end
 
 template "/var/lib/pgsql/data/reindex" do
   source "reindex.erb"
@@ -266,6 +216,40 @@ template "/etc/snmp/snmptt.ini" do
   mode 0644
 end
 
+cookbook_file "#{Chef::Config[:file_cache_path]}/vendor-mib.tar.gz" do
+  source "vendor-mib.tar.gz"
+end
+
+cookbook_file "#{Chef::Config[:file_cache_path]}/snmpttconf.tar.gz" do
+  source "snmpttconf.tar.gz"
+end
+
+script "install_mib" do
+  interpreter "bash"
+  user "root"
+  code <<-EOL
+    tar xzvf #{Chef::Config[:file_cache_path]}/vendor-mib.tar.gz -C /usr/share/snmp/mibs
+  EOL
+  not_if {::File.exists?("/usr/share/snmp/mibs/cisco")}
+end
+
+script "install_snmpttconf" do
+  interpreter "bash"
+  user "root"
+  code <<-EOL
+    tar xzvf #{Chef::Config[:file_cache_path]}/snmpttconf.tar.gz -C /etc/snmp
+  EOL
+  not_if {::File.exists?("/etc/snmp/snmpttconf")}
+  notifies :restart, "service[snmptt]" 
+end
+
+
+template "/etc/snmp/snmp.conf" do
+  source "snmp.conf.erb"
+  owner "root"
+  mode 0644
+end
+
 service "snmptrapd" do
   supports :status => true, :restart => true, :reload => true
   action [ :enable, :start ]
@@ -274,9 +258,5 @@ end
 service "snmptt" do
   supports :status => true, :restart => true, :reload => true
   action [ :enable, :start ]
-end
-
-execute "create-schema-data" do
-   command "psql -f /usr/share/doc/zabbix-server-pgsql-2.0.5/create/data.sql -U zabbix zabbix"
 end
 
