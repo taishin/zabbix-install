@@ -446,7 +446,8 @@ datestyle = 'iso, ymd'
 					# encoding
 
 # These settings are initialized by initdb, but they can be changed.
-lc_messages = 'ja_JP.UTF-8'			# locale for system error message
+#lc_messages = 'ja_JP.UTF-8'			# locale for system error message
+lc_messages = 'C'			# locale for system error message
 					# strings
 lc_monetary = 'ja_JP.UTF-8'			# locale for monetary formatting
 lc_numeric = 'ja_JP.UTF-8'			# locale for number formatting
@@ -466,6 +467,7 @@ default_text_search_config = 'pg_catalog.simple'
 #------------------------------------------------------------------------------
 
 #deadlock_timeout = 1s
+deadlock_timeout = 5s
 #max_locks_per_transaction = 64		# min 10
 					# (change requires restart)
 # Note:  Each lock table slot uses ~270 bytes of shared memory, and there are

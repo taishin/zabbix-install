@@ -1,0 +1,22 @@
+default['zabbix-server']['packages'] = %w{
+  zabbix
+  zabbix-agent
+  zabbix-get
+  zabbix-java-gateway
+  zabbix-sender
+  zabbix-server-pgsql
+  zabbix-web
+  zabbix-web-japanese
+  zabbix-web-pgsql
+  snmptt
+  postgresql-server
+  crontabs
+  net-snmp-utils
+  net-snmp-perl
+  ntp
+  tcpdump
+  telnet
+  vim-enhanced
+  bind-utils
+  man
+}

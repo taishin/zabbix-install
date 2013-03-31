@@ -6,5 +6,5 @@ if [ "$https_proxy" != "" ]; then
   echo "https_proxy \"$http_proxy\"" >> solo.rb
 fi
 
-
-/usr/bin/chef-solo -j ./chef.json -c ./solo.rb
+curl -L https://www.opscode.com/chef/install.sh | bash
+/usr/bin/chef-solo -o 'recipe[zabbix-server]' -c ./solo.rb

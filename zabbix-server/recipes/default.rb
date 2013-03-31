@@ -28,9 +28,7 @@ package "epel-release" do
   provider Chef::Provider::Package::Rpm
 end
 
-packages = %w{zabbix zabbix-agent zabbix-get zabbix-java-gateway zabbix-sender zabbix-server-pgsql zabbix-web zabbix-web-japanese zabbix-web-pgsql snmptt postgresql-server crontabs net-snmp-utils net-snmp-perl ntp tcpdump telnet vim-common bind-utils man}
-
-packages.each do |pkg|
+node['zabbix-server']['packages'].each do |pkg|
   package pkg do
     action :install
   end
@@ -46,9 +44,6 @@ template "/etc/selinux/config" do
   owner "root"
   mode 0644
 end
-
-#zbx_version = `rpm -q zabbix-server-pgsql`.scan(/^(zabbix-server-pgsql-\d\.\d\.\d)/)[0]
-#zbx_version = `rpm -q zabbix-server-pgsql`.scan(/^(zabbix-server-pgsql-\d\.\d\.\d)/)[0][0]
 
 
 execute "/sbin/service postgresql initdb" do
@@ -88,21 +83,6 @@ execute "create-database-user" do
   not_if exists
 end
 
-#ruby_block "zbx_version" do
-#  zbx_version = `rpm -q zabbix-server-pgsql`.scan(/^(zabbix-server-pgsql-\d\.\d\.\d)/)[0][0]
-#end
-
-#execute "zbx_version" do
-#  command "rpm -q zabbix-server-pgsql"
-#  action :nothing
-#end
-
-#execute "create-schema" do
-#   command "psql -f /usr/share/doc/#{zbx_version}/create/schema.sql -U zabbix zabbix"
-#  zbx_version = "execute[zbx_version]"
-#   command "psql -f /usr/share/doc/#{zbx_version}/create/schema.sql -U zabbix zabbix"
-#end
-
 script "create_zabbix_table" do
   interpreter "bash"
   user "root"
@@ -111,22 +91,6 @@ script "create_zabbix_table" do
   psql -f /usr/share/doc/`rpm -q zabbix-server-pgsql | sed -e s/-.\.el.\.x86_64//`/create/images.sql -U zabbix zabbix
   psql -f /usr/share/doc/`rpm -q zabbix-server-pgsql | sed -e s/-.\.el.\.x86_64//`/create/data.sql -U zabbix zabbix
   EOH
-end
-
-=begin
-execute "create-schema-data" do
-   command "psql -f /usr/share/doc/#{zbx_version}/create/data.sql -U zabbix zabbix"
-end
-
-execute "create-schema-images" do
-   command "psql -f /usr/share/doc/#{zbx_version}/create/images.sql -U zabbix zabbix"
-end
-=end
-
-template "/var/lib/pgsql/data/reindex" do
-  source "reindex.erb"
-  owner "root"
-  mode 0644
 end
 
 template "/etc/cron.d/postgresql_maintenance" do
