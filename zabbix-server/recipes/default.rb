@@ -132,6 +132,11 @@ service "zabbix-server" do
   action [ :enable, :start ]
 end
 
+service "zabbix-java-gateway" do
+  supports :status => true, :restart => true, :reload => true
+  action [ :enable, :start ]
+end
+
 service "zabbix-agent" do
   supports :status => true, :restart => true, :reload => true
   action [ :enable, :start ]

@@ -345,8 +345,7 @@ DocumentRoot "/var/www/html"
 
     RewriteEngine On
     RewriteBase /
-    RewriteCond %{REQUEST_URI} !zabbix.*$
-    RewriteRule ^(.*)$ zabbix/$1 [R,L]
+    RewriteRule ^$ /zabbix [R,L]
 </Directory>
 
 #
