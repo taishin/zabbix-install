@@ -1,5 +1,5 @@
 #
-# SNMPTT v1.4beta2 Configuration File
+# SNMPTT v1.3 Configuration File
 #
 # Linux / Unix
 #
@@ -13,6 +13,7 @@ snmptt_system_name =
 # standalone: snmptt called from snmptrapd.conf
 # daemon: snmptrapd.conf calls snmptthandler
 # Ignored by Windows.  See documentation
+# mode = standalone
 mode = daemon
 
 # Set to 1 to allow multiple trap definitions to be executed for the same trap.
@@ -70,13 +71,6 @@ resolve_value_ip_addresses = 0
 #       the loading of the MIBS at startup.
 net_snmp_perl_enable = 1
 
-# Set to 1 to enable caching of OID and ENUM translations when net_snmp_perl_enable is 
-# enabled.  Enabling this should result in faster translations.
-# Set to 0 to disable caching.
-# Note: Restart SNMPTT after updating the MIB files for Net-SNMP, otherwise the cache may
-# contain inaccurate data.  Defaults to 1.
-net_snmp_perl_cache_enable = 1
-
 # This sets the best_guess parameter used by the UCD-SNMP / NET-SNMP Perl module for 
 # translating symbolic nams to OIDs and vice versa.
 # For UCD-SNMP, and Net-SNMP 5.0.8 and previous versions, set this value to 0.
@@ -85,7 +79,7 @@ net_snmp_perl_cache_enable = 1
 # UCD-SNMP and Net-SNMP 5.0.8 and previous may not be able to translate certain formats of
 # symbolic names such as RFC1213-MIB::sysDescr.  Net-SNMP 5.0.9 or patch 722075 will allow
 # all possibilities to be translated.  See the FAQ section in the README for more info
-net_snmp_perl_best_guess = 0
+net_snmp_perl_best_guess = 2
 
 # Configures how the OID of the received trap is handled when outputting to a log file /
 # database.  It does NOT apply to the $O variable.
@@ -143,7 +137,7 @@ translate_integers = 1
 # Leave blank or comment out to have the systems enviroment settings used
 # To have all MIBS processed, set to ALL
 # See the snmp.conf manual page for more info
-#mibs_environment = ALL
+mibs_environment = ALL
 
 # Set what is used to separate variables when wildcards are expanded on the FORMAT /
 # EXEC line.  Defaults to a space.  Value MUST be within quotes.  Can contain 1 or 
@@ -251,7 +245,7 @@ pid_file = /var/run/snmptt.pid
 spool_directory = /var/spool/snmptt/
 
 # Amount of time in seconds to sleep between processing spool files
-sleep = 5
+sleep = 1
 
 # Set to 1 to have SNMPTT use the time that the trap was processed by SNMPTTHANDLER
 # Set to 0 to have SNMPTT use the time the trap was processed.  Note:  Using 0 can
@@ -604,27 +598,32 @@ exec_escape = 1
 # 0 - do not output messages
 # 1 - output some basic messages
 # 2 - out all messages
-DEBUGGING = 0
+DEBUGGING = 1
 
 # Debugging file - SNMPTT
 # Location of debugging output file.  Leave blank to default to STDOUT (good for
 # standalone mode, or daemon mode without forking)
-#DEBUGGING_FILE = 
+# DEBUGGING_FILE = 
 DEBUGGING_FILE = /var/log/snmptt/snmptt.debug
 
 # Debugging file - SNMPTTHANDLER
 # Location of debugging output file.  Leave blank to default to STDOUT
-#DEBUGGING_FILE_HANDLER = 
+# DEBUGGING_FILE_HANDLER = 
 DEBUGGING_FILE_HANDLER = /var/log/snmptt/snmptthandler.debug
 
 [TrapFiles]
 # A list of snmptt.conf files (this is NOT the snmptrapd.conf file).  The COMPLETE path 
 # and filename.  Ex: '/etc/snmp/snmptt.conf'
 snmptt_conf_files = <<END
-/etc/snmp/snmpttconf/snmptt.conf.netsnmp
-/etc/snmp/snmpttconf/snmptt.conf.netapp
+/etc/snmp/snmptt.conf
+/etc/snmp/IF-MIB.conf
+/etc/snmp/SNMPv2-MIB.conf
 /etc/snmp/snmpttconf/snmptt.conf.cisco
 /etc/snmp/snmpttconf/snmptt.conf.imm
-/etc/snmp/snmptt.conf
+/etc/snmp/snmpttconf/snmptt.conf.netapp
+/etc/snmp/snmpttconf/snmptt.conf.netsnmp
+/etc/snmp/snmpttconf/snmptt.conf.netscaler
+/etc/snmp/snmpttconf/snmptt.conf.hp
+/etc/snmp/snmpttconf/snmptt.conf.clusterpro
 END
 
