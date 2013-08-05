@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: zabbix-server
+# Cookbook Name:: zabbix-proxy
 # Recipe:: default
 #
 # Copyright 2013, YOUR_COMPANY_NAME
@@ -28,19 +28,18 @@ package "epel-release" do
   provider Chef::Provider::Package::Rpm
 end
 
-node['zabbix-server']['packages']['zabbix'].each do |pkg|
+node['zabbix-proxy']['packages']['zabbix'].each do |pkg|
   package pkg do
     version "#{node['zabbix-server']['version']}.el#{node[:platform_version].to_i}"
     action :install
   end
 end
 
-node['zabbix-server']['packages']['other'].each do |pkg|
+node['zabbix-proxy']['packages']['other'].each do |pkg|
   package pkg do
     action :install
   end
 end
-
 
 execute "selinux" do
   command "/usr/sbin/setenforce 0"
@@ -83,23 +82,23 @@ execute "create-database-user" do
   not_if code 
 end
 
-execute "create-database-user" do
+execute "create-database" do
   exists = <<-EOH
-  psql -U postgres -c "select * from pg_database WHERE datname='zabbix'" | grep -c zabbix
+  psql -U postgres -c "select * from pg_database WHERE datname='zabbix_proxy'" | grep -c zabbix
   EOH
-  command "createdb -U zabbix zabbix"
+  command "createdb -U zabbix zabbix_proxy"
   not_if exists
 end
 
-script "create_zabbix_table" do
-  interpreter "bash"
-  user "root"
-  code <<-EOH
-  psql -f /usr/share/doc/`rpm -q zabbix-server-pgsql | sed -e s/-.\.el.\.x86_64//`/create/schema.sql -U zabbix zabbix
-  psql -f /usr/share/doc/`rpm -q zabbix-server-pgsql | sed -e s/-.\.el.\.x86_64//`/create/images.sql -U zabbix zabbix
-  psql -f /usr/share/doc/`rpm -q zabbix-server-pgsql | sed -e s/-.\.el.\.x86_64//`/create/data.sql -U zabbix zabbix
-  EOH
-end
+#script "create_zabbix_table" do
+#  interpreter "bash"
+#  user "root"
+#  code <<-EOH
+#  psql -f /usr/share/doc/`rpm -q zabbix-proxy-pgsql | sed -e s/-.\.el.\.x86_64//`/create/schema.sql -U zabbix zabbix_proxy
+#  EOH
+#end
+#  psql -f /usr/share/doc/`rpm -q zabbix-proxy-pgsql | sed -e s/-.\.el.\.x86_64//`/create/images.sql -U zabbix zabbix_proxy
+#  psql -f /usr/share/doc/`rpm -q zabbix-proxy-pgsql | sed -e s/-.\.el.\.x86_64//`/create/data.sql -U zabbix zabbix_proxy
 
 template "/etc/cron.d/postgresql_maintenance" do
   source "postgresql_maintenance.erb"
@@ -107,52 +106,21 @@ template "/etc/cron.d/postgresql_maintenance" do
   mode 0644
 end
 
-template "/etc/zabbix/zabbix_server.conf" do
-  source "zabbix_server.conf.erb"
+template "/etc/zabbix/zabbix_proxy.conf" do
+  source "zabbix_proxy.conf.erb"
   owner "root"
-  notifies :restart, "service[zabbix-server]"
+  notifies :restart, 'service[zabbix-proxy]'
   mode 0640
 end
 
-template "/etc/zabbix/web/zabbix.conf.php" do
-  source "zabbix.conf.php.erb"
-  owner "root"
-  notifies :restart, "service[zabbix-server]"
-  mode 0644
-end
-
-template "/etc/php.ini" do
-  source "php.ini.erb"
-  owner "root"
-  notifies :restart, "service[httpd]"
-  mode 0644
-end
-
-template "/etc/httpd/conf/httpd.conf" do
-  source "httpd.conf.erb"
-  owner "root"
-  notifies :restart, "service[httpd]"
-  mode 0644
-end
-
-service "zabbix-server" do
-  supports :status => true, :restart => true, :reload => true
-  action [ :enable, :start ]
+service "zabbix-proxy" do
+  supports :status => true, :restart => true
+  action [ :enable, :start]
 end
 
 service "zabbix-java-gateway" do
-  supports :status => true, :restart => true, :reload => true
-  action [ :enable, :start ]
-end
-
-service "zabbix-agent" do
-  supports :status => true, :restart => true, :reload => true
-  action [ :enable, :start ]
-end
-
-service "httpd" do
-  supports :status => true, :restart => true, :reload => true
-  action [ :enable, :start ]
+  supports :status => true, :restart => true
+  action [ :enable, :start]
 end
 
 service "iptables" do
