@@ -7,4 +7,4 @@ if [ "$https_proxy" != "" ]; then
 fi
 
 curl -L https://www.opscode.com/chef/install.sh | bash
-/usr/bin/chef-solo -o 'recipe[zabbix-server]' -c ./solo.rb
+/usr/bin/chef-solo -j ./chef.json -c ./solo.rb
