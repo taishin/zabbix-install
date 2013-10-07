@@ -1,0 +1,1181 @@
+#
+#
+#
+#
+MIB: AGENTX-MIB (file:/usr/share/snmp/mibs/AGENTX-MIB.txt) converted on Sun Feb 24 10:28:43 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: BRIDGE-MIB (file:/usr/share/snmp/mibs/BRIDGE-MIB.txt) converted on Sun Feb 24 10:28:43 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT newRoot .1.3.6.1.2.1.17.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA The newRoot trap indicates that the sending agent has $*
+SDESC
+The newRoot trap indicates that the sending agent has
+become the new root of the Spanning Tree; the trap is
+sent by a bridge soon after its election as the new
+root, e.g., upon expiration of the Topology Change Timer,
+immediately subsequent to its election.  Implementation
+of this trap is optional.
+EDESC
+#
+#
+#
+EVENT topologyChange .1.3.6.1.2.1.17.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA A topologyChange trap is sent by a bridge when any of $*
+SDESC
+A topologyChange trap is sent by a bridge when any of
+its configured ports transitions from the Learning state
+to the Forwarding state, or from the Forwarding state to
+the Blocking state.  The trap is not sent if a newRoot
+trap is sent for the same transition.  Implementation of
+this trap is optional.
+EDESC
+#
+#
+#
+#
+MIB: DISMAN-EVENT-MIB (file:/usr/share/snmp/mibs/DISMAN-EVENT-MIB.txt) converted on Sun Feb 24 10:28:43 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT mteTriggerFired .1.3.6.1.2.1.88.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA Notification that the trigger indicated by the object $*
+SDESC
+Notification that the trigger indicated by the object
+instances has fired, for triggers with mteTriggerType
+'boolean' or 'existence'.
+Variables:
+  1: mteHotTrigger
+     Syntax="OCTETSTR"
+     Descr="The name of the trigger causing the notification."
+  2: mteHotTargetName
+     Syntax="OCTETSTR"
+     Descr="The SNMP Target MIB's snmpTargetAddrName related to the
+        notification."
+  3: mteHotContextName
+     Syntax="OCTETSTR"
+     Descr="The context name related to the notification.  This MUST be as
+        fully-qualified as possible, including filling in wildcard
+        information determined in processing."
+  4: mteHotOID
+     Syntax="OBJECTID"
+     Descr="The object identifier of the destination object related to the
+        notification.  This MUST be as fully-qualified as possible,
+        including filling in wildcard information determined in
+        processing.
+
+        For a trigger-related notification this is from
+        mteTriggerValueID.
+
+        For a set failure this is from mteEventSetObject."
+  5: mteHotValue
+     Syntax="INTEGER32"
+     Descr="The value of the object at mteTriggerValueID when a
+        trigger fired."
+EDESC
+#
+#
+#
+EVENT mteTriggerRising .1.3.6.1.2.1.88.2.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA Notification that the rising threshold was met for triggers $*
+SDESC
+Notification that the rising threshold was met for triggers
+with mteTriggerType 'threshold'.
+Variables:
+  1: mteHotTrigger
+     Syntax="OCTETSTR"
+     Descr="The name of the trigger causing the notification."
+  2: mteHotTargetName
+     Syntax="OCTETSTR"
+     Descr="The SNMP Target MIB's snmpTargetAddrName related to the
+        notification."
+  3: mteHotContextName
+     Syntax="OCTETSTR"
+     Descr="The context name related to the notification.  This MUST be as
+        fully-qualified as possible, including filling in wildcard
+        information determined in processing."
+  4: mteHotOID
+     Syntax="OBJECTID"
+     Descr="The object identifier of the destination object related to the
+        notification.  This MUST be as fully-qualified as possible,
+        including filling in wildcard information determined in
+        processing.
+
+        For a trigger-related notification this is from
+        mteTriggerValueID.
+
+        For a set failure this is from mteEventSetObject."
+  5: mteHotValue
+     Syntax="INTEGER32"
+     Descr="The value of the object at mteTriggerValueID when a
+        trigger fired."
+EDESC
+#
+#
+#
+EVENT mteTriggerFalling .1.3.6.1.2.1.88.2.0.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA Notification that the falling threshold was met for triggers $*
+SDESC
+Notification that the falling threshold was met for triggers
+with mteTriggerType 'threshold'.
+Variables:
+  1: mteHotTrigger
+     Syntax="OCTETSTR"
+     Descr="The name of the trigger causing the notification."
+  2: mteHotTargetName
+     Syntax="OCTETSTR"
+     Descr="The SNMP Target MIB's snmpTargetAddrName related to the
+        notification."
+  3: mteHotContextName
+     Syntax="OCTETSTR"
+     Descr="The context name related to the notification.  This MUST be as
+        fully-qualified as possible, including filling in wildcard
+        information determined in processing."
+  4: mteHotOID
+     Syntax="OBJECTID"
+     Descr="The object identifier of the destination object related to the
+        notification.  This MUST be as fully-qualified as possible,
+        including filling in wildcard information determined in
+        processing.
+
+        For a trigger-related notification this is from
+        mteTriggerValueID.
+
+        For a set failure this is from mteEventSetObject."
+  5: mteHotValue
+     Syntax="INTEGER32"
+     Descr="The value of the object at mteTriggerValueID when a
+        trigger fired."
+EDESC
+#
+#
+#
+EVENT mteTriggerFailure .1.3.6.1.2.1.88.2.0.4 "Status Events" Normal
+FORMAT ZBXTRAP $aA Notification that an attempt to check a trigger has failed. $*
+SDESC
+Notification that an attempt to check a trigger has failed.
+The network manager must enable this notification only with
+a certain fear and trembling, as it can easily crowd out more
+important information.  It should be used only to help diagnose
+a problem that has appeared in the error counters and can not
+be found otherwise.
+Variables:
+  1: mteHotTrigger
+     Syntax="OCTETSTR"
+     Descr="The name of the trigger causing the notification."
+  2: mteHotTargetName
+     Syntax="OCTETSTR"
+     Descr="The SNMP Target MIB's snmpTargetAddrName related to the
+        notification."
+  3: mteHotContextName
+     Syntax="OCTETSTR"
+     Descr="The context name related to the notification.  This MUST be as
+        fully-qualified as possible, including filling in wildcard
+        information determined in processing."
+  4: mteHotOID
+     Syntax="OBJECTID"
+     Descr="The object identifier of the destination object related to the
+        notification.  This MUST be as fully-qualified as possible,
+        including filling in wildcard information determined in
+        processing.
+
+        For a trigger-related notification this is from
+        mteTriggerValueID.
+
+        For a set failure this is from mteEventSetObject."
+  5: mteFailedReason
+     Syntax="INTEGER"
+       -1: localResourceLack
+       -2: badDestination
+       -3: destinationUnreachable
+       -4: noResponse
+       -5: badType
+       -6: sampleOverrun
+       0: noError
+       1: tooBig
+       10: wrongValue
+       11: noCreation
+       12: inconsistentValue
+       13: resourceUnavailable
+       14: commitFailed
+       15: undoFailed
+       16: authorizationError
+       17: notWritable
+       18: inconsistentName
+       2: noSuchName
+       3: badValue
+       4: readOnly
+       5: genErr
+       6: noAccess
+       7: wrongType
+       8: wrongLength
+       9: wrongEncoding
+     Descr="The reason for the failure of an attempt to check for a
+        trigger condition or set an object in response to an event."
+EDESC
+#
+#
+#
+EVENT mteEventSetFailure .1.3.6.1.2.1.88.2.0.5 "Status Events" Normal
+FORMAT ZBXTRAP $aA Notification that an attempt to do a set in response to an $*
+SDESC
+Notification that an attempt to do a set in response to an
+event has failed.
+The network manager must enable this notification only with
+a certain fear and trembling, as it can easily crowd out more
+important information.  It should be used only to help diagnose
+a problem that has appeared in the error counters and can not
+be found otherwise.
+Variables:
+  1: mteHotTrigger
+     Syntax="OCTETSTR"
+     Descr="The name of the trigger causing the notification."
+  2: mteHotTargetName
+     Syntax="OCTETSTR"
+     Descr="The SNMP Target MIB's snmpTargetAddrName related to the
+        notification."
+  3: mteHotContextName
+     Syntax="OCTETSTR"
+     Descr="The context name related to the notification.  This MUST be as
+        fully-qualified as possible, including filling in wildcard
+        information determined in processing."
+  4: mteHotOID
+     Syntax="OBJECTID"
+     Descr="The object identifier of the destination object related to the
+        notification.  This MUST be as fully-qualified as possible,
+        including filling in wildcard information determined in
+        processing.
+
+        For a trigger-related notification this is from
+        mteTriggerValueID.
+
+        For a set failure this is from mteEventSetObject."
+  5: mteFailedReason
+     Syntax="INTEGER"
+       -1: localResourceLack
+       -2: badDestination
+       -3: destinationUnreachable
+       -4: noResponse
+       -5: badType
+       -6: sampleOverrun
+       0: noError
+       1: tooBig
+       10: wrongValue
+       11: noCreation
+       12: inconsistentValue
+       13: resourceUnavailable
+       14: commitFailed
+       15: undoFailed
+       16: authorizationError
+       17: notWritable
+       18: inconsistentName
+       2: noSuchName
+       3: badValue
+       4: readOnly
+       5: genErr
+       6: noAccess
+       7: wrongType
+       8: wrongLength
+       9: wrongEncoding
+     Descr="The reason for the failure of an attempt to check for a
+        trigger condition or set an object in response to an event."
+EDESC
+#
+#
+#
+#
+MIB: DISMAN-SCHEDULE-MIB (file:/usr/share/snmp/mibs/DISMAN-SCHEDULE-MIB.txt) converted on Sun Feb 24 10:28:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT schedActionFailure .1.3.6.1.2.1.63.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is generated whenever the invocation of a $*
+SDESC
+This notification is generated whenever the invocation of a
+scheduled action fails.
+Variables:
+  1: schedLastFailure
+     Syntax="INTEGER"
+       -1: noResponse
+       0: noError
+       1: tooBig
+       10: wrongValue
+       11: noCreation
+       12: inconsistentValue
+       13: resourceUnavailable
+       14: commitFailed
+       15: undoFailed
+       16: authorizationError
+       17: notWritable
+       18: inconsistentName
+       2: noSuchName
+       3: badValue
+       4: readOnly
+       5: genErr
+       6: noAccess
+       7: wrongType
+       8: wrongLength
+       9: wrongEncoding
+     Descr="The most recent error that occurred during the invocation of
+         a scheduled action.  The value noError(0) is returned
+         if no errors have occurred yet."
+  2: schedLastFailed
+     Syntax="OCTETSTR"
+     Descr="The date and time when the most recent failure occurred.
+
+         The value '0000000000000000'H is returned if no failure
+         occurred since the last re-initialization of the scheduler."
+EDESC
+#
+#
+#
+#
+MIB: DISMAN-SCRIPT-MIB (file:/usr/share/snmp/mibs/DISMAN-SCRIPT-MIB.txt) converted on Sun Feb 24 10:28:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT smScriptAbort .1.3.6.1.2.1.64.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is generated whenever a running script $*
+SDESC
+This notification is generated whenever a running script
+terminates with an smRunExitCode unequal to `noError'.
+Variables:
+  1: smRunExitCode
+     Syntax="INTEGER"
+       1: noError
+       2: halted
+       3: lifeTimeExceeded
+       4: noResourcesLeft
+       5: languageError
+       6: runtimeError
+       7: invalidArgument
+       8: securityViolation
+       9: genericError
+     Descr="The value of this object indicates the reason why a
+         script finished execution. The smRunExitCode code may have
+         one of the following values:
+
+         - `noError', which indicates that the script completed
+            successfully without errors;
+
+         - `halted', which indicates that the script was halted
+            by a request from an authorized manager;
+
+         - `lifeTimeExceeded', which indicates that the script
+            exited because a time limit was exceeded;
+
+         - `noResourcesLeft', which indicates that the script
+            exited because it ran out of resources (e.g. memory);
+
+         - `languageError', which indicates that the script exited
+            because of a language error (e.g. a syntax error in an
+            interpreted language);
+
+         - `runtimeError', which indicates that the script exited
+            due to a runtime error (e.g. a division by zero);
+
+         - `invalidArgument', which indicates that the script could
+            not be run because of invalid script arguments;
+
+         - `securityViolation', which indicates that the script
+            exited due to a security violation;
+
+         - `genericError', which indicates that the script exited
+            for an unspecified reason.
+
+         If the script has not yet begun running, or is currently
+         running, the value will be `noError'."
+  2: smRunEndTime
+     Syntax="OCTETSTR"
+     Descr="The date and time when the execution terminated. The value
+         '0000000000000000'H is returned if the script has not
+         terminated yet."
+  3: smRunError
+     Syntax="OCTETSTR"
+     Descr="This object contains a descriptive error message if the
+         script startup or execution raised an abnormal condition.
+         An implementation must store a descriptive error message
+         in this object if the script exits with the smRunExitCode
+         `genericError'."
+EDESC
+#
+#
+#
+EVENT smScriptResult .1.3.6.1.2.1.64.2.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification can be used by scripts to notify other $*
+SDESC
+This notification can be used by scripts to notify other
+management applications about results produced by the
+script.
+This notification is not automatically generated by the
+Script MIB implementation. It is the responsibility of
+the executing script to emit this notification where it
+is appropriate to do so.
+Variables:
+  1: smRunResult
+     Syntax="OCTETSTR"
+     Descr="The result value produced by the running script. Note that
+         the result may change while the script is executing."
+EDESC
+#
+#
+#
+EVENT smScriptException .1.3.6.1.2.1.64.2.0.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification can be used by scripts to notify other $*
+SDESC
+This notification can be used by scripts to notify other
+management applications about script errors.
+This notification is not automatically generated by the
+Script MIB implementation. It is the responsibility of
+the executing script or the runtime system to emit this
+notification where it is appropriate to do so.
+Variables:
+  1: smRunError
+     Syntax="OCTETSTR"
+     Descr="This object contains a descriptive error message if the
+         script startup or execution raised an abnormal condition.
+         An implementation must store a descriptive error message
+         in this object if the script exits with the smRunExitCode
+         `genericError'."
+EDESC
+#
+#
+#
+#
+MIB: EtherLike-MIB (file:/usr/share/snmp/mibs/EtherLike-MIB.txt) converted on Sun Feb 24 10:28:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: HCNUM-TC (file:/usr/share/snmp/mibs/HCNUM-TC.txt) converted on Sun Feb 24 10:28:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: HOST-RESOURCES-MIB (file:/usr/share/snmp/mibs/HOST-RESOURCES-MIB.txt) converted on Sun Feb 24 10:28:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: HOST-RESOURCES-TYPES (file:/usr/share/snmp/mibs/HOST-RESOURCES-TYPES.txt) converted on Sun Feb 24 10:28:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IANA-ADDRESS-FAMILY-NUMBERS-MIB (file:/usr/share/snmp/mibs/IANA-ADDRESS-FAMILY-NUMBERS-MIB.txt) converted on Sun Feb 24 10:28:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IANA-LANGUAGE-MIB (file:/usr/share/snmp/mibs/IANA-LANGUAGE-MIB.txt) converted on Sun Feb 24 10:28:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IANA-RTPROTO-MIB (file:/usr/share/snmp/mibs/IANA-RTPROTO-MIB.txt) converted on Sun Feb 24 10:28:45 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IANAifType-MIB (file:/usr/share/snmp/mibs/IANAifType-MIB.txt) converted on Sun Feb 24 10:28:45 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IF-INVERTED-STACK-MIB (file:/usr/share/snmp/mibs/IF-INVERTED-STACK-MIB.txt) converted on Sun Feb 24 10:28:45 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IF-MIB (file:/usr/share/snmp/mibs/IF-MIB.txt) converted on Sun Feb 24 10:28:45 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT linkDown .1.3.6.1.6.3.1.1.5.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA A linkDown trap signifies that the SNMP entity, acting in $*
+SDESC
+A linkDown trap signifies that the SNMP entity, acting in
+an agent role, has detected that the ifOperStatus object for
+one of its communication links is about to enter the down
+state from some other state (but not from the notPresent
+state).  This other state is indicated by the included value
+of ifOperStatus.
+Variables:
+  1: ifIndex
+     Syntax="INTEGER32"
+     Descr="A unique value, greater than zero, for each interface.  It
+            is recommended that values are assigned contiguously
+            starting from 1.  The value for each interface sub-layer
+            must remain constant at least from one re-initialization of
+            the entity's network management system to the next re-
+            initialization."
+  2: ifAdminStatus
+     Syntax="INTEGER"
+       1: up
+       2: down
+       3: testing
+     Descr="The desired state of the interface.  The testing(3) state
+            indicates that no operational packets can be passed.  When a
+            managed system initializes, all interfaces start with
+            ifAdminStatus in the down(2) state.  As a result of either
+            explicit management action or per configuration information
+            retained by the managed system, ifAdminStatus is then
+            changed to either the up(1) or testing(3) states (or remains
+            in the down(2) state)."
+  3: ifOperStatus
+     Syntax="INTEGER"
+       1: up
+       2: down
+       3: testing
+       4: unknown
+       5: dormant
+       6: notPresent
+       7: lowerLayerDown
+     Descr="The current operational state of the interface.  The
+            testing(3) state indicates that no operational packets can
+            be passed.  If ifAdminStatus is down(2) then ifOperStatus
+            should be down(2).  If ifAdminStatus is changed to up(1)
+            then ifOperStatus should change to up(1) if the interface is
+            ready to transmit and receive network traffic; it should
+            change to dormant(5) if the interface is waiting for
+            external actions (such as a serial line waiting for an
+            incoming connection); it should remain in the down(2) state
+            if and only if there is a fault that prevents it from going
+            to the up(1) state; it should remain in the notPresent(6)
+            state if the interface has missing (typically, hardware)
+            components."
+EDESC
+#
+#
+#
+EVENT linkUp .1.3.6.1.6.3.1.1.5.4 "Status Events" Normal
+FORMAT ZBXTRAP $aA A linkUp trap signifies that the SNMP entity, acting in an $*
+SDESC
+A linkUp trap signifies that the SNMP entity, acting in an
+agent role, has detected that the ifOperStatus object for
+one of its communication links left the down state and
+transitioned into some other state (but not into the
+notPresent state).  This other state is indicated by the
+included value of ifOperStatus.
+Variables:
+  1: ifIndex
+     Syntax="INTEGER32"
+     Descr="A unique value, greater than zero, for each interface.  It
+            is recommended that values are assigned contiguously
+            starting from 1.  The value for each interface sub-layer
+            must remain constant at least from one re-initialization of
+            the entity's network management system to the next re-
+            initialization."
+  2: ifAdminStatus
+     Syntax="INTEGER"
+       1: up
+       2: down
+       3: testing
+     Descr="The desired state of the interface.  The testing(3) state
+            indicates that no operational packets can be passed.  When a
+            managed system initializes, all interfaces start with
+            ifAdminStatus in the down(2) state.  As a result of either
+            explicit management action or per configuration information
+            retained by the managed system, ifAdminStatus is then
+            changed to either the up(1) or testing(3) states (or remains
+            in the down(2) state)."
+  3: ifOperStatus
+     Syntax="INTEGER"
+       1: up
+       2: down
+       3: testing
+       4: unknown
+       5: dormant
+       6: notPresent
+       7: lowerLayerDown
+     Descr="The current operational state of the interface.  The
+            testing(3) state indicates that no operational packets can
+            be passed.  If ifAdminStatus is down(2) then ifOperStatus
+            should be down(2).  If ifAdminStatus is changed to up(1)
+            then ifOperStatus should change to up(1) if the interface is
+            ready to transmit and receive network traffic; it should
+            change to dormant(5) if the interface is waiting for
+            external actions (such as a serial line waiting for an
+            incoming connection); it should remain in the down(2) state
+            if and only if there is a fault that prevents it from going
+            to the up(1) state; it should remain in the notPresent(6)
+            state if the interface has missing (typically, hardware)
+            components."
+EDESC
+#
+#
+#
+#
+MIB: INET-ADDRESS-MIB (file:/usr/share/snmp/mibs/INET-ADDRESS-MIB.txt) converted on Sun Feb 24 10:28:45 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IP-FORWARD-MIB (file:/usr/share/snmp/mibs/IP-FORWARD-MIB.txt) converted on Sun Feb 24 10:28:45 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IP-MIB (file:/usr/share/snmp/mibs/IP-MIB.txt) converted on Sun Feb 24 10:28:45 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IPV6-ICMP-MIB (file:/usr/share/snmp/mibs/IPV6-ICMP-MIB.txt) converted on Sun Feb 24 10:28:45 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IPV6-MIB (file:/usr/share/snmp/mibs/IPV6-MIB.txt) converted on Sun Feb 24 10:28:46 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT ipv6IfStateChange .1.3.6.1.2.1.55.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA An ipv6IfStateChange notification signifies $*
+SDESC
+An ipv6IfStateChange notification signifies
+that there has been a change in the state of
+an ipv6 interface.  This notification should
+be generated when the interface's operational
+status transitions to or from the up(1) state.
+Variables:
+  1: ipv6IfDescr
+     Syntax="OCTETSTR"
+     Descr="A textual string containing information about the
+       interface.  This string may be set by the network
+       management system."
+  2: ipv6IfOperStatus
+     Syntax="INTEGER"
+       1: up
+       2: down
+       3: noIfIdentifier
+       4: unknown
+       5: notPresent
+     Descr="The current operational state of the interface.
+      The noIfIdentifier(3) state indicates that no valid
+      Interface Identifier is assigned to the interface.
+      This state usually indicates that the link-local
+      interface address failed Duplicate Address Detection.
+      If ipv6IfAdminStatus is down(2) then ipv6IfOperStatus
+      should be down(2).  If ipv6IfAdminStatus is changed
+      to up(1) then ipv6IfOperStatus should change to up(1)
+      if the interface is ready to transmit and receive
+      network traffic; it should remain in the down(2) or
+      noIfIdentifier(3) state if and only if there is a
+      fault that prevents it from going to the up(1) state;
+      it should remain in the notPresent(5) state if
+      the interface has missing (typically, lower layer)
+      components."
+EDESC
+#
+#
+#
+#
+MIB: IPV6-TC (file:/usr/share/snmp/mibs/IPV6-TC.txt) converted on Sun Feb 24 10:28:46 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IPV6-TCP-MIB (file:/usr/share/snmp/mibs/IPV6-TCP-MIB.txt) converted on Sun Feb 24 10:28:46 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IPV6-UDP-MIB (file:/usr/share/snmp/mibs/IPV6-UDP-MIB.txt) converted on Sun Feb 24 10:28:46 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: LM-SENSORS-MIB (file:/usr/share/snmp/mibs/LM-SENSORS-MIB.txt) converted on Sun Feb 24 10:28:46 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: MTA-MIB (file:/usr/share/snmp/mibs/MTA-MIB.txt) converted on Sun Feb 24 10:28:46 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: NET-SNMP-AGENT-MIB (file:/usr/share/snmp/mibs/NET-SNMP-AGENT-MIB.txt) converted on Sun Feb 24 10:28:46 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT nsNotifyStart .1.3.6.1.4.1.8072.4.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA An indication that the agent has started running. $*
+SDESC
+An indication that the agent has started running.
+EDESC
+#
+#
+#
+EVENT nsNotifyShutdown .1.3.6.1.4.1.8072.4.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA An indication that the agent is in the process of being shut down. $*
+SDESC
+An indication that the agent is in the process of being shut down.
+EDESC
+#
+#
+#
+EVENT nsNotifyRestart .1.3.6.1.4.1.8072.4.0.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA An indication that the agent has been restarted. $*
+SDESC
+An indication that the agent has been restarted.
+This does not imply anything about whether the configuration has
+changed or not (unlike the standard coldStart or warmStart traps)
+EDESC
+#
+#
+#
+#
+MIB: NET-SNMP-EXAMPLES-MIB (file:/usr/share/snmp/mibs/NET-SNMP-EXAMPLES-MIB.txt) converted on Sun Feb 24 10:28:46 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT netSnmpExampleHeartbeatNotification .1.3.6.1.4.1.8072.2.3.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA An example notification, used to illustrate the $*
+SDESC
+An example notification, used to illustrate the
+definition and generation of trap and inform PDUs
+(including the use of both standard and additional
+varbinds in the notification payload).
+This notification will typically be sent every
+30 seconds, using the code found in the example module
+agent/mibgroup/examples/notification.c
+Variables:
+  1: netSnmpExampleHeartbeatRate
+     Syntax="INTEGER32"
+     Descr="A simple integer object, to act as a payload for the
+         netSnmpExampleHeartbeatNotification.  The value has
+         no real meaning, but is nominally the interval (in
+         seconds) between successive heartbeat notifications."
+EDESC
+#
+#
+#
+#
+MIB: NET-SNMP-EXTEND-MIB (file:/usr/share/snmp/mibs/NET-SNMP-EXTEND-MIB.txt) converted on Sun Feb 24 10:28:46 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: NET-SNMP-MIB (file:/usr/share/snmp/mibs/NET-SNMP-MIB.txt) converted on Sun Feb 24 10:28:47 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: NET-SNMP-PASS-MIB (file:/usr/share/snmp/mibs/NET-SNMP-PASS-MIB.txt) converted on Sun Feb 24 10:28:47 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: NET-SNMP-TC (file:/usr/share/snmp/mibs/NET-SNMP-TC.txt) converted on Sun Feb 24 10:28:47 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: NET-SNMP-VACM-MIB (file:/usr/share/snmp/mibs/NET-SNMP-VACM-MIB.txt) converted on Sun Feb 24 10:28:47 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: NETWORK-SERVICES-MIB (file:/usr/share/snmp/mibs/NETWORK-SERVICES-MIB.txt) converted on Sun Feb 24 10:28:47 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: NOTIFICATION-LOG-MIB (file:/usr/share/snmp/mibs/NOTIFICATION-LOG-MIB.txt) converted on Sun Feb 24 10:28:47 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: RFC-1215 (file:/usr/share/snmp/mibs/RFC-1215.txt) converted on Sun Feb 24 10:28:47 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: RFC1155-SMI (file:/usr/share/snmp/mibs/RFC1155-SMI.txt) converted on Sun Feb 24 10:28:47 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: RFC1213-MIB (file:/usr/share/snmp/mibs/RFC1213-MIB.txt) converted on Sun Feb 24 10:28:48 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: RMON-MIB (file:/usr/share/snmp/mibs/RMON-MIB.txt) converted on Sun Feb 24 10:28:48 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT risingAlarm .1.3.6.1.2.1.16.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA The SNMP trap that is generated when an alarm $*
+SDESC
+The SNMP trap that is generated when an alarm
+entry crosses its rising threshold and generates
+an event that is configured for sending SNMP
+traps.
+Variables:
+  1: alarmIndex
+     Syntax="INTEGER32"
+     Descr="An index that uniquely identifies an entry in the
+        alarm table.  Each such entry defines a
+        diagnostic sample at a particular interval
+        for an object on the device."
+  2: alarmVariable
+     Syntax="OBJECTID"
+     Descr="The object identifier of the particular variable to be
+        sampled.  Only variables that resolve to an ASN.1 primitive
+        type of INTEGER (INTEGER, Integer32, Counter32, Counter64,
+        Gauge, or TimeTicks) may be sampled.
+
+        Because SNMP access control is articulated entirely
+        in terms of the contents of MIB views, no access
+        control mechanism exists that can restrict the value of
+        this object to identify only those objects that exist
+        in a particular MIB view.  Because there is thus no
+        acceptable means of restricting the read access that
+        could be obtained through the alarm mechanism, the
+        probe must only grant write access to this object in
+
+        those views that have read access to all objects on
+        the probe.
+
+        During a set operation, if the supplied variable name is
+        not available in the selected MIB view, a badValue error
+        must be returned.  If at any time the variable name of
+        an established alarmEntry is no longer available in the
+        selected MIB view, the probe must change the status of
+        this alarmEntry to invalid(4).
+
+        This object may not be modified if the associated
+        alarmStatus object is equal to valid(1)."
+  3: alarmSampleType
+     Syntax="INTEGER"
+       1: absoluteValue
+       2: deltaValue
+     Descr="The method of sampling the selected variable and
+        calculating the value to be compared against the
+        thresholds.  If the value of this object is
+        absoluteValue(1), the value of the selected variable
+        will be compared directly with the thresholds at the
+        end of the sampling interval.  If the value of this
+        object is deltaValue(2), the value of the selected
+        variable at the last sample will be subtracted from
+        the current value, and the difference compared with
+        the thresholds.
+
+        This object may not be modified if the associated
+        alarmStatus object is equal to valid(1)."
+  4: alarmValue
+     Syntax="INTEGER32"
+     Descr="The value of the statistic during the last sampling
+        period.  For example, if the sample type is deltaValue,
+        this value will be the difference between the samples
+        at the beginning and end of the period.  If the sample
+        type is absoluteValue, this value will be the sampled
+        value at the end of the period.
+
+        This is the value that is compared with the rising and
+        falling thresholds.
+
+        The value during the current sampling period is not
+        made available until the period is completed and will
+        remain available until the next period completes."
+  5: alarmRisingThreshold
+     Syntax="INTEGER32"
+     Descr="A threshold for the sampled statistic.  When the current
+        sampled value is greater than or equal to this threshold,
+        and the value at the last sampling interval was less than
+        this threshold, a single event will be generated.
+        A single event will also be generated if the first
+        sample after this entry becomes valid is greater than or
+        equal to this threshold and the associated
+        alarmStartupAlarm is equal to risingAlarm(1) or
+        risingOrFallingAlarm(3).
+
+        After a rising event is generated, another such event
+
+        will not be generated until the sampled value
+        falls below this threshold and reaches the
+        alarmFallingThreshold.
+
+        This object may not be modified if the associated
+        alarmStatus object is equal to valid(1)."
+EDESC
+#
+#
+#
+EVENT fallingAlarm .1.3.6.1.2.1.16.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA The SNMP trap that is generated when an alarm $*
+SDESC
+The SNMP trap that is generated when an alarm
+entry crosses its falling threshold and generates
+an event that is configured for sending SNMP
+traps.
+Variables:
+  1: alarmIndex
+     Syntax="INTEGER32"
+     Descr="An index that uniquely identifies an entry in the
+        alarm table.  Each such entry defines a
+        diagnostic sample at a particular interval
+        for an object on the device."
+  2: alarmVariable
+     Syntax="OBJECTID"
+     Descr="The object identifier of the particular variable to be
+        sampled.  Only variables that resolve to an ASN.1 primitive
+        type of INTEGER (INTEGER, Integer32, Counter32, Counter64,
+        Gauge, or TimeTicks) may be sampled.
+
+        Because SNMP access control is articulated entirely
+        in terms of the contents of MIB views, no access
+        control mechanism exists that can restrict the value of
+        this object to identify only those objects that exist
+        in a particular MIB view.  Because there is thus no
+        acceptable means of restricting the read access that
+        could be obtained through the alarm mechanism, the
+        probe must only grant write access to this object in
+
+        those views that have read access to all objects on
+        the probe.
+
+        During a set operation, if the supplied variable name is
+        not available in the selected MIB view, a badValue error
+        must be returned.  If at any time the variable name of
+        an established alarmEntry is no longer available in the
+        selected MIB view, the probe must change the status of
+        this alarmEntry to invalid(4).
+
+        This object may not be modified if the associated
+        alarmStatus object is equal to valid(1)."
+  3: alarmSampleType
+     Syntax="INTEGER"
+       1: absoluteValue
+       2: deltaValue
+     Descr="The method of sampling the selected variable and
+        calculating the value to be compared against the
+        thresholds.  If the value of this object is
+        absoluteValue(1), the value of the selected variable
+        will be compared directly with the thresholds at the
+        end of the sampling interval.  If the value of this
+        object is deltaValue(2), the value of the selected
+        variable at the last sample will be subtracted from
+        the current value, and the difference compared with
+        the thresholds.
+
+        This object may not be modified if the associated
+        alarmStatus object is equal to valid(1)."
+  4: alarmValue
+     Syntax="INTEGER32"
+     Descr="The value of the statistic during the last sampling
+        period.  For example, if the sample type is deltaValue,
+        this value will be the difference between the samples
+        at the beginning and end of the period.  If the sample
+        type is absoluteValue, this value will be the sampled
+        value at the end of the period.
+
+        This is the value that is compared with the rising and
+        falling thresholds.
+
+        The value during the current sampling period is not
+        made available until the period is completed and will
+        remain available until the next period completes."
+  5: alarmFallingThreshold
+     Syntax="INTEGER32"
+     Descr="A threshold for the sampled statistic.  When the current
+        sampled value is less than or equal to this threshold,
+        and the value at the last sampling interval was greater than
+        this threshold, a single event will be generated.
+        A single event will also be generated if the first
+        sample after this entry becomes valid is less than or
+        equal to this threshold and the associated
+        alarmStartupAlarm is equal to fallingAlarm(2) or
+        risingOrFallingAlarm(3).
+
+        After a falling event is generated, another such event
+        will not be generated until the sampled value
+        rises above this threshold and reaches the
+        alarmRisingThreshold.
+
+        This object may not be modified if the associated
+        alarmStatus object is equal to valid(1)."
+EDESC
+#
+#
+#
+#
+MIB: SCTP-MIB (file:/usr/share/snmp/mibs/SCTP-MIB.txt) converted on Sun Feb 24 10:28:48 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SMUX-MIB (file:/usr/share/snmp/mibs/SMUX-MIB.txt) converted on Sun Feb 24 10:28:48 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-COMMUNITY-MIB (file:/usr/share/snmp/mibs/SNMP-COMMUNITY-MIB.txt) converted on Sun Feb 24 10:28:48 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-FRAMEWORK-MIB (file:/usr/share/snmp/mibs/SNMP-FRAMEWORK-MIB.txt) converted on Sun Feb 24 10:28:48 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-MPD-MIB (file:/usr/share/snmp/mibs/SNMP-MPD-MIB.txt) converted on Sun Feb 24 10:28:48 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-NOTIFICATION-MIB (file:/usr/share/snmp/mibs/SNMP-NOTIFICATION-MIB.txt) converted on Sun Feb 24 10:28:48 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-PROXY-MIB (file:/usr/share/snmp/mibs/SNMP-PROXY-MIB.txt) converted on Sun Feb 24 10:28:48 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-TARGET-MIB (file:/usr/share/snmp/mibs/SNMP-TARGET-MIB.txt) converted on Sun Feb 24 10:28:49 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-USER-BASED-SM-MIB (file:/usr/share/snmp/mibs/SNMP-USER-BASED-SM-MIB.txt) converted on Sun Feb 24 10:28:49 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-USM-AES-MIB (file:/usr/share/snmp/mibs/SNMP-USM-AES-MIB.txt) converted on Sun Feb 24 10:28:49 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-USM-DH-OBJECTS-MIB (file:/usr/share/snmp/mibs/SNMP-USM-DH-OBJECTS-MIB.txt) converted on Sun Feb 24 10:28:49 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-VIEW-BASED-ACM-MIB (file:/usr/share/snmp/mibs/SNMP-VIEW-BASED-ACM-MIB.txt) converted on Sun Feb 24 10:28:49 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMPv2-CONF (file:/usr/share/snmp/mibs/SNMPv2-CONF.txt) converted on Sun Feb 24 10:28:49 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMPv2-MIB (file:/usr/share/snmp/mibs/SNMPv2-MIB.txt) converted on Sun Feb 24 10:28:49 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT coldStart .1.3.6.1.6.3.1.1.5.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA A coldStart trap signifies that the SNMP entity, $*
+SDESC
+A coldStart trap signifies that the SNMP entity,
+supporting a notification originator application, is
+reinitializing itself and that its configuration may
+have been altered.
+EDESC
+#
+#
+#
+EVENT warmStart .1.3.6.1.6.3.1.1.5.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA A warmStart trap signifies that the SNMP entity, $*
+SDESC
+A warmStart trap signifies that the SNMP entity,
+supporting a notification originator application,
+is reinitializing itself such that its configuration
+is unaltered.
+EDESC
+#
+#
+#
+EVENT authenticationFailure .1.3.6.1.6.3.1.1.5.5 "Status Events" Normal
+FORMAT ZBXTRAP $aA An authenticationFailure trap signifies that the SNMP $*
+SDESC
+An authenticationFailure trap signifies that the SNMP
+entity has received a protocol message that is not
+properly authenticated.  While all implementations
+of SNMP entities MAY be capable of generating this
+trap, the snmpEnableAuthenTraps object indicates
+whether this trap will be generated.
+EDESC
+#
+#
+#
+#
+MIB: SNMPv2-SMI (file:/usr/share/snmp/mibs/SNMPv2-SMI.txt) converted on Sun Feb 24 10:28:49 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMPv2-TC (file:/usr/share/snmp/mibs/SNMPv2-TC.txt) converted on Sun Feb 24 10:28:50 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMPv2-TM (file:/usr/share/snmp/mibs/SNMPv2-TM.txt) converted on Sun Feb 24 10:28:50 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: TCP-MIB (file:/usr/share/snmp/mibs/TCP-MIB.txt) converted on Sun Feb 24 10:28:50 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: TRANSPORT-ADDRESS-MIB (file:/usr/share/snmp/mibs/TRANSPORT-ADDRESS-MIB.txt) converted on Sun Feb 24 10:28:50 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: UCD-DEMO-MIB (file:/usr/share/snmp/mibs/UCD-DEMO-MIB.txt) converted on Sun Feb 24 10:28:50 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: UCD-DISKIO-MIB (file:/usr/share/snmp/mibs/UCD-DISKIO-MIB.txt) converted on Sun Feb 24 10:28:50 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: UCD-DLMOD-MIB (file:/usr/share/snmp/mibs/UCD-DLMOD-MIB.txt) converted on Sun Feb 24 10:28:50 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: UCD-IPFWACC-MIB (file:/usr/share/snmp/mibs/UCD-IPFWACC-MIB.txt) converted on Sun Feb 24 10:28:50 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: UCD-SNMP-MIB (file:/usr/share/snmp/mibs/UCD-SNMP-MIB.txt) converted on Sun Feb 24 10:28:50 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT ucdStart .1.3.6.1.4.1.2021.251.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA This trap could in principle be sent when the agent start $*
+SDESC
+This trap could in principle be sent when the agent start
+EDESC
+#
+#
+#
+EVENT ucdShutdown .1.3.6.1.4.1.2021.251.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA This trap is sent when the agent terminates $*
+SDESC
+This trap is sent when the agent terminates
+EDESC
+#
+#
+#
+#
+MIB: UDP-MIB (file:/usr/share/snmp/mibs/UDP-MIB.txt) converted on Sun Feb 24 10:28:51 2013 using snmpttconvertmib v1.3

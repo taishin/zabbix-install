@@ -30,7 +30,9 @@ end
 
 node['zabbix-proxy']['packages']['zabbix'].each do |pkg|
   package pkg do
-    version "#{node['zabbix-server']['version']}.el#{node[:platform_version].to_i}"
+    if node['zabbix-server']['version']
+      version "#{node['zabbix-server']['version']}.el#{node[:platform_version].to_i}"
+    end
     action :install
   end
 end
@@ -165,9 +167,9 @@ cookbook_file "#{Chef::Config[:file_cache_path]}/vendor-mib.tar.gz" do
   source "vendor-mib.tar.gz"
 end
 
-cookbook_file "#{Chef::Config[:file_cache_path]}/snmpttconf.tar.gz" do
-  source "snmpttconf.tar.gz"
-end
+# cookbook_file "#{Chef::Config[:file_cache_path]}/snmpttconf.tar.gz" do
+#   source "snmpttconf.tar.gz"
+# end
 
 script "install_mib" do
   interpreter "bash"
@@ -178,16 +180,25 @@ script "install_mib" do
   not_if {::File.exists?("/usr/share/snmp/mibs/cisco")}
 end
 
-script "install_snmpttconf" do
-  interpreter "bash"
-  user "root"
-  code <<-EOL
-    tar xzvf #{Chef::Config[:file_cache_path]}/snmpttconf.tar.gz -C /etc/snmp
-  EOL
-  not_if {::File.exists?("/etc/snmp/snmpttconf")}
-  notifies :restart, "service[snmptt]" 
-end
+# script "install_snmpttconf" do
+#   interpreter "bash"
+#   user "root"
+#   code <<-EOL
+#     tar xzvf #{Chef::Config[:file_cache_path]}/snmpttconf.tar.gz -C /etc/snmp
+#   EOL
+#   not_if {::File.exists?("/etc/snmp/snmpttconf")}
+#   notifies :restart, "service[snmptt]" 
+# end
 
+remote_directory "/etc/snmp/snmpttconf" do
+  source "snmpttconf"
+  files_owner "root"
+  files_group "root"
+  files_mode 00644
+  owner "root"
+  group "root"
+  mode 00755
+end
 
 template "/etc/snmp/snmp.conf" do
   source "snmp.conf.erb"

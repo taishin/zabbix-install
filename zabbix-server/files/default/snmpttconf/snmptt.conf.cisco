@@ -1,0 +1,4577 @@
+#
+#
+#
+#
+MIB: CISCO-CABLE-DIAG-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-CABLE-DIAG-MIB.my) converted on Mon Oct  7 13:50:31 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-CDP-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-CDP-MIB.my) converted on Mon Oct  7 13:50:32 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-CLUSTER-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-CLUSTER-MIB.my) converted on Mon Oct  7 13:50:32 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT ccStatusMemberStatusChange .1.3.6.1.4.1.9.9.134.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA  A cluster member status change notification $*
+SDESC
+ A cluster member status change notification
+is generated whenever the value of any instance
+of ccClusterMemberOperStatus changes after the
+member is completely added to the cluster.
+Variables:
+  1: ccMemberOperStatus
+     Syntax="INTEGER"
+       1: active
+       2: inactive
+     Descr="The status of cluster management connectivity between
+             the command switch and a cluster member. Cluster management
+             connectivity is determined by the exchange of cluster
+             management messages between the command switch and a
+             cluster member. A member that has failed to exchange
+             cluster management messages with the command switch is
+             deemed to be inactive. Otherwise, it is deemed to be active."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-CONFIG-COPY-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-CONFIG-COPY-MIB.my) converted on Mon Oct  7 13:50:32 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT ccCopyCompletion .1.3.6.1.4.1.9.9.96.2.1.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ccCopyCompletion trap is sent at the completion $*
+SDESC
+A ccCopyCompletion trap is sent at the completion
+of a config-copy request. The ccCopyFailCause is not
+instantiated, and hence not included in a trap, when 
+the ccCopyState is success.
+Variables:
+  1: ccCopyServerAddress
+     Syntax="IPADDR"
+     Descr="The IP address of the TFTP server from (or to)
+        which to copy the configuration file. This object 
+        must be created when either the 
+        ccCopySourceFileType or ccCopyDestFileType has the
+        value 'networkFile'. 
+        Values of 0.0.0.0 or FF.FF.FF.FF for
+        ccCopyServerAddress are not allowed.
+
+        Since this object can just hold only IPv4 Transport
+        type, it is deprecated and replaced by 
+        ccCopyServerAddressRev1."
+  2: ccCopyFileName
+     Syntax="OCTETSTR"
+     Descr="The file name (including the path, if applicable)
+        of the file. This object must be created when either
+        the ccCopySourceFileType or ccCopyDestFileType has
+        the value 'networkFile' or 'iosFile'."
+  3: ccCopyState
+     Syntax="INTEGER"
+       1: waiting
+       2: running
+       3: successful
+       4: failed
+     Descr="Specifies the state of this config-copy request.
+        This value of this object is instantiated only after 
+        the row has been instantiated, i.e. after the 
+        ccCopyEntryRowStatus has been made active."
+  4: ccCopyTimeStarted
+     Syntax="TICKS"
+     Descr="Specifies the time the ccCopyState last
+        transitioned to 'running', or 0 if the state has 
+        never transitioned to 'running'(e.g., stuck in
+        'waiting' state).
+
+        This object is instantiated only after the row has 
+        been instantiated."
+  5: ccCopyTimeCompleted
+     Syntax="TICKS"
+     Descr="Specifies the time the ccCopyState last
+        transitioned from 'running' to 'successful' or 
+        'failed' states. This object is instantiated only 
+        after the row has been instantiated.
+        Its value will remain 0 until the request has 
+        completed."
+  6: ccCopyFailCause
+     Syntax="INTEGER"
+       1: unknown
+       2: badFileName
+       3: timeout
+       4: noMem
+       5: noConfig
+       6: unsupportedProtocol
+       7: someConfigApplyFailed
+       8: systemNotReady
+       9: requestAborted
+     Descr="The reason why the config-copy operation failed.
+        This object is instantiated only when the 
+        ccCopyState for this entry is in the 
+        'failed' state."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-CONFIG-MAN-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-CONFIG-MAN-MIB.my) converted on Mon Oct  7 13:50:32 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT ciscoConfigManEvent .1.3.6.1.4.1.9.9.43.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA Notification of a configuration management event as $*
+SDESC
+Notification of a configuration management event as
+recorded in ccmHistoryEventTable.
+Variables:
+  1: ccmHistoryEventCommandSource
+     Syntax="INTEGER"
+       1: commandLine
+       2: snmp
+     Descr="The source of the command that instigated the event."
+  2: ccmHistoryEventConfigSource
+     Syntax="INTEGER"
+       1: erase
+       2: commandSource
+       3: running
+       4: startup
+       5: local
+       6: networkTftp
+       7: networkRcp
+       8: networkFtp
+       9: networkScp
+     Descr="The configuration data source for the event."
+  3: ccmHistoryEventConfigDestination
+     Syntax="INTEGER"
+       1: erase
+       2: commandSource
+       3: running
+       4: startup
+       5: local
+       6: networkTftp
+       7: networkRcp
+       8: networkFtp
+       9: networkScp
+     Descr="The configuration data destination for the event."
+EDESC
+#
+#
+#
+EVENT ccmCLIRunningConfigChanged .1.3.6.1.4.1.9.9.43.2.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification indicates that the running $*
+SDESC
+This notification indicates that the running
+configuration of the managed system has changed
+from the CLI.
+If the managed system supports a separate 
+configuration mode(where the configuration commands 
+are entered under a  configuration session which 
+affects the running configuration of the system), 
+then this notification is sent when the configuration 
+mode is exited.
+During this configuration session there can be 
+one or more running configuration changes.
+Variables:
+  1: ccmHistoryRunningLastChanged
+     Syntax="TICKS"
+     Descr="The value of sysUpTime when the running configuration
+            was last changed.
+
+                    If the value of ccmHistoryRunningLastChanged is
+                    greater than ccmHistoryRunningLastSaved, the 
+                    configuration has been changed but not saved."
+  2: ccmHistoryEventTerminalType
+     Syntax="INTEGER"
+       1: notApplicable
+       2: unknown
+       3: console
+       4: terminal
+       5: virtual
+       6: auxiliary
+     Descr="If ccmHistoryEventCommandSource is 'commandLine',
+            the terminal type, otherwise 'notApplicable'."
+EDESC
+#
+#
+#
+EVENT ccmCTIDRolledOver .1.3.6.1.4.1.9.9.43.2.0.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification indicates that the Config Change Tracking $*
+SDESC
+This notification indicates that the Config Change Tracking
+ID has rolled over and will be reset.
+EDESC
+#
+#
+#
+#
+MIB: CISCO-ENTITY-VENDORTYPE-OID-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-ENTITY-VENDORTYPE-OID-MIB.my) converted on Mon Oct  7 13:50:32 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-ENVMON-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-ENVMON-MIB.my) converted on Mon Oct  7 13:50:33 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT ciscoEnvMonShutdownNotification .1.3.6.1.4.1.9.9.13.3.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA $*
+SDESC
+Variables:
+  1: ciscoEnvMonMIBNotifications1
+     Syntax=""
+EDESC
+#
+#
+#
+EVENT ciscoEnvMonVoltageNotification .1.3.6.1.4.1.9.9.13.3.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoEnvMonVoltageNotification is sent if the voltage  $*
+SDESC
+A ciscoEnvMonVoltageNotification is sent if the voltage 
+measured at a given testpoint is outside the normal range 
+for the testpoint (i.e. is at the warning, critical, or
+shutdown stage).  Since such a notification is usually 
+generated before the shutdown state is reached, it can 
+convey more data and has a better chance of being sent 
+than does the ciscoEnvMonShutdownNotification.
+This notification is deprecated in favour of
+ciscoEnvMonVoltStatusChangeNotif.
+Variables:
+  1: ciscoEnvMonVoltageStatusDescr
+     Syntax="OCTETSTR"
+     Descr="Textual description of the testpoint being instrumented.
+                This description is a short textual label, suitable as a
+                human-sensible identification for the rest of the
+                information in the entry."
+  2: ciscoEnvMonVoltageStatusValue
+     Syntax="INTEGER32"
+     Descr="The current measurement of the testpoint being instrumented."
+  3: ciscoEnvMonVoltageState
+     Syntax="INTEGER"
+       1: normal
+       2: warning
+       3: critical
+       4: shutdown
+       5: notPresent
+       6: notFunctioning
+     Descr="The current state of the testpoint being instrumented."
+EDESC
+#
+#
+#
+EVENT ciscoEnvMonTemperatureNotification .1.3.6.1.4.1.9.9.13.3.0.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoEnvMonTemperatureNotification is sent if the  $*
+SDESC
+A ciscoEnvMonTemperatureNotification is sent if the 
+temperature measured at a given testpoint is outside 
+the normal range for the testpoint (i.e. is at the warning, 
+critical, or shutdown stage).  Since such a Notification 
+is usually generated before the shutdown state is reached,
+it can convey more data and has a better chance of being
+sent than does the ciscoEnvMonShutdownNotification.
+This notification is deprecated in favour of 
+ciscoEnvMonTempStatusChangeNotif.
+Variables:
+  1: ciscoEnvMonTemperatureStatusDescr
+     Syntax="OCTETSTR"
+     Descr="Textual description of the testpoint being instrumented.
+                This description is a short textual label, suitable as a
+                human-sensible identification for the rest of the
+                information in the entry."
+  2: ciscoEnvMonTemperatureStatusValue
+     Syntax="GAUGE"
+     Descr="The current measurement of the testpoint being instrumented."
+  3: ciscoEnvMonTemperatureState
+     Syntax="INTEGER"
+       1: normal
+       2: warning
+       3: critical
+       4: shutdown
+       5: notPresent
+       6: notFunctioning
+     Descr="The current state of the testpoint being instrumented."
+EDESC
+#
+#
+#
+EVENT ciscoEnvMonFanNotification .1.3.6.1.4.1.9.9.13.3.0.4 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoEnvMonFanNotification is sent if any one of $*
+SDESC
+A ciscoEnvMonFanNotification is sent if any one of
+the fans in the fan array (where extant) fails. 
+Since such a notification is usually generated before 
+the shutdown state is reached, it can convey more 
+data and has a better chance of being sent
+than does the ciscoEnvMonShutdownNotification.
+This notification is deprecated in favour of
+ciscoEnvMonFanStatusChangeNotif.
+Variables:
+  1: ciscoEnvMonFanStatusDescr
+     Syntax="OCTETSTR"
+     Descr="Textual description of the fan being instrumented.
+                This description is a short textual label, suitable as a
+                human-sensible identification for the rest of the
+                information in the entry."
+  2: ciscoEnvMonFanState
+     Syntax="INTEGER"
+       1: normal
+       2: warning
+       3: critical
+       4: shutdown
+       5: notPresent
+       6: notFunctioning
+     Descr="The current state of the fan being instrumented."
+EDESC
+#
+#
+#
+EVENT ciscoEnvMonRedundantSupplyNotification .1.3.6.1.4.1.9.9.13.3.0.5 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoEnvMonRedundantSupplyNotification is sent if $*
+SDESC
+A ciscoEnvMonRedundantSupplyNotification is sent if
+the redundant power supply (where extant) fails. 
+Since such a notification is usually generated before 
+the shutdown state is reached, it can convey more 
+data and has a better chance of being sent
+than does the ciscoEnvMonShutdownNotification.
+This notification is deprecated in favour of 
+ciscoEnvMonSuppStatusChangeNotif.
+Variables:
+  1: ciscoEnvMonSupplyStatusDescr
+     Syntax="OCTETSTR"
+     Descr="Textual description of the power supply being instrumented.
+                This description is a short textual label, suitable as a
+                human-sensible identification for the rest of the
+                information in the entry."
+  2: ciscoEnvMonSupplyState
+     Syntax="INTEGER"
+       1: normal
+       2: warning
+       3: critical
+       4: shutdown
+       5: notPresent
+       6: notFunctioning
+     Descr="The current state of the power supply being instrumented."
+EDESC
+#
+#
+#
+EVENT ciscoEnvMonVoltStatusChangeNotif .1.3.6.1.4.1.9.9.13.3.0.6 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoEnvMonVoltStatusChangeNotif is sent if there is  $*
+SDESC
+A ciscoEnvMonVoltStatusChangeNotif is sent if there is 
+change in the state of a device being monitored
+by ciscoEnvMonVoltageState.
+Variables:
+  1: ciscoEnvMonVoltageStatusDescr
+     Syntax="OCTETSTR"
+     Descr="Textual description of the testpoint being instrumented.
+                This description is a short textual label, suitable as a
+                human-sensible identification for the rest of the
+                information in the entry."
+  2: ciscoEnvMonVoltageStatusValue
+     Syntax="INTEGER32"
+     Descr="The current measurement of the testpoint being instrumented."
+  3: ciscoEnvMonVoltageState
+     Syntax="INTEGER"
+       1: normal
+       2: warning
+       3: critical
+       4: shutdown
+       5: notPresent
+       6: notFunctioning
+     Descr="The current state of the testpoint being instrumented."
+EDESC
+#
+#
+#
+EVENT ciscoEnvMonTempStatusChangeNotif .1.3.6.1.4.1.9.9.13.3.0.7 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoEnvMonTempStatusChangeNotif is sent if there  $*
+SDESC
+A ciscoEnvMonTempStatusChangeNotif is sent if there 
+is change in the state of a device being monitored
+by ciscoEnvMonTemperatureState.
+Variables:
+  1: ciscoEnvMonTemperatureStatusDescr
+     Syntax="OCTETSTR"
+     Descr="Textual description of the testpoint being instrumented.
+                This description is a short textual label, suitable as a
+                human-sensible identification for the rest of the
+                information in the entry."
+  2: ciscoEnvMonTemperatureStatusValue
+     Syntax="GAUGE"
+     Descr="The current measurement of the testpoint being instrumented."
+  3: ciscoEnvMonTemperatureState
+     Syntax="INTEGER"
+       1: normal
+       2: warning
+       3: critical
+       4: shutdown
+       5: notPresent
+       6: notFunctioning
+     Descr="The current state of the testpoint being instrumented."
+EDESC
+#
+#
+#
+EVENT ciscoEnvMonFanStatusChangeNotif .1.3.6.1.4.1.9.9.13.3.0.8 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoEnvMonFanStatusChangeNotif is sent if there  $*
+SDESC
+A ciscoEnvMonFanStatusChangeNotif is sent if there 
+is change in the state of a device being monitored
+by ciscoEnvMonFanState.
+Variables:
+  1: ciscoEnvMonFanStatusDescr
+     Syntax="OCTETSTR"
+     Descr="Textual description of the fan being instrumented.
+                This description is a short textual label, suitable as a
+                human-sensible identification for the rest of the
+                information in the entry."
+  2: ciscoEnvMonFanState
+     Syntax="INTEGER"
+       1: normal
+       2: warning
+       3: critical
+       4: shutdown
+       5: notPresent
+       6: notFunctioning
+     Descr="The current state of the fan being instrumented."
+EDESC
+#
+#
+#
+EVENT ciscoEnvMonSuppStatusChangeNotif .1.3.6.1.4.1.9.9.13.3.0.9 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoEnvMonSupplyStatChangeNotif is sent if there  $*
+SDESC
+A ciscoEnvMonSupplyStatChangeNotif is sent if there 
+is change in the state of a device being monitored
+by ciscoEnvMonSupplyState.
+Variables:
+  1: ciscoEnvMonSupplyStatusDescr
+     Syntax="OCTETSTR"
+     Descr="Textual description of the power supply being instrumented.
+                This description is a short textual label, suitable as a
+                human-sensible identification for the rest of the
+                information in the entry."
+  2: ciscoEnvMonSupplyState
+     Syntax="INTEGER"
+       1: normal
+       2: warning
+       3: critical
+       4: shutdown
+       5: notPresent
+       6: notFunctioning
+     Descr="The current state of the power supply being instrumented."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-ERR-DISABLE-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-ERR-DISABLE-MIB.my) converted on Mon Oct  7 13:50:33 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT cErrDisableInterfaceEvent .1.3.6.1.4.1.9.9.548.0.1.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA The cErrDisableInterfaceEvent is generated when an interface $*
+SDESC
+The cErrDisableInterfaceEvent is generated when an interface
+or {interface, vlan} is error-disabled by the feature
+specified in cErrDisableIfStatusCause.
+cErrDisableInterfaceEvent is deprecated and replaced by 
+cErrDisableInterfaceEventRev1.
+Variables:
+  1: cErrDisableIfStatusCause
+     Syntax="INTEGER"
+       1: udld
+       10: gbicInvalid
+       11: dhcpRateLimit
+       12: unicastFlood
+       13: vmps
+       14: stormControl
+       15: inlinePower
+       16: arpInspection
+       17: portLoopback
+       18: packetBuffer
+       19: macLimit
+       2: bpduGuard
+       20: linkMonitorFailure
+       21: oamRemoteFailure
+       22: dot1adIncompEtype
+       23: dot1adIncompTunnel
+       24: sfpConfigMismatch
+       25: communityLimit
+       26: invalidPolicy
+       27: lsGroup
+       28: ekey
+       29: portModeFailure
+       3: channelMisconfig
+       30: pppoeIaRateLimit
+       31: oamRemoteCriticalEvent
+       32: oamRemoteDyingGasp
+       33: oamRemoteLinkFault
+       34: mvrp
+       35: tranceiverIncomp
+       4: pagpFlap
+       5: dtpFlap
+       6: linkFlap
+       7: l2ptGuard
+       8: dot1xSecurityViolation
+       9: portSecurityViolation
+     Descr="This object specifies the feature/event that caused the
+        {interface, vlan} (or the entire interface) to be
+        error-disabled."
+EDESC
+#
+#
+#
+EVENT cErrDisableInterfaceEventRev1 .1.3.6.1.4.1.9.9.548.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA The cErrDisableInterfaceEventRev1 is generated when an $*
+SDESC
+The cErrDisableInterfaceEventRev1 is generated when an
+interface or {interface, vlan} is error-disabled by the 
+feature specified in cErrDisableIfStatusCause.
+cErrDisableInterfaceEventRev1 deprecates 
+cErrDisableInterfaceEvent to make it RFC 2578 compliant. 
+According to section 8.5 of RFC 2578, the next
+to last sub-identifier in the name of any newly-defined
+notification must have the value zero.
+Variables:
+  1: cErrDisableIfStatusCause
+     Syntax="INTEGER"
+       1: udld
+       10: gbicInvalid
+       11: dhcpRateLimit
+       12: unicastFlood
+       13: vmps
+       14: stormControl
+       15: inlinePower
+       16: arpInspection
+       17: portLoopback
+       18: packetBuffer
+       19: macLimit
+       2: bpduGuard
+       20: linkMonitorFailure
+       21: oamRemoteFailure
+       22: dot1adIncompEtype
+       23: dot1adIncompTunnel
+       24: sfpConfigMismatch
+       25: communityLimit
+       26: invalidPolicy
+       27: lsGroup
+       28: ekey
+       29: portModeFailure
+       3: channelMisconfig
+       30: pppoeIaRateLimit
+       31: oamRemoteCriticalEvent
+       32: oamRemoteDyingGasp
+       33: oamRemoteLinkFault
+       34: mvrp
+       35: tranceiverIncomp
+       4: pagpFlap
+       5: dtpFlap
+       6: linkFlap
+       7: l2ptGuard
+       8: dot1xSecurityViolation
+       9: portSecurityViolation
+     Descr="This object specifies the feature/event that caused the
+        {interface, vlan} (or the entire interface) to be
+        error-disabled."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-ETHER-CFM-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-ETHER-CFM-MIB.my) converted on Mon Oct  7 13:50:33 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT cEtherCfmCcMepUp .1.3.6.1.4.1.9.9.461.0.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is generated in the following cases: $*
+SDESC
+This notification is generated in the following cases:
+- when a remote MEP first comes up, that is when we receive 
+a CC message from that MEP for the first time.
+- when the device receives a CC message from a MEP for which 
+it has an expired CCDB entry.
+- when a CC message is received for a remote MEP for which
+the device already has a CCDB entry and the port-state in
+the received CC message is different from the cached 
+previous state.
+Variables:
+  1: cEtherCfmEventServiceId
+     Syntax="OCTETSTR"
+     Descr="The customer service instance to which the event belongs."
+  2: cEtherCfmEventLclMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the device reporting the event."
+  3: cEtherCfmEventLclMepCount
+     Syntax="GAUGE"
+     Descr="The number of local MEPs affected by the event."
+  4: cEtherCfmEventLclIfCount
+     Syntax="GAUGE"
+     Descr="The number of local interfaces affected by the event."
+  5: cEtherCfmEventRmtMepid
+     Syntax="UNSIGNED32"
+     Descr="The maintenance end-point identifier of the remote 
+        MEP causing the event entry to be logged."
+  6: cEtherCfmEventRmtMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the remote maintenance point for which
+        the event entry is being logged."
+  7: cEtherCfmEventCode
+     Syntax="INTEGER"
+       1: new
+       2: returning
+       3: portState
+       4: lastGasp
+       5: timeout
+       6: configClear
+       7: loopClear
+       8: xconnectClear
+       9: unknownClear
+     Descr="This object is used in decoding 'mepUp' and 'mepDown' events. 
+
+        ** For 'mepUp', the following codes are relevant:
+
+            'new'           - This is the very first time the device 
+                              receives a CC message from the remote MEP.
+
+            'returning'     - The device received a CC message from a 
+                              remote MEP for which it had an expired 
+                              CCDB entry.
+
+            'portState'     - The device received a CC message from a 
+                              remote MEP for which it has a valid CCDB 
+                              entry, and the message indicates a port 
+                              status change.
+
+        ** For 'mepDown', the following codes are relevant:
+
+            'lastGasp'      - The device received a CC message from a
+                              remote MEP with zero lifetime.
+
+            'timeout'       - The local CCDB entry for the remote MEP 
+                              expired.
+
+            'configClear'   - A previous CC message from a MEP that
+                              triggered a configuration error event
+                              is cleared.
+            
+            'loopClear'     - A previous CC message from a MEP that
+                              triggered a loop error event is cleared.
+
+            'xconnectClear' - A previous CC message from a MEP that
+                              triggered a crossconnect error event 
+                              is cleared.
+
+            'unknownClear'  - A previous CC message from a MEP that
+                              triggered an unknown MEP event is 
+                              cleared."
+  8: cEtherCfmEventRmtPortState
+     Syntax="INTEGER"
+       1: up
+       2: down
+       3: adminDown
+       4: test
+       5: remoteExcessiveErrors
+       6: localExcessiveErrors
+       7: localNoData
+     Descr="The operational state of the port on which the 
+        remote MEP is configured. This information is 
+        derived from the port-state as indicated in the 
+        CC message. The possible values are:
+        
+        'up'                    - The port is operationally up.
+
+        'down'                  - The port is operationally (but not
+                                  administratively) down.
+        
+        'adminDown'             - The port is administratively down.
+       
+        'test'                  - The port is in test mode (perhaps 
+                                  due to an IEEE Standard 802.3ah OAM
+                                  intrusive loopback operation).
+
+        'remoteExcessiveErrors' - 802.3ah OAM reports that the other 
+                                  end of the link is receiving an 
+                                  excessive number of invalid frames.
+
+        'localExcessiveErrors'  - 802.3ah OAM reports that this end of
+                                  the link is receiving an excessive 
+                                  number of invalid frames.
+
+        'localNoData'           - No data and no CFM messages have been
+                                  received for an excessive length of 
+                                  time."
+EDESC
+#
+#
+#
+EVENT cEtherCfmCcMepDown .1.3.6.1.4.1.9.9.461.0.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is generated when a remote MEP goes down;  $*
+SDESC
+This notification is generated when a remote MEP goes down; 
+i.e. the entry in CCDB corresponding to this MEP times out 
+or the device receives a CC message with zero hold-time.
+Variables:
+  1: cEtherCfmEventServiceId
+     Syntax="OCTETSTR"
+     Descr="The customer service instance to which the event belongs."
+  2: cEtherCfmEventLclMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the device reporting the event."
+  3: cEtherCfmEventLclMepCount
+     Syntax="GAUGE"
+     Descr="The number of local MEPs affected by the event."
+  4: cEtherCfmEventLclIfCount
+     Syntax="GAUGE"
+     Descr="The number of local interfaces affected by the event."
+  5: cEtherCfmEventRmtMepid
+     Syntax="UNSIGNED32"
+     Descr="The maintenance end-point identifier of the remote 
+        MEP causing the event entry to be logged."
+  6: cEtherCfmEventRmtMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the remote maintenance point for which
+        the event entry is being logged."
+  7: cEtherCfmEventCode
+     Syntax="INTEGER"
+       1: new
+       2: returning
+       3: portState
+       4: lastGasp
+       5: timeout
+       6: configClear
+       7: loopClear
+       8: xconnectClear
+       9: unknownClear
+     Descr="This object is used in decoding 'mepUp' and 'mepDown' events. 
+
+        ** For 'mepUp', the following codes are relevant:
+
+            'new'           - This is the very first time the device 
+                              receives a CC message from the remote MEP.
+
+            'returning'     - The device received a CC message from a 
+                              remote MEP for which it had an expired 
+                              CCDB entry.
+
+            'portState'     - The device received a CC message from a 
+                              remote MEP for which it has a valid CCDB 
+                              entry, and the message indicates a port 
+                              status change.
+
+        ** For 'mepDown', the following codes are relevant:
+
+            'lastGasp'      - The device received a CC message from a
+                              remote MEP with zero lifetime.
+
+            'timeout'       - The local CCDB entry for the remote MEP 
+                              expired.
+
+            'configClear'   - A previous CC message from a MEP that
+                              triggered a configuration error event
+                              is cleared.
+            
+            'loopClear'     - A previous CC message from a MEP that
+                              triggered a loop error event is cleared.
+
+            'xconnectClear' - A previous CC message from a MEP that
+                              triggered a crossconnect error event 
+                              is cleared.
+
+            'unknownClear'  - A previous CC message from a MEP that
+                              triggered an unknown MEP event is 
+                              cleared."
+EDESC
+#
+#
+#
+EVENT cEtherCfmCcCrossconnect .1.3.6.1.4.1.9.9.461.0.0.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is generated when a device receives a CC $*
+SDESC
+This notification is generated when a device receives a CC
+message with the service ID not matching the one locally 
+configured for the VLAN in question.
+Variables:
+  1: cEtherCfmEventServiceId
+     Syntax="OCTETSTR"
+     Descr="The customer service instance to which the event belongs."
+  2: cEtherCfmEventLclMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the device reporting the event."
+  3: cEtherCfmEventRmtMepid
+     Syntax="UNSIGNED32"
+     Descr="The maintenance end-point identifier of the remote 
+        MEP causing the event entry to be logged."
+  4: cEtherCfmEventRmtMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the remote maintenance point for which
+        the event entry is being logged."
+  5: cEtherCfmEventRmtServiceId
+     Syntax="OCTETSTR"
+     Descr="The ID that the remote device has configured for the 
+        customer service instance (VLAN)."
+EDESC
+#
+#
+#
+EVENT cEtherCfmCcLoop .1.3.6.1.4.1.9.9.461.0.0.4 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is generated when a device receives a CC $*
+SDESC
+This notification is generated when a device receives a CC
+message with the same MEPID and MAC address as those of
+the device itself, indicating that there is a forwarding
+loop and that the device is receiving its own CC messages.
+Variables:
+  1: cEtherCfmEventServiceId
+     Syntax="OCTETSTR"
+     Descr="The customer service instance to which the event belongs."
+  2: cEtherCfmEventLclMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the device reporting the event."
+  3: cEtherCfmEventLclMepid
+     Syntax="UNSIGNED32"
+     Descr="The identifier of the local MEP impacted by the event."
+EDESC
+#
+#
+#
+EVENT cEtherCfmCcConfigError .1.3.6.1.4.1.9.9.461.0.0.5 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is generated when a device receives a CC $*
+SDESC
+This notification is generated when a device receives a CC
+message with the same MEPID but different MAC address as 
+those of the device itself, indicating that there is a  
+mis-configuration in the network where a remote device
+has the same MEPID configured.
+Variables:
+  1: cEtherCfmEventServiceId
+     Syntax="OCTETSTR"
+     Descr="The customer service instance to which the event belongs."
+  2: cEtherCfmEventLclMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the device reporting the event."
+  3: cEtherCfmEventLclMepid
+     Syntax="UNSIGNED32"
+     Descr="The identifier of the local MEP impacted by the event."
+  4: cEtherCfmEventRmtMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the remote maintenance point for which
+        the event entry is being logged."
+EDESC
+#
+#
+#
+EVENT cEtherCfmXCheckMissing .1.3.6.1.4.1.9.9.461.0.0.6 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is generated when an expected  $*
+SDESC
+This notification is generated when an expected 
+(configured) MEP does not come up during the cross-check
+start timeout interval.
+Variables:
+  1: cEtherCfmEventServiceId
+     Syntax="OCTETSTR"
+     Descr="The customer service instance to which the event belongs."
+  2: cEtherCfmEventLclMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the device reporting the event."
+  3: cEtherCfmEventRmtMepid
+     Syntax="UNSIGNED32"
+     Descr="The maintenance end-point identifier of the remote 
+        MEP causing the event entry to be logged."
+  4: cEtherCfmEventRmtMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the remote maintenance point for which
+        the event entry is being logged."
+EDESC
+#
+#
+#
+EVENT cEtherCfmXCheckUnknown .1.3.6.1.4.1.9.9.461.0.0.7 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is generated when an unexpected MEP $*
+SDESC
+This notification is generated when an unexpected MEP
+comes up.
+Variables:
+  1: cEtherCfmEventServiceId
+     Syntax="OCTETSTR"
+     Descr="The customer service instance to which the event belongs."
+  2: cEtherCfmEventLclMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the device reporting the event."
+  3: cEtherCfmEventRmtMepid
+     Syntax="UNSIGNED32"
+     Descr="The maintenance end-point identifier of the remote 
+        MEP causing the event entry to be logged."
+  4: cEtherCfmEventRmtMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the remote maintenance point for which
+        the event entry is being logged."
+EDESC
+#
+#
+#
+EVENT cEtherCfmXCheckServiceUp .1.3.6.1.4.1.9.9.461.0.0.8 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is generated when all the MEPs belonging $*
+SDESC
+This notification is generated when all the MEPs belonging
+to a customer service instance come up before the expiration of
+the cross-check start timeout interval.
+Variables:
+  1: cEtherCfmEventServiceId
+     Syntax="OCTETSTR"
+     Descr="The customer service instance to which the event belongs."
+  2: cEtherCfmEventLclMacAddress
+     Syntax="OCTETSTR"
+     Descr="The MAC address of the device reporting the event."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-FLASH-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-FLASH-MIB.my) converted on Mon Oct  7 13:50:34 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT ciscoFlashCopyCompletionTrap .1.3.6.1.4.1.9.9.10.1.3.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoFlashCopyCompletionTrap is sent at the $*
+SDESC
+A ciscoFlashCopyCompletionTrap is sent at the
+completion of a flash copy operation if such a trap
+was requested when the operation was initiated.
+Variables:
+  1: ciscoFlashCopyStatus
+     Syntax="INTEGER"
+       0: copyOperationPending
+       1: copyInProgress
+       10: copyDeviceError
+       11: copyDeviceNotProgrammable
+       12: copyDeviceFull
+       13: copyFileOpenError
+       14: copyFileTransferError
+       15: copyFileChecksumError
+       16: copyNoMemory
+       17: copyUnknownFailure
+       18: copyInvalidSignature
+       19: copyProhibited
+       2: copyOperationSuccess
+       3: copyInvalidOperation
+       4: copyInvalidProtocol
+       5: copyInvalidSourceName
+       6: copyInvalidDestName
+       7: copyInvalidServerAddress
+       8: copyDeviceBusy
+       9: copyDeviceOpenError
+     Descr="The status of the specified copy operation.
+
+        copyOperationPending :
+                operation request is received and
+                pending for validation and process
+
+        copyInProgress :
+                specified operation is active
+
+        copyOperationSuccess :
+                specified operation is supported and
+                completed successfully
+
+        copyInvalidOperation :
+                command invalid or command-protocol-device
+                combination unsupported
+
+        copyInvalidProtocol :
+                invalid protocol specified
+
+        copyInvalidSourceName :
+                invalid source file name specified
+                For the  copy from flash to lex operation, this
+                error code will be returned when the source file
+                is not a valid lex image.
+
+        copyInvalidDestName :
+                invalid target name (file or partition or
+                device name) specified
+                For the  copy from flash to lex operation, this
+                error code will be returned when no lex devices
+                are connected to the router or when an invalid
+                lex interface number has been specified in
+                the destination string.
+
+        copyInvalidServerAddress :
+                invalid server address specified
+
+        copyDeviceBusy :
+                specified device is in use and locked by
+                another process
+
+        copyDeviceOpenError :
+                invalid device name
+
+        copyDeviceError :
+                device read, write or erase error
+
+        copyDeviceNotProgrammable :
+                device is read-only but a write or erase
+                operation was specified
+
+        copyDeviceFull :
+                device is filled to capacity
+
+        copyFileOpenError :
+                invalid file name; file not found in partition
+
+        copyFileTransferError :
+                file transfer was unsuccessfull; network failure
+
+        copyFileChecksumError :
+                file checksum in Flash failed
+
+        copyNoMemory :
+                system running low on memory
+
+        copyUnknownFailure :
+                failure unknown
+
+        copyProhibited:
+              stop user from overwriting current boot image file."
+EDESC
+#
+#
+#
+EVENT ciscoFlashPartitioningCompletionTrap .1.3.6.1.4.1.9.9.10.1.3.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoFlashPartitioningCompletionTrap is sent at the $*
+SDESC
+A ciscoFlashPartitioningCompletionTrap is sent at the
+completion of a partitioning operation if such a trap
+was requested when the operation was initiated.
+Variables:
+  1: ciscoFlashPartitioningStatus
+     Syntax="INTEGER"
+       1: partitioningInProgress
+       10: partitioningNoMemory
+       11: partitioningUnknownFailure
+       2: partitioningOperationSuccess
+       3: partitioningInvalidOperation
+       4: partitioningInvalidDestName
+       5: partitioningInvalidPartitionCount
+       6: partitioningInvalidPartitionSizes
+       7: partitioningDeviceBusy
+       8: partitioningDeviceOpenError
+       9: partitioningDeviceError
+     Descr="The status of the specified partitioning operation.
+        partitioningInProgress :
+                specified operation is active
+
+        partitioningOperationSuccess :
+                specified operation is supported and completed
+                successfully
+
+        partitioningInvalidOperation :
+                command invalid or command-protocol-device
+                combination unsupported
+
+        partitioningInvalidDestName :
+                invalid target name (file or partition or
+                device name) specified
+
+        partitioningInvalidPartitionCount :
+                invalid partition count specified for the
+                partitioning command
+
+        partitioningInvalidPartitionSizes :
+                invalid partition size, or invalid count of
+                partition sizes
+
+        partitioningDeviceBusy :
+                specified device is in use and locked by
+                another process
+
+        partitioningDeviceOpenError :
+                invalid device name
+
+        partitioningDeviceError :
+                device read, write or erase error
+
+        partitioningNoMemory :
+                system running low on memory
+
+        partitioningUnknownFailure :
+                failure unknown"
+EDESC
+#
+#
+#
+EVENT ciscoFlashMiscOpCompletionTrap .1.3.6.1.4.1.9.9.10.1.3.0.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoFlashMiscOpCompletionTrap is sent at the $*
+SDESC
+A ciscoFlashMiscOpCompletionTrap is sent at the
+completion of a miscellaneous flash operation
+(enumerated in ciscoFlashMiscOpCommand) if such a trap
+was requested when the operation was initiated.
+Variables:
+  1: ciscoFlashMiscOpStatus
+     Syntax="INTEGER"
+       1: miscOpInProgress
+       10: miscOpFileDeleteFailure
+       11: miscOpFileUndeleteFailure
+       12: miscOpFileChecksumError
+       13: miscOpNoMemory
+       14: miscOpUnknownFailure
+       18: miscOpSqueezeFailure
+       19: miscOpNoSuchFile
+       2: miscOpOperationSuccess
+       20: miscOpFormatFailure
+       3: miscOpInvalidOperation
+       4: miscOpInvalidDestName
+       5: miscOpDeviceBusy
+       6: miscOpDeviceOpenError
+       7: miscOpDeviceError
+       8: miscOpDeviceNotProgrammable
+       9: miscOpFileOpenError
+     Descr="The status of the specified operation.
+        miscOpInProgress :
+                specified operation is active
+
+        miscOpOperationSuccess :
+                specified operation is supported and completed
+                successfully
+
+        miscOpInvalidOperation :
+                command invalid or command-protocol-device
+                combination unsupported
+
+        miscOpInvalidDestName :
+                invalid target name (file or partition or
+                device name) specified
+
+        miscOpDeviceBusy :
+                specified device is in use and locked by another
+                process
+
+        miscOpDeviceOpenError :
+                invalid device name
+
+        miscOpDeviceError :
+                device read, write or erase error
+
+        miscOpDeviceNotProgrammable :
+                device is read-only but a write or erase
+                operation was specified
+
+        miscOpFileOpenError :
+                invalid file name; file not found in partition
+
+        miscOpFileDeleteFailure :
+                file could not be deleted; delete count exceeded
+
+        miscOpFileUndeleteFailure :
+                file could not be undeleted; undelete count
+                exceeded
+
+        miscOpFileChecksumError :
+                file has a bad checksum
+
+        miscOpNoMemory :
+                system running low on memory
+
+        miscOpUnknownFailure :
+                failure unknown
+
+        miscOpSqueezeFailure :
+                the squeeze operation failed
+
+        miscOpNoSuchFile :
+                a valid but nonexistent file name was specified
+
+        miscOpFormatFailure :
+                the format operation failed"
+EDESC
+#
+#
+#
+EVENT ciscoFlashDeviceChangeTrap .1.3.6.1.4.1.9.9.10.1.3.0.4 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoFlashDeviceChangeTrap is sent whenever a $*
+SDESC
+A ciscoFlashDeviceChangeTrap is sent whenever a
+removable Flash device is inserted or removed.
+Variables:
+  1: ciscoFlashDeviceMinPartitionSize
+     Syntax="UNSIGNED32"
+     Descr="This object will give the minimum partition size
+        supported for this device. For systems that execute code
+        directly out of Flash, the minimum partition size needs
+        to be the bank size. (Bank size is equal to the size of a
+        chip multiplied by the width of the device. In most cases,
+        the device width is 4 bytes, and so the bank size would be
+        four times the size of a chip). This has to be so because
+        all programming commands affect the operation of an
+        entire chip (in our case, an entire bank because all
+        operations are done on the entire width of the device)
+        even though the actual command may be localized to a small
+        portion of each chip. So when executing code out of Flash,
+        one needs to be able to write and erase some portion of
+        Flash without affecting the code execution.
+        For systems that execute code out of DRAM or ROM, it is
+        possible to partition Flash with a finer granularity (for
+        eg., at erase sector boundaries) if the system code supports
+        such granularity.
+
+        This object will let a management entity know the
+        minimum partition size as defined by the system.
+        If the system does not support partitioning, the value
+        will be equal to the device size in ciscoFlashDeviceSize.
+        The maximum number of partitions that could be configured
+        will be equal to the minimum of
+        ciscoFlashDeviceMaxPartitions
+        and
+        (ciscoFlashDeviceSize / ciscoFlashDeviceMinPartitionSize).
+
+        If the total size of the flash device is greater than the
+        maximum value reportable by this object then this object should
+        report its maximum value(4,294,967,295) and
+        ciscoFlashDeviceMinPartitionSizeExtended must be used to report
+        the flash device's minimum partition size."
+  2: ciscoFlashDeviceName
+     Syntax="OCTETSTR"
+     Descr="Flash device name. This name is used to refer to the
+        device within the system. Flash operations get directed
+        to a device based on this name.
+        The system has a concept of a default device.
+        This would be the primary or most used device in case of
+        multiple devices. The system directs an operation to the
+        default device whenever a device name is not specified.
+        The device name is therefore mandatory except when the
+        operation is being done on the default device, or,
+        the system supports only a single Flash device.
+        The device name will always be available for a
+        removable device, even when the device has been removed."
+EDESC
+#
+#
+#
+EVENT ciscoFlashDeviceInsertedNotif .1.3.6.1.4.1.9.9.10.1.3.0.5 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoFlashDeviceInsertedNotif notification is sent $*
+SDESC
+A ciscoFlashDeviceInsertedNotif notification is sent
+whenever a removable Flash device is inserted.
+Variables:
+  1: ciscoFlashDeviceMinPartitionSize
+     Syntax="UNSIGNED32"
+     Descr="This object will give the minimum partition size
+        supported for this device. For systems that execute code
+        directly out of Flash, the minimum partition size needs
+        to be the bank size. (Bank size is equal to the size of a
+        chip multiplied by the width of the device. In most cases,
+        the device width is 4 bytes, and so the bank size would be
+        four times the size of a chip). This has to be so because
+        all programming commands affect the operation of an
+        entire chip (in our case, an entire bank because all
+        operations are done on the entire width of the device)
+        even though the actual command may be localized to a small
+        portion of each chip. So when executing code out of Flash,
+        one needs to be able to write and erase some portion of
+        Flash without affecting the code execution.
+        For systems that execute code out of DRAM or ROM, it is
+        possible to partition Flash with a finer granularity (for
+        eg., at erase sector boundaries) if the system code supports
+        such granularity.
+
+        This object will let a management entity know the
+        minimum partition size as defined by the system.
+        If the system does not support partitioning, the value
+        will be equal to the device size in ciscoFlashDeviceSize.
+        The maximum number of partitions that could be configured
+        will be equal to the minimum of
+        ciscoFlashDeviceMaxPartitions
+        and
+        (ciscoFlashDeviceSize / ciscoFlashDeviceMinPartitionSize).
+
+        If the total size of the flash device is greater than the
+        maximum value reportable by this object then this object should
+        report its maximum value(4,294,967,295) and
+        ciscoFlashDeviceMinPartitionSizeExtended must be used to report
+        the flash device's minimum partition size."
+  2: ciscoFlashDeviceName
+     Syntax="OCTETSTR"
+     Descr="Flash device name. This name is used to refer to the
+        device within the system. Flash operations get directed
+        to a device based on this name.
+        The system has a concept of a default device.
+        This would be the primary or most used device in case of
+        multiple devices. The system directs an operation to the
+        default device whenever a device name is not specified.
+        The device name is therefore mandatory except when the
+        operation is being done on the default device, or,
+        the system supports only a single Flash device.
+        The device name will always be available for a
+        removable device, even when the device has been removed."
+EDESC
+#
+#
+#
+EVENT ciscoFlashDeviceRemovedNotif .1.3.6.1.4.1.9.9.10.1.3.0.6 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoFlashDeviceRemovedNotif notification is sent $*
+SDESC
+A ciscoFlashDeviceRemovedNotif notification is sent
+whenever a removable Flash device is removed.
+Variables:
+  1: ciscoFlashDeviceName
+     Syntax="OCTETSTR"
+     Descr="Flash device name. This name is used to refer to the
+        device within the system. Flash operations get directed
+        to a device based on this name.
+        The system has a concept of a default device.
+        This would be the primary or most used device in case of
+        multiple devices. The system directs an operation to the
+        default device whenever a device name is not specified.
+        The device name is therefore mandatory except when the
+        operation is being done on the default device, or,
+        the system supports only a single Flash device.
+        The device name will always be available for a
+        removable device, even when the device has been removed."
+EDESC
+#
+#
+#
+EVENT ciscoFlashDeviceInsertedNotifRev1 .1.3.6.1.4.1.9.9.10.1.3.0.7 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoFlashDeviceInsertedNotif notification is sent $*
+SDESC
+A ciscoFlashDeviceInsertedNotif notification is sent
+whenever a removable Flash device is inserted
+ciscoFlashDeviceInsertedNotifRev1 depcrecates
+ciscoFlashDeviceInsertedNotif since it uses
+ciscoFlashDeviceName as a varbind which is
+deprecated
+Variables:
+  1: ciscoFlashDeviceMinPartitionSize
+     Syntax="UNSIGNED32"
+     Descr="This object will give the minimum partition size
+        supported for this device. For systems that execute code
+        directly out of Flash, the minimum partition size needs
+        to be the bank size. (Bank size is equal to the size of a
+        chip multiplied by the width of the device. In most cases,
+        the device width is 4 bytes, and so the bank size would be
+        four times the size of a chip). This has to be so because
+        all programming commands affect the operation of an
+        entire chip (in our case, an entire bank because all
+        operations are done on the entire width of the device)
+        even though the actual command may be localized to a small
+        portion of each chip. So when executing code out of Flash,
+        one needs to be able to write and erase some portion of
+        Flash without affecting the code execution.
+        For systems that execute code out of DRAM or ROM, it is
+        possible to partition Flash with a finer granularity (for
+        eg., at erase sector boundaries) if the system code supports
+        such granularity.
+
+        This object will let a management entity know the
+        minimum partition size as defined by the system.
+        If the system does not support partitioning, the value
+        will be equal to the device size in ciscoFlashDeviceSize.
+        The maximum number of partitions that could be configured
+        will be equal to the minimum of
+        ciscoFlashDeviceMaxPartitions
+        and
+        (ciscoFlashDeviceSize / ciscoFlashDeviceMinPartitionSize).
+
+        If the total size of the flash device is greater than the
+        maximum value reportable by this object then this object should
+        report its maximum value(4,294,967,295) and
+        ciscoFlashDeviceMinPartitionSizeExtended must be used to report
+        the flash device's minimum partition size."
+  2: ciscoFlashDeviceNameExtended
+     Syntax="OCTETSTR"
+     Descr="Extended Flash device name whose size can be upto
+        255 characters. This name is used to refer to the
+        device within the system. Flash operations get directed
+        to a device based on this name.
+        The system has a concept of a default device.
+        This would be the primary or most used device in case
+        of multiple devices. The system directs an operation
+        to the default device whenever a device name is not
+        specified. The device name is therefore mandatory
+        except when the operation is being done on the
+        default device, or, the system supports only a single
+        Flash device. The device name will always be available
+        for a removable device, even when the device has been
+        removed."
+EDESC
+#
+#
+#
+EVENT ciscoFlashDeviceRemovedNotifRev1 .1.3.6.1.4.1.9.9.10.1.3.0.8 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoFlashDeviceRemovedNotif notification is sent $*
+SDESC
+A ciscoFlashDeviceRemovedNotif notification is sent
+whenever a removable Flash device is removed.
+ciscoFlashDeviceRemovedNotifRev1 depcrecates
+ciscoFlashDeviceRemovedNotif since it uses
+ciscoFlashDeviceName as a varbind which is
+deprecated
+Variables:
+  1: ciscoFlashDeviceNameExtended
+     Syntax="OCTETSTR"
+     Descr="Extended Flash device name whose size can be upto
+        255 characters. This name is used to refer to the
+        device within the system. Flash operations get directed
+        to a device based on this name.
+        The system has a concept of a default device.
+        This would be the primary or most used device in case
+        of multiple devices. The system directs an operation
+        to the default device whenever a device name is not
+        specified. The device name is therefore mandatory
+        except when the operation is being done on the
+        default device, or, the system supports only a single
+        Flash device. The device name will always be available
+        for a removable device, even when the device has been
+        removed."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-FTP-CLIENT-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-FTP-CLIENT-MIB.my) converted on Mon Oct  7 13:50:34 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-HSRP-EXT-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-HSRP-EXT-MIB.my) converted on Mon Oct  7 13:50:34 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-HSRP-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-HSRP-MIB.my) converted on Mon Oct  7 13:50:34 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT cHsrpStateChange .1.3.6.1.4.1.9.9.106.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA A cHsrpStateChange notification is sent when a $*
+SDESC
+A cHsrpStateChange notification is sent when a
+cHsrpGrpStandbyState transitions to either active or
+standby state, or leaves active or standby state. There
+will be only one notification issued when the state change
+is from standby to active and vice versa.
+Variables:
+  1: cHsrpGrpStandbyState
+     Syntax="INTEGER"
+       1: initial
+       2: learn
+       3: listen
+       4: speak
+       5: standby
+       6: active
+     Descr="The current HSRP state of this group on this interface."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-IGMP-FILTER-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-IGMP-FILTER-MIB.my) converted on Mon Oct  7 13:50:34 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-IMAGE-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-IMAGE-MIB.my) converted on Mon Oct  7 13:50:35 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-IP-STAT-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-IP-STAT-MIB.my) converted on Mon Oct  7 13:50:35 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-L2L3-INTERFACE-CONFIG-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-L2L3-INTERFACE-CONFIG-MIB.my) converted on Mon Oct  7 13:50:35 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-LAG-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-LAG-MIB.my) converted on Mon Oct  7 13:50:35 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-MAC-NOTIFICATION-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-MAC-NOTIFICATION-MIB.my) converted on Mon Oct  7 13:50:35 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT cmnMacChangedNotification .1.3.6.1.4.1.9.9.215.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is generated when there is enough MAC $*
+SDESC
+This notification is generated when there is enough MAC
+address information to fully occupy a maximum size SNMP trap
+message. This notification is also generated when there
+is at least one MAC address changed or removed and the amount
+of time elapsed from the previous notification is greater
+than the maximum wait time denoted by 
+cmnNotificationInterval object. 
+If there are more MAC addresses information than can fit into
+one cmmHistTrapContent object, then multiple notifications
+will be generated. 
+Variables:
+  1: cmnHistMacChangedMsg
+     Syntax="OCTETSTR"
+     Descr="This object contains the information of a MAC change
+        notification event. It consists of several tuples packed
+        together in the format of '<tuple1><tuple2>...'.
+        
+        Each tuple consist of 11 octets in the format of
+        '<operation><VLAN><MAC><dot1dBasePort>' where 
+
+        <operation> is of size 1 octet and supports the following values
+          0 - End of MIB object.
+          1 - MAC learnt.
+          2 - MAC removed.
+
+        <VLAN> is VLAN number of the VLAN which the MAC address is
+        belonged to and has size of 2 octet.
+
+        <MAC> is the Layer2 Mac Address and has size of 6 octets.
+
+        <dot1dBasePort> is the value of dot1dBasePort for the
+        interface from which the MAC address is learnt and has size
+        of 2 octets."
+  2: cmnHistTimestamp
+     Syntax="TICKS"
+     Descr="The value of sysUpTime when the cmnMacChangedNotification
+        containing the information denoted by the cmnHistMacChangedMsg
+        object in this entry was generated."
+EDESC
+#
+#
+#
+EVENT cmnMacMoveNotification .1.3.6.1.4.1.9.9.215.2.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA cmnMacMoveNotification is generated when a MAC address is  $*
+SDESC
+cmnMacMoveNotification is generated when a MAC address is 
+moved between two interfaces.
+Variables:
+  1: cmnMACMoveAddress
+     Syntax="OCTETSTR"
+     Descr="Indicates the MAC address that is moved between
+          cmnMACMoveFromPortId and cmnMACMoveToPortId on 
+          cmnMACMoveVlanNumber.  This object is instantiated only 
+          when cmnMACMoveFeatureEnabled value is set to true(1) and
+          a MAC move is detected by the MAC move notification feature."
+  2: cmnMACMoveVlanNumber
+     Syntax="INTEGER32"
+     Descr="Indicates the VLAN on which the cmnMACMoveAddress is
+          moved from cmnMACMoveFromPortId to cmnMACMoveToPortId. 
+          This object is instantiated only when
+          cmnMACMoveFeatureEnabled value is set to true(1) and a
+          MAC move is detected by the MAC move notification feature."
+  3: cmnMACMoveFromPortId
+     Syntax="INTEGER32"
+     Descr="The value of dot1dBasePort for the bridge port from which 
+          the cmnMACMoveAddress is moved to cmnMACMoveToPortId on 
+          cmnMACMoveVlanNumber. This object is instantiated only when
+          cmnMACMoveFeatureEnabled value is set to true(1) and a 
+          MAC move is detected by the MAC move notification feature."
+  4: cmnMACMoveToPortId
+     Syntax="INTEGER32"
+     Descr="The value of dot1dBasePort for the bridge port to which 
+          the cmnMACMoveAddress is moved from cmnMACMoveFromPortId 
+          on cmnMACMoveVlanNumber.  This object is instantiated only 
+          when cmnMACMoveFeatureEnabled value is set to true(1) and  
+          a MAC move is detected by the MAC move notification feature."
+  5: cmnMACMoveTime
+     Syntax="TICKS"
+     Descr="The value of sysUpTime when a cmnMACMoveAddress is moved 
+          between cmnMACMoveFromPortId and cmnMACMACMoveToPortId. 
+          This object is instantiated only when 
+          cmnMACMoveFeatureEnabled value is set to true(1) and  
+          a MAC move is detected by the MAC move notification feature."
+EDESC
+#
+#
+#
+EVENT cmnMacThresholdExceedNotif .1.3.6.1.4.1.9.9.215.2.0.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA cmnMacThresholdExceedNotif is sent when  $*
+SDESC
+cmnMacThresholdExceedNotif is sent when 
+cmnUtilizationUtilization exceeds or equals to the 
+cmnMACThresholdLimit for a given entPhysicalIndex.
+cmnMacThresholdExceedNotif is not sent when 
+cmnMACThresholdLimit is set to zero
+Variables:
+  1: cmnUtilizationUtilization
+     Syntax="INTEGER"
+     Descr="Indicates the utilization of the forwarding table for the given
+         entPhysicalIndex calculated at the end of 
+         cmnMACThresholdInterval."
+  2: cmnMACThresholdLimit
+     Syntax="INTEGER"
+     Descr="Indicate the threshold limit of the forwarding table 
+          utilization."
+  3: cmnUtilizationTimeStamp
+     Syntax="TICKS"
+     Descr="Indicates the sysUptime at which the cmnUtilizationUtilization 
+         is updated."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-MEMORY-POOL-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-MEMORY-POOL-MIB.my) converted on Mon Oct  7 13:50:35 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-NAC-TC-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-NAC-TC-MIB.my) converted on Mon Oct  7 13:50:35 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-PAE-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-PAE-MIB.my) converted on Mon Oct  7 13:50:36 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT cpaeNoGuestVlanNotif .1.3.6.1.4.1.9.9.220.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA A cpaeNoGuestVlanNotif is sent if a non-802.1x $*
+SDESC
+A cpaeNoGuestVlanNotif is sent if a non-802.1x
+supplicant is detected on a PAE port for which the
+value of corresponding instance of
+dot1xAuthAuthControlledPortControl is 'auto' and the
+value of corresponding instance of cpaeGuestVlanNumber
+is zero.
+Variables:
+  1: dot1xAuthPaeState
+     Syntax="INTEGER"
+       1: initialize
+       10: restart
+       2: disconnected
+       3: connecting
+       4: authenticating
+       5: authenticated
+       6: aborting
+       7: held
+       8: forceAuth
+       9: forceUnauth
+     Descr="The current value of the Authenticator PAE state
+        machine."
+EDESC
+#
+#
+#
+EVENT cpaeNoAuthFailVlanNotif .1.3.6.1.4.1.9.9.220.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA A cpaeNoAuthFailVlanNotif is sent if a 802.1x $*
+SDESC
+A cpaeNoAuthFailVlanNotif is sent if a 802.1x
+supplicant fails to authenticate on a PAE port for
+which the value of corresponding instance of
+dot1xAuthAuthControlledPortControl is 'auto' and the
+value of corresponding instance of cpaePortAuthFailVlan
+is zero.
+Variables:
+  1: dot1xAuthPaeState
+     Syntax="INTEGER"
+       1: initialize
+       10: restart
+       2: disconnected
+       3: connecting
+       4: authenticating
+       5: authenticated
+       6: aborting
+       7: held
+       8: forceAuth
+       9: forceUnauth
+     Descr="The current value of the Authenticator PAE state
+        machine."
+EDESC
+#
+#
+#
+EVENT cpaeGuestVlanNotif .1.3.6.1.4.1.9.9.220.0.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA A cpaeGuestVlanNotif is sent if value of the instance $*
+SDESC
+A cpaeGuestVlanNotif is sent if value of the instance
+of cpaeGuestVlanNotifEnable is set to 'true', and a PAE
+port is being moved to the VLAN specified by value of
+the corresponding instance of cpaeGuestVlanNumber.
+Variables:
+  1: cpaeGuestVlanNumber
+     Syntax="INTEGER32"
+     Descr="Specifies the Guest Vlan of the interface.
+        An interface with cpaePortMode value of 'singleHost'
+        will be moved to its Guest Vlan if the supplicant on
+        the interface is not capable of IEEE-802.1x
+        authentication.
+
+        A value of zero for this object indicates no Guest
+        Vlan configured for the interface."
+  2: dot1xAuthPaeState
+     Syntax="INTEGER"
+       1: initialize
+       10: restart
+       2: disconnected
+       3: connecting
+       4: authenticating
+       5: authenticated
+       6: aborting
+       7: held
+       8: forceAuth
+       9: forceUnauth
+     Descr="The current value of the Authenticator PAE state
+        machine."
+EDESC
+#
+#
+#
+EVENT cpaeAuthFailVlanNotif .1.3.6.1.4.1.9.9.220.0.4 "Status Events" Normal
+FORMAT ZBXTRAP $aA A cpaeAuthFailVlanNotif is sent if value of the instance $*
+SDESC
+A cpaeAuthFailVlanNotif is sent if value of the instance
+of cpaeAuthFailVlanNotifEnable is set to 'true', and a PAE
+port is being moved to the VLAN specified by value of
+the corresponding instance of cpaePortAuthFailVlan.
+Variables:
+  1: cpaePortAuthFailVlan
+     Syntax="INTEGER32"
+     Descr="Specifies the Auth-Fail (Authentication Fail) Vlan of
+        the port.  A port is moved to Auth-Fail Vlan if the
+        supplicant which support IEEE-802.1x authentication is
+        unsuccessfully authenticated.
+
+        A value of zero for this object indicates no Auth-Fail
+        Vlan configured for the port."
+  2: dot1xAuthPaeState
+     Syntax="INTEGER"
+       1: initialize
+       10: restart
+       2: disconnected
+       3: connecting
+       4: authenticating
+       5: authenticated
+       6: aborting
+       7: held
+       8: forceAuth
+       9: forceUnauth
+     Descr="The current value of the Authenticator PAE state
+        machine."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-PAGP-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-PAGP-MIB.my) converted on Mon Oct  7 13:50:36 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-PING-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-PING-MIB.my) converted on Mon Oct  7 13:50:36 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT ciscoPingCompletion .1.3.6.1.4.1.9.9.16.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA A ciscoPingCompleted trap is sent at the completion $*
+SDESC
+A ciscoPingCompleted trap is sent at the completion
+of a sequence of pings if such a trap was requested
+when the sequence was initiated.  In addition to the
+above listed objects (which are always present),
+the message will contain the following objects if 
+any responses were received:
+ciscoPingMinRtt
+ciscoPingAvgRtt
+ciscoPingMaxRtt
+It will also contain the following object if the ping
+is to a VPN address:
+ciscoPingVrfName
+Variables:
+  1: ciscoPingCompleted
+     Syntax="INTEGER"
+       1: true
+       2: false
+     Descr="Set to true when all the packets in this sequence have been
+                either responded to or timed out."
+  2: ciscoPingSentPackets
+     Syntax="COUNTER"
+     Descr="The number of ping packets that have been sent to the target
+                in this sequence."
+  3: ciscoPingReceivedPackets
+     Syntax="COUNTER"
+     Descr="The number of ping packets that have been received from the
+                target in this sequence."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-POLICY-GROUP-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-POLICY-GROUP-MIB.my) converted on Mon Oct  7 13:50:36 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-PRIVATE-VLAN-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-PRIVATE-VLAN-MIB.my) converted on Mon Oct  7 13:50:36 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-PROCESS-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-PROCESS-MIB.my) converted on Mon Oct  7 13:50:36 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT cpmCPURisingThreshold .1.3.6.1.4.1.9.9.109.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA A cpmCPURisingThreshold notification is sent $*
+SDESC
+A cpmCPURisingThreshold notification is sent
+when configured rising CPU utilization threshold
+(cpmCPURisingThresholdValue) is reached and
+CPU utilization remained above the threshold 
+for configured interval(cpmCPURisingThresholdPeriod)
+and such a notification is requested. 
+The cpmProcExtUtil5SecRev and cpmProcessTimeCreated 
+objects can be repeated multiple times
+in a notification indicating the top users of CPU.
+Variables:
+  1: cpmCPURisingThresholdValue
+     Syntax="UNSIGNED32"
+     Descr="The percentage rising threshold value configured by
+        the user. The value indicates, 
+        if the percentage CPU utilization is equal to or above
+        this value for cpmCPURisingThresholdPeriod duration 
+        then send a cpmCPURisingThreshold notification to
+        the NMS."
+  2: cpmCPUTotalMonIntervalValue
+     Syntax="GAUGE"
+     Descr="The overall CPU busy percentage in the last
+        cpmCPUMonInterval period. 
+        This object deprecates the object cpmCPUTotal5secRev."
+  3: cpmCPUInterruptMonIntervalValue
+     Syntax="GAUGE"
+     Descr="The overall CPU busy percentage in the
+        interrupt context in the last cpmCPUMonInterval
+        period."
+  4: cpmProcExtUtil5SecRev
+     Syntax="GAUGE"
+     Descr="This object provides a general idea of how busy
+        a process caused the processor to be over a 5 
+        second period. It is determined as a weighted 
+        decaying average of the current idle time over 
+        the longest idle time. Note that this information 
+        should be used as an estimate only. This object
+        deprecates cpmProcExtUtil5Sec and increases the 
+        value range to (0..100)."
+  5: cpmProcessTimeCreated
+     Syntax="TICKS"
+     Descr="The time when the process was created. The process ID
+        and the time when the process was created, uniquely 
+        identifies a process."
+EDESC
+#
+#
+#
+EVENT cpmCPUFallingThreshold .1.3.6.1.4.1.9.9.109.2.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA A cpmCPUFallingThresholdTrap is sent when the $*
+SDESC
+A cpmCPUFallingThresholdTrap is sent when the
+configured falling threshold
+(cpmCPURisingThresholdValue) 
+is reached and CPU utilization remained under 
+threshold for configured 
+interval (cpmCPUFallingThresholdPeriod) 
+and such a notification is requested.
+Variables:
+  1: cpmCPUFallingThresholdValue
+     Syntax="UNSIGNED32"
+     Descr="The percentage falling threshold value configured by
+        the user. The value indicates, if the percentage 
+        CPU utilization is equal to or below this value for 
+        cpmCPUFallingThresholdPeriod duration
+        then send a cpmCPUFallingThreshold notification 
+        to the NMS."
+  2: cpmCPUTotalMonIntervalValue
+     Syntax="GAUGE"
+     Descr="The overall CPU busy percentage in the last
+        cpmCPUMonInterval period. 
+        This object deprecates the object cpmCPUTotal5secRev."
+  3: cpmCPUInterruptMonIntervalValue
+     Syntax="GAUGE"
+     Descr="The overall CPU busy percentage in the
+        interrupt context in the last cpmCPUMonInterval
+        period."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-PRODUCTS-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-PRODUCTS-MIB.my) converted on Mon Oct  7 13:50:37 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-QOS-PIB-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-QOS-PIB-MIB.my) converted on Mon Oct  7 13:50:37 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-RTTMON-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-RTTMON-MIB.my) converted on Mon Oct  7 13:50:37 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT rttMonConnectionChangeNotification .1.3.6.1.4.1.9.9.42.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is only valid when the RttMonRttType $*
+SDESC
+This notification is only valid when the RttMonRttType
+is 'echo' or 'pathEcho'.
+A rttMonConnectionChangeNotification indicates that a
+connection to a target (not to a hop along the path
+to a target) has either failed on establishment or 
+been lost and when reestablished.  Precisely, this
+has resulted in rttMonCtrlOperConnectionLostOccurred
+changing value.
+If History is not being collected, the instance values 
+for the rttMonHistoryCollectionAddress object will not 
+be valid.  When RttMonRttType is not 'echo' or 'pathEcho'
+the rttMonHistoryCollectionAddress object will be null.
+rttMonConnectionChangeNotification object is superseded by
+rttMonNotification.
+Variables:
+  1: rttMonCtrlAdminTag
+     Syntax="OCTETSTR"
+     Descr="A string which is used by a managing application to
+        identify the RTT target.  This string is inserted into trap
+        notifications, but has no other significance to the 
+        agent."
+  2: rttMonHistoryCollectionAddress
+     Syntax="OCTETSTR"
+     Descr="When the RttMonRttType is 'echo' or 'pathEcho' this
+        is a string which specifies the address of the target for
+        the this RTT operation.  For all other values of
+        RttMonRttType this string will be null.
+
+        This address will be the address of the hop along the
+        path to the rttMonEchoAdminTargetAddress address,
+        including rttMonEchoAdminTargetAddress address, or just
+        the rttMonEchoAdminTargetAddress address, when the
+        path information is not collected.  This behavior is
+        defined by the rttMonCtrlAdminRttType object.
+
+        The interpretation of this string depends on the type
+        of RTT operation selected, as specified by the
+        rttMonEchoAdminProtocol object.
+
+        See rttMonEchoAdminTargetAddress for a complete
+        description."
+  3: rttMonCtrlOperConnectionLostOccurred
+     Syntax="INTEGER"
+       1: true
+       2: false
+     Descr="This object will only change its value when the
+        RttMonRttType is 'echo' or 'pathEcho'.
+
+        This object is set to true when the RTT connection fails 
+        to be established or is lost, and set to false when a 
+        connection is reestablished.  When the RttMonRttType
+        is 'pathEcho', connection loss applies only to the
+        rttMonEchoAdminTargetAddress and not to intermediate
+        hops to the Target.
+
+        When this value changes and 
+        rttMonReactAdminConnectionEnable is true, a reaction 
+        will occur. 
+
+        If a trap is sent it is a 
+        rttMonConnectionChangeNotification.
+
+        When this value changes and any one of the rttMonReactTable row
+        has rttMonReactVar object value as 'connectionLoss(8)',
+        a reaction may occur.
+
+        If a trap is sent it is rttMonNotification with rttMonReactVar
+        value of 'connectionLoss'."
+EDESC
+#
+#
+#
+EVENT rttMonTimeoutNotification .1.3.6.1.4.1.9.9.42.2.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA A rttMonTimeoutNotification indicates the occurrence of $*
+SDESC
+A rttMonTimeoutNotification indicates the occurrence of
+a timeout for a RTT operation, and it indicates the 
+clearing of such a condition by a subsequent RTT 
+operation. Precisely, this has resulted in 
+rttMonCtrlOperTimeoutOccurred changing value. 
+When the RttMonRttType is 'pathEcho', this 
+notification will only be sent when the timeout 
+occurs during an operation to the target and not to
+a hop along the path to the target.  This also 
+applies to the clearing of the timeout. 
+If History is not being collected, the instance values 
+for the rttMonHistoryCollectionAddress object will not 
+be valid.  When RttMonRttType is not 'echo' or 'pathEcho'
+the rttMonHistoryCollectionAddress object will be null.
+rttMonTimeoutNotification object is superseded by
+rttMonNotification.
+Variables:
+  1: rttMonCtrlAdminTag
+     Syntax="OCTETSTR"
+     Descr="A string which is used by a managing application to
+        identify the RTT target.  This string is inserted into trap
+        notifications, but has no other significance to the 
+        agent."
+  2: rttMonHistoryCollectionAddress
+     Syntax="OCTETSTR"
+     Descr="When the RttMonRttType is 'echo' or 'pathEcho' this
+        is a string which specifies the address of the target for
+        the this RTT operation.  For all other values of
+        RttMonRttType this string will be null.
+
+        This address will be the address of the hop along the
+        path to the rttMonEchoAdminTargetAddress address,
+        including rttMonEchoAdminTargetAddress address, or just
+        the rttMonEchoAdminTargetAddress address, when the
+        path information is not collected.  This behavior is
+        defined by the rttMonCtrlAdminRttType object.
+
+        The interpretation of this string depends on the type
+        of RTT operation selected, as specified by the
+        rttMonEchoAdminProtocol object.
+
+        See rttMonEchoAdminTargetAddress for a complete
+        description."
+  3: rttMonCtrlOperTimeoutOccurred
+     Syntax="INTEGER"
+       1: true
+       2: false
+     Descr="This object will change its value for all
+        RttMonRttTypes.
+
+        This object is set to true when an operation times out, 
+        and set to false when an operation completes under 
+        rttMonCtrlAdminTimeout.  When this value changes, a 
+        reaction may occur, as defined by 
+        rttMonReactAdminTimeoutEnable. 
+
+        When the RttMonRttType is 'pathEcho', this timeout
+        applies only to the rttMonEchoAdminTargetAddress and
+        not to intermediate hops to the Target.
+
+        If a trap is sent it is a rttMonTimeoutNotification.
+
+        When this value changes and any one of the rttMonReactTable
+        row has rttMonReactVar object value as 'timeout(7)', a reaction
+        may occur.
+
+        If a trap is sent it is rttMonNotification with rttMonReactVar
+        value of 'timeout'."
+EDESC
+#
+#
+#
+EVENT rttMonThresholdNotification .1.3.6.1.4.1.9.9.42.2.0.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA A rttMonThresholdNotification indicates the $*
+SDESC
+A rttMonThresholdNotification indicates the
+occurrence of a threshold violation for a RTT operation,
+and it indicates the previous violation has subsided for
+a subsequent RTT operation.  Precisely, this has resulted
+in rttMonCtrlOperOverThresholdOccurred changing value.  
+When the RttMonRttType is 'pathEcho', this 
+notification will only be sent when the threshold
+violation occurs during an operation to the target and
+not to a hop along the path to the target.  This also
+applies to the subsiding of a threshold condition.
+If History is not being collected, the instance values 
+for the rttMonHistoryCollectionAddress object will not 
+be valid.  When RttMonRttType is not 'echo' or 'pathEcho'
+the rttMonHistoryCollectionAddress object will be null.
+rttMonThresholdNotification object is superseded by
+rttMonNotification.
+Variables:
+  1: rttMonCtrlAdminTag
+     Syntax="OCTETSTR"
+     Descr="A string which is used by a managing application to
+        identify the RTT target.  This string is inserted into trap
+        notifications, but has no other significance to the 
+        agent."
+  2: rttMonHistoryCollectionAddress
+     Syntax="OCTETSTR"
+     Descr="When the RttMonRttType is 'echo' or 'pathEcho' this
+        is a string which specifies the address of the target for
+        the this RTT operation.  For all other values of
+        RttMonRttType this string will be null.
+
+        This address will be the address of the hop along the
+        path to the rttMonEchoAdminTargetAddress address,
+        including rttMonEchoAdminTargetAddress address, or just
+        the rttMonEchoAdminTargetAddress address, when the
+        path information is not collected.  This behavior is
+        defined by the rttMonCtrlAdminRttType object.
+
+        The interpretation of this string depends on the type
+        of RTT operation selected, as specified by the
+        rttMonEchoAdminProtocol object.
+
+        See rttMonEchoAdminTargetAddress for a complete
+        description."
+  3: rttMonCtrlOperOverThresholdOccurred
+     Syntax="INTEGER"
+       1: true
+       2: false
+     Descr="This object will change its value for all
+        RttMonRttTypes.
+
+        This object is changed by operation completion times over
+        threshold, as defined by rttMonReactAdminThresholdType.  
+        When this value changes, a reaction may occur, as defined 
+        by rttMonReactAdminThresholdType. 
+
+        If a trap is sent it is a rttMonThresholdNotification.
+
+        This object is set to true if the operation completion time
+        exceeds the rttMonCtrlAdminThreshold and set to false when an
+        operation completes under rttMonCtrlAdminThreshold. When this
+        value changes, a reaction may occur, as defined by
+        rttMonReactThresholdType.
+
+        If a trap is sent it is rttMonNotification with rttMonReactVar
+        value of 'rtt'."
+EDESC
+#
+#
+#
+EVENT rttMonVerifyErrorNotification .1.3.6.1.4.1.9.9.42.2.0.4 "Status Events" Normal
+FORMAT ZBXTRAP $aA A rttMonVerifyErrorNotification indicates the $*
+SDESC
+A rttMonVerifyErrorNotification indicates the
+occurrence of a data corruption in an RTT operation.
+rttMonVerifyErrorNotification object is superseded by
+rttMonNotification.
+Variables:
+  1: rttMonCtrlAdminTag
+     Syntax="OCTETSTR"
+     Descr="A string which is used by a managing application to
+        identify the RTT target.  This string is inserted into trap
+        notifications, but has no other significance to the 
+        agent."
+  2: rttMonHistoryCollectionAddress
+     Syntax="OCTETSTR"
+     Descr="When the RttMonRttType is 'echo' or 'pathEcho' this
+        is a string which specifies the address of the target for
+        the this RTT operation.  For all other values of
+        RttMonRttType this string will be null.
+
+        This address will be the address of the hop along the
+        path to the rttMonEchoAdminTargetAddress address,
+        including rttMonEchoAdminTargetAddress address, or just
+        the rttMonEchoAdminTargetAddress address, when the
+        path information is not collected.  This behavior is
+        defined by the rttMonCtrlAdminRttType object.
+
+        The interpretation of this string depends on the type
+        of RTT operation selected, as specified by the
+        rttMonEchoAdminProtocol object.
+
+        See rttMonEchoAdminTargetAddress for a complete
+        description."
+  3: rttMonCtrlOperVerifyErrorOccurred
+     Syntax="INTEGER"
+       1: true
+       2: false
+     Descr="This object is true if rttMonCtrlAdminVerifyData is
+        set to true and data corruption occurs."
+EDESC
+#
+#
+#
+EVENT rttMonNotification .1.3.6.1.4.1.9.9.42.2.0.5 "Status Events" Normal
+FORMAT ZBXTRAP $aA A rttMonNotification indicates the occurrence of a $*
+SDESC
+A rttMonNotification indicates the occurrence of a
+threshold violation, and it indicates the previous
+violation has subsided for a subsequent operation. 
+When the RttMonRttType is 'pathEcho', this
+notification will only be sent when the threshold
+violation occurs during an operation to the target and
+not to a hop along the path to the target. This also
+applies to the subsiding of a threshold condition.
+If History is not being collected, the instance values
+for the rttMonHistoryCollectionAddress object will not
+be valid. When RttMonRttType is not 'echo' or 'pathEcho'
+the rttMonHistoryCollectionAddress object will be null.
+rttMonReactVar defines the type of reaction that is
+configured for the probe ( e.g jitterAvg, rtt etc ).
+In the rttMonReactTable there are trap definitions
+for the probes and each probe may have more than
+one trap definitions for various types ( e.g rtt,
+jitterAvg, packetLoossSD etc ). So the object rttMonReactVar
+indicates the type ( e.g. rtt, packetLossSD, timeout etc )
+for which threshold violation traps has been generated.
+The object rttMonEchoAdminLSPSelector will be valid only
+for the probes based on 'mplsLspPingAppl' RttMonProtocol. For
+all other probes it will be null.
+Variables:
+  1: rttMonCtrlAdminTag
+     Syntax="OCTETSTR"
+     Descr="A string which is used by a managing application to
+        identify the RTT target.  This string is inserted into trap
+        notifications, but has no other significance to the 
+        agent."
+  2: rttMonHistoryCollectionAddress
+     Syntax="OCTETSTR"
+     Descr="When the RttMonRttType is 'echo' or 'pathEcho' this
+        is a string which specifies the address of the target for
+        the this RTT operation.  For all other values of
+        RttMonRttType this string will be null.
+
+        This address will be the address of the hop along the
+        path to the rttMonEchoAdminTargetAddress address,
+        including rttMonEchoAdminTargetAddress address, or just
+        the rttMonEchoAdminTargetAddress address, when the
+        path information is not collected.  This behavior is
+        defined by the rttMonCtrlAdminRttType object.
+
+        The interpretation of this string depends on the type
+        of RTT operation selected, as specified by the
+        rttMonEchoAdminProtocol object.
+
+        See rttMonEchoAdminTargetAddress for a complete
+        description."
+  3: rttMonReactVar
+     Syntax="INTEGER"
+       1: rtt
+       10: jitterAvg
+       11: icpif
+       12: packetMIA
+       13: packetLateArrival
+       14: packetOutOfSequence
+       15: maxOfPositiveSD
+       16: maxOfNegativeSD
+       17: maxOfPositiveDS
+       18: maxOfNegativeDS
+       19: iaJitterDS
+       2: jitterSDAvg
+       20: frameLossDS
+       21: mosLQDS
+       22: mosCQDS
+       23: rFactorDS
+       24: successivePacketLoss
+       25: maxOfLatencyDS
+       26: maxOfLatencySD
+       27: latencyDSAvg
+       28: latencySDAvg
+       29: packetLoss
+       3: jitterDSAvg
+       30: iaJitterSD
+       31: mosCQSD
+       32: rFactorSD
+       4: packetLossSD
+       5: packetLossDS
+       6: mos
+       7: timeout
+       8: connectionLoss
+       9: verifyError
+     Descr="This object specifies the type of reaction configured for a
+        probe.
+
+        The reaction types 'rtt', 'timeout', and 'connectionLoss' 
+        can be configured for all probe types.
+
+        The reaction type 'verifyError' can be configured for all 
+        probe types except RTP probe type.
+
+        The reaction types 'jitterSDAvg', 'jitterDSAvg', 'jitterAvg', 
+        'packetLateArrival', 'packetOutOfSequence', 
+        'maxOfPositiveSD', 'maxOfNegativeSD', 'maxOfPositiveDS'
+        and 'maxOfNegativeDS' can be configured for UDP jitter 
+        and ICMP jitter probe types only.
+
+        The reaction types 'mos' and 'icpif' can be configured 
+        for UDP jitter and ICMP jitter probe types only.
+
+        The reaction types 'packetLossDS', 'packetLossSD' and 
+        'packetMIA' can be configured for UDP jitter, and 
+        RTP probe types only.
+
+        The reaction types 'iaJitterDS', 'frameLossDS', 'mosLQDS', 
+        'mosCQDS', 'rFactorDS', 'iaJitterSD', 'rFactorSD', 'mosCQSD' 
+        can be configured for RTP probe type only.
+
+        The reaction types 'successivePacketLoss', 'maxOfLatencyDS', 
+        'maxOfLatencySD', 'latencyDSAvg', 'latencySDAvg' and 
+        'packetLoss' can be configured for ICMP jitter probe 
+        type only."
+  4: rttMonReactOccurred
+     Syntax="INTEGER"
+       1: true
+       2: false
+     Descr="This object is set to true when the configured threshold
+        condition is violated as defined by rttMonReactThresholdType.
+        It will be again set to 'false' if the condition reverses.
+
+        This object is set to true in the following conditions:
+         - rttMonReactVar is set to timeout and
+           rttMonCtrlOperTimeoutOccurred set to true.
+         - rttMonReactVar is set to connectionLoss and
+           rttMonCtrlOperConnectionLostOccurred set to true.
+         - rttMonReactVar is set to verifyError and
+           rttMonCtrlOperVerifyErrorOccurred is set to true.
+         - For all other values of rttMonReactVar, if the
+           corresponding value exceeds the configured
+           rttMonReactThresholdRising.
+
+         This object is set to false in the following conditions:
+         - rttMonReactVar is set to timeout and
+           rttMonCtrlOperTimeoutOccurred set to false.
+         - rttMonReactVar is set to connectionLoss and 
+           rttMonCtrlOperConnectionLostOccurred set to false.
+         - rttMonReactVar is set to verifyError and
+           rttMonCtrlOperVerifyErrorOccurred is set to false.
+         - For all other values of rttMonReactVar, if the
+           corresponding value fall below the configured 
+           rttMonReactThresholdFalling.
+
+        When the RttMonRttType is 'pathEcho' or 'pathJitter',
+        this object is applied only to the 
+        rttMonEchoAdminTargetAddress and not to intermediate
+        hops to the Target."
+  5: rttMonReactValue
+     Syntax="INTEGER32"
+     Descr="This object will be set when the configured threshold condition
+        is violated as defined by rttMonReactThresholdType and holds the
+        actual value that violated the configured threshold values.
+
+        This object is not valid for the following values of
+        rttMonReactVar and It will be always 0:
+          - timeout
+          - connectionLoss
+          - verifyError."
+  6: rttMonReactThresholdRising
+     Syntax="INTEGER32"
+     Descr="This object defines the higher threshold limit.
+        If the value ( e.g rtt, jitterAvg, packetLossSD etc ) rises
+        above this limit and if the condition specified in
+        rttMonReactThresholdType are satisfied, a trap is generated.
+
+        Default value of rttMonReactThresholdRising for
+           'rtt' is 5000
+           'jitterAvg' is 100.
+           'jitterSDAvg' is 100.
+           'jitterDSAvg' 100.
+           'packetLossSD' is 10000.
+           'packetLossDS' is 10000.
+           'mos' is 500.
+           'icpif' is 93.
+           'packetMIA' is 10000.
+           'packetLateArrival' is 10000.
+           'packetOutOfSequence' is 10000.
+           'maxOfPositiveSD' is 10000.
+           'maxOfNegativeSD' is 10000.
+           'maxOfPositiveDS' is 10000.
+           'maxOfNegativeDS' is 10000.
+           'iaJitterDS' is 20.
+           'frameLossDS' is 10000.
+           'mosLQDS' is 400.
+           'mosCQDS' is 400.
+           'rFactorDS' is 80.
+           'successivePacketLoss' is 1000.
+           'maxOfLatencyDS' is 5000.
+           'maxOfLatencySD' is 5000.
+           'latencyDSAvg' is 5000.
+           'latencySDAvg' is 5000.
+           'packetLoss' is 10000.
+
+        This object is not applicable if the rttMonReactVar is
+        'timeout', 'connectionLoss' or 'verifyError'. For 'timeout',
+        'connectionLoss' and 'verifyError' default value of 
+        rttMonReactThresholdRising will be 0."
+  7: rttMonReactThresholdFalling
+     Syntax="INTEGER32"
+     Descr="This object defines a lower threshold limit. If the
+        value ( e.g rtt, jitterAvg, packetLossSD etc ) falls
+        below this limit and if the conditions specified in
+        rttMonReactThresholdType are satisfied, a trap is generated.
+
+        Default value of rttMonReactThresholdFalling
+           'rtt' is 3000
+           'jitterAvg' is 100.
+           'jitterSDAvg' is 100.
+           'jitterDSAvg' 100.
+           'packetLossSD' is 10000.
+           'packetLossDS' is 10000.
+           'mos' is 500.
+           'icpif' is 93.
+           'packetMIA' is 10000.
+           'packetLateArrival' is 10000.
+           'packetOutOfSequence' is 10000.
+           'maxOfPositiveSD' is 10000.
+           'maxOfNegativeSD' is 10000.
+           'maxOfPositiveDS' is 10000.
+           'maxOfNegativeDS' is 10000.
+           'iaJitterDS' is 20.
+           'frameLossDS' is 10000.
+           'mosLQDS' is 310.
+           'mosCQDS' is 310.
+           'rFactorDS' is 60.
+           'successivePacketLoss' is 1000.
+           'maxOfLatencyDS' is 3000.
+           'maxOfLatencySD' is 3000.
+           'latencyDSAvg' is 3000.
+           'latencySDAvg' is 3000.
+           'packetLoss' is 10000.
+           'iaJitterSD' is 20.
+           'mosCQSD' is 310.
+           'rFactorSD' is 60.
+
+        This object is not applicable if the rttMonReactVar is
+        'timeout', 'connectionLoss' or 'verifyError'. For 'timeout',
+        'connectionLoss' and 'verifyError' default value of
+        rttMonReactThresholdFalling will be 0."
+  8: rttMonEchoAdminLSPSelector
+     Syntax="OCTETSTR"
+     Descr="A string which specifies a valid 127/8 address. This address
+        is of the form 127.x.y.z.
+        This address is not used to route the MPLS echo packet to the
+        destination but is used for load balancing in cases where the
+        IP payload's destination address is used for load balancing."
+EDESC
+#
+#
+#
+EVENT rttMonLpdDiscoveryNotification .1.3.6.1.4.1.9.9.42.2.0.6 "Status Events" Normal
+FORMAT ZBXTRAP $aA A rttMonLpdDiscoveryNotification indicates that the LSP Path $*
+SDESC
+A rttMonLpdDiscoveryNotification indicates that the LSP Path
+Discovery to the target PE has failed, and it also indicates
+the clearing of such condition. Precisely this has resulted in
+rttMonLpdGrpStatsLPDFailOccurred changing value.
+When the rttMonLpdGrpStatsLPDFailOccurred is 'false', the
+instance value for rttMonLpdGrpStatsLPDFailCause is not valid.
+Variables:
+  1: rttMplsVpnMonCtrlTag
+     Syntax="OCTETSTR"
+     Descr="A string which is used by a managing application to
+        identify the RTT target.
+
+        This string will be configured as rttMonCtrlAdminTag for all
+        the operations configured by this Auto SAA L3 MPLS VPN.
+
+        The usage of this value in Auto SAA L3 MPLS VPN is same as
+        rttMonCtrlAdminTag in RTT operation."
+  2: rttMonLpdGrpStatsTargetPE
+     Syntax="OCTETSTR"
+     Descr="The object is a string that specifies the address of the
+        target PE for this LPD group."
+  3: rttMonLpdGrpStatsLPDFailCause
+     Syntax="INTEGER"
+       1: unknown
+       2: noPath
+       3: allPathsBroken
+       4: allPathsUnexplorable
+       5: allPathsBrokenOrUnexplorable
+       6: timeout
+       7: error
+     Descr="This object identifies the cause of failure for the LSP Path
+        Discovery last attempted. It will be only valid if
+        rttMonLpdGrpStatsLPDFailOccurred is set to true.
+
+        This object will be set to 'unknown' on reset."
+  4: rttMonLpdGrpStatsLPDFailOccurred
+     Syntax="INTEGER"
+       1: true
+       2: false
+     Descr="This object is set to true when the LSP Path Discovery
+        to the target PE i.e. rttMonLpdGrpStatsTargetPE fails, and
+        set to false when the LSP Path Discovery succeeds.
+
+        When this value changes and rttMplsVpnMonReactLpdNotifyType is
+        set to 'lpdPathDiscovery' or 'lpdAll' a
+        rttMonLpdDiscoveryNotification will be generated.
+
+        This object will be set to 'FALSE' on reset."
+EDESC
+#
+#
+#
+EVENT rttMonLpdGrpStatusNotification .1.3.6.1.4.1.9.9.42.2.0.7 "Status Events" Normal
+FORMAT ZBXTRAP $aA A rttMonLpdGrpStatusNotification indicates that the LPD $*
+SDESC
+A rttMonLpdGrpStatusNotification indicates that the LPD
+Group status rttMonLpdGrpStatsGroupStatus has changed indicating
+some connectivity change to the target PE.
+This has resulted in rttMonLpdGrpStatsGroupStatus changing
+value.
+Variables:
+  1: rttMplsVpnMonCtrlTag
+     Syntax="OCTETSTR"
+     Descr="A string which is used by a managing application to
+        identify the RTT target.
+
+        This string will be configured as rttMonCtrlAdminTag for all
+        the operations configured by this Auto SAA L3 MPLS VPN.
+
+        The usage of this value in Auto SAA L3 MPLS VPN is same as
+        rttMonCtrlAdminTag in RTT operation."
+  2: rttMonLpdGrpStatsTargetPE
+     Syntax="OCTETSTR"
+     Descr="The object is a string that specifies the address of the
+        target PE for this LPD group."
+  3: rttMonLpdGrpStatsGroupStatus
+     Syntax="INTEGER"
+       1: unknown
+       2: up
+       3: partial
+       4: down
+     Descr="This object identifies the LPD Group status.
+
+        When the LPD Group status changes and
+        rttMplsVpnMonReactLpdNotifyType is set to 'lpdGroupStatus' or
+        'lpdAll' a rttMonLpdGrpStatusNotification will be generated.
+
+        When the LPD Group status value is 'unknown' or changes to
+        'unknown' this notification will not be generated.
+
+        When LSP Path Discovery is enabled for a particular row in
+        rttMplsVpnMonCtrlTable, 'single probes' in the 'lspGroup' probe
+        cannot generate notifications independently but will be
+        generating depending on the state of the group. Notifications 
+        are only generated if the failure/restoration of an individual
+        probe causes the state of the LPD Group to change.
+
+        This object will be set to 'unknown' on reset."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-RTTMON-TC-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-RTTMON-TC-MIB.my) converted on Mon Oct  7 13:50:38 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-SMI (file:/usr/share/snmp/mibs/cisco/CISCO-SMI.my) converted on Mon Oct  7 13:50:38 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-ST-TC (file:/usr/share/snmp/mibs/cisco/CISCO-ST-TC-V1SMI.my) converted on Mon Oct  7 13:50:38 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-STACK-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-STACK-MIB.my) converted on Mon Oct  7 13:50:38 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT lerAlarmOn .1.3.6.1.4.1.9.5.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA A lerAlarmOn trap signifies that the agent entity $*
+SDESC
+A lerAlarmOn trap signifies that the agent entity
+has detected that the fddimibPORTLerFlag object in
+the FDDI-SMT73-MIB (RFC 1512) has transitioned to
+the true(1) state for one of its ports.
+The generation of this trap can be controlled by
+the fddimibPORTLerAlarm object in the
+FDDI-SMT73-MIB for each port.
+Variables:
+  1: fddimibPORTSMTIndex
+     Syntax="INTEGER"
+     Descr="The value of the SMT index associated with this
+                      PORT."
+  2: fddimibPORTIndex
+     Syntax="INTEGER"
+     Descr="A unique value for each PORT within a given SMT,
+                      which is the same as the corresponding resource
+                      index in SMT.  The value for each PORT must remain
+                      constant at least from one re-initialization of
+                      the entity's network management system to the next
+                      re-initialization."
+EDESC
+#
+#
+#
+EVENT lerAlarmOff .1.3.6.1.4.1.9.5.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA A lerAlarmOff trap signifies that the agent $*
+SDESC
+A lerAlarmOff trap signifies that the agent
+entity has detected that the fddimibPORTLerFlag
+object in the FDDI-SMT73-MIB (RFC 1512) has
+transitioned to the false(2) state for one of
+its ports. The generation of this trap can be
+controlled by the fddimibPORTLerAlarm object in
+the FDDI-SMT73-MIB for each port.
+Variables:
+  1: fddimibPORTSMTIndex
+     Syntax="INTEGER"
+     Descr="The value of the SMT index associated with this
+                      PORT."
+  2: fddimibPORTIndex
+     Syntax="INTEGER"
+     Descr="A unique value for each PORT within a given SMT,
+                      which is the same as the corresponding resource
+                      index in SMT.  The value for each PORT must remain
+                      constant at least from one re-initialization of
+                      the entity's network management system to the next
+                      re-initialization."
+EDESC
+#
+#
+#
+EVENT moduleUp .1.3.6.1.4.1.9.5.0.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA A moduleUp trap signifies that the agent entity $*
+SDESC
+A moduleUp trap signifies that the agent entity
+has detected that the moduleStatus object in this
+MIB has transitioned to the ok(2) state for one of
+its modules.
+The generation of this trap can be controlled by
+the sysEnableModuleTraps object in this MIB.
+Variables:
+  1: moduleIndex
+     Syntax="INTEGER"
+     Descr="A unique value for each module within the
+                       chassis."
+  2: moduleType
+     Syntax="INTEGER"
+       1: other
+       1001: wssup720
+       1002: wssup720base
+       1004: m7600Sip600
+       1007: wsx6748getx
+       1008: wsx670410ge
+       1009: wsx6748sfp
+       1010: wsx6724sfp
+       1016: wsx670810ge
+       1021: vss72010g
+       1023: wsx6708a10ge
+       1027: wsx671610ge
+       1031: vssup2t10g
+       1032: wsx6148ege45at
+       1033: wsx671610t
+       1034: wsx690810g
+       1035: wsx690440g
+       1036: wsx6148egetx
+       1037: wsx6848tx
+       1039: wsx6848sfp
+       1040: wsx6824sfp
+       1042: wsx681610ge
+       1043: wsx681610t
+       11: wsc1200
+       1101: wsx65822pa
+       1102: m7600Sip200
+       1103: m7600Sip400
+       1104: c7600ssc400
+       1105: c7600ssc600
+       1106: esm2x10ge
+       12: wsc1400
+       13: wsx1441
+       14: wsx1444
+       15: wsx1450
+       16: wsx1483
+       17: wsx1454
+       18: wsx1455
+       1800: rsp720
+       1801: rsp720base
+       1805: c7600msfc4
+       19: wsx1431
+       2: empty
+       20: wsx1465
+       200: wsx6ksup12ge
+       201: wsx6408gbic
+       202: wsx6224mmmt
+       203: wsx6248rj45
+       204: wsx6248tel
+       206: wsx6302msm
+       207: wsf6kmsfc
+       208: wsx6024flmt
+       209: wsx6101oc12mmf
+       21: wsx1436
+       210: wsx6101oc12smf
+       211: wsx6416gemt
+       212: wsx61822pa
+       213: osm2oc12AtmMM
+       214: osm2oc12AtmSI
+       216: osm4oc12PosMM
+       217: osm4oc12PosSI
+       218: osm4oc12PosSL
+       219: wsx6ksup1a2ge
+       22: wsx1434
+       220: wsx6302amsm
+       221: wsx6416gbic
+       222: wsx6224ammmt
+       223: wsx6380nam
+       224: wsx6248arj45
+       225: wsx6248atel
+       226: wsx6408agbic
+       229: wsx6608t1
+       23: wsx5009
+       230: wsx6608e1
+       231: wsx6624fxs
+       233: wsx6316getx
+       234: wsf6kmsfc2
+       235: wsx6324mmmt
+       236: wsx6348rj45
+       237: wsx6ksup22ge
+       238: wsx6324sm
+       239: wsx6516gbic
+       24: wsx5013
+       240: osm4geWanGbic
+       241: osm1oc48PosSS
+       242: osm1oc48PosSI
+       243: osm1oc48PosSL
+       244: wsx6381ids
+       245: wsc6500sfm
+       246: osm16oc3PosMM
+       247: osm16oc3PosSI
+       248: osm16oc3PosSL
+       249: osm2oc12PosMM
+       25: wsx5011
+       250: osm2oc12PosSI
+       251: osm2oc12PosSL
+       252: wsx650210ge
+       253: osm8oc3PosMM
+       254: osm8oc3PosSI
+       255: osm8oc3PosSL
+       258: wsx6548rj45
+       259: wsx6524mmmt
+       26: wsx5010
+       260: wsx6066SlbApc
+       261: wsx6516getx
+       265: osm2oc48OneDptSS
+       266: osm2oc48OneDptSI
+       267: osm2oc48OneDptSL
+       268: osm2oc48OneDptSSDual
+       269: osm2oc48OneDptSIDual
+       27: wsx5113
+       270: osm2oc48OneDptSLDual
+       271: wsx6816gbic
+       272: osm4choc12T3MM
+       273: osm4choc12T3SI
+       274: osm8choc12T3MM
+       275: osm8choc12T3SI
+       276: osm1choc48T3SS
+       277: osm2choc48T3SS
+       278: wsx6500sfm2
+       279: osm1choc48T3SI
+       28: wsx5101
+       280: osm2choc48T3SI
+       281: wsx6348rj21
+       282: wsx6548rj21
+       284: wsSvcCmm
+       285: wsx650110gex4
+       286: osm4oc3PosSI
+       289: osm4oc3PosMM
+       29: wsx5103
+       290: wsSvcIdsm2
+       291: wsSvcNam2
+       292: wsSvcFwm1
+       293: wsSvcCe1
+       294: wsSvcSsl1
+       295: osm8choc3DS0SI
+       296: osm4choc3DS0SI
+       297: osm1choc12T1SI
+       3: wsc1000
+       30: wsx5104
+       300: wsx4012
+       301: wsx4148rj
+       302: wsx4232gbrj
+       303: wsx4306gb
+       304: wsx4418gb
+       305: wsx44162gbtx
+       306: wsx4912gb
+       307: wsx2948gbrj
+       309: wsx2948
+       310: wsx4912
+       311: wsx4424sxmt
+       312: wsx4232rjxx
+       313: wsx4148rj21
+       317: wsx4124fxmt
+       318: wsx4013
+       319: wsx4232l3
+       32: wsx5155
+       320: wsx4604gwy
+       321: wsx44122Gbtx
+       322: wsx2980
+       323: wsx2980rj
+       324: wsx2980gbrj
+       325: wsx4019
+       326: wsx4148rj45v
+       33: wsx5154
+       330: wsx4424gbrj45
+       331: wsx4148fxmt
+       332: wsx4448gblx
+       334: wsx4448gbrj45
+       337: wsx4148lxmt
+       339: wsx4548gbrj45
+       34: wsx5153
+       340: wsx4548gbrj45v
+       341: wsx4248rj21v
+       342: wsx4302gb
+       343: wsx4248rj45v
+       345: wsx2948ggetx
+       346: wsx2948ggetxgbrj
+       35: wsx5111
+       36: wsx5213
+       37: wsx5020
+       38: wsx5006
+       39: wsx5005
+       4: wsc1001
+       40: wsx5509
+       41: wsx5506
+       42: wsx5505
+       43: wsx5156
+       44: wsx5157
+       45: wsx5158
+       46: wsx5030
+       47: wsx5114
+       48: wsx5223
+       49: wsx5224
+       5: wsc1100
+       50: wsx5012
+       502: wsx6516aGbic
+       503: wsx6148getx
+       506: wsx6148x2rj45
+       507: wsx6196rj21
+       509: wssup32ge3b
+       510: wssup3210ge3b
+       511: mec6524gs8s
+       512: mec6524gt8s
+       515: wssup32pge
+       516: wssup32p10ge
+       52: wsx5302
+       53: wsx5213a
+       54: wsx5380
+       55: wsx5201
+       56: wsx5203
+       57: wsx5530
+       597: wssvcpisa32
+       598: me6524msfc2a
+       599: wsf6kmsfc2a
+       600: osm12ct3T1
+       601: osm12t3e3
+       602: osm24t3e3
+       603: osm4GeWanGbicPlus
+       604: osm1choc12T3SI
+       605: osm2choc12T3SI
+       606: osm2oc12AtmMMPlus
+       607: osm2oc12AtmSIPlus
+       608: osm2oc12PosMMPlus
+       609: osm2oc12PosSIPlus
+       61: wsx5161
+       610: osm16oc3PosSIPlus
+       611: osm1oc48PosSSPlus
+       612: osm1oc48PosSIPlus
+       613: osm1oc48PosSLPlus
+       614: osm4oc3PosSIPlus
+       615: osm8oc3PosSLPlus
+       616: osm8oc3PosSIPlus
+       617: osm4oc12PosSIPlus
+       618: c7600Es4Tg3cxl
+       62: wsx5162
+       620: c7600Es2Tg3cxl
+       625: c76EsXt4Tg3cxl
+       626: c76EsXt2Tg3cxl
+       627: c7600Es4Tg3c
+       629: c7600Es2Tg3c
+       633: c76EsXt4Tg3c
+       634: c76EsXt2Tg3c
+       65: wsx5165
+       66: wsx5166
+       67: wsx5031
+       68: wsx5410
+       69: wsx5403
+       73: wsx5201r
+       74: wsx5225r
+       75: wsx5014
+       76: wsx5015
+       77: wsx5236
+       78: wsx5540
+       79: wsx5234
+       81: wsx5012a
+       82: wsx5167
+       83: wsx5239
+       84: wsx5168
+       85: wsx5305
+       87: wsx5550
+       88: wsf5541
+       903: wsSvcIpSec1
+       91: wsx5534
+       910: wsSvcMwam1
+       911: wsSvcCsg1
+       912: wsx6148rj45v
+       913: wsx6148rj21v
+       914: wsSvcNam1
+       915: wsx6548getx
+       919: wsSvcPsd1
+       92: wsx5536
+       920: wsx6066SlbSk9
+       921: wsx6148agetx
+       923: wsx6148arj45
+       924: wsSvcWlan1k9
+       925: wsSvcAon1k9
+       926: ace106500k9
+       927: wsSvcWebVpnk9
+       928: wsx6148FeSfp
+       929: wsSvcAdm1k9
+       930: wsSvcAgm1k9
+       936: ace046500k9
+       940: wsSvcSamiBb
+       946: wsSvcWism2k9
+       947: wsSvcAsaSm1
+       949: wsSvcNam3k9
+       950: wsSvcAsaSm1k7
+       951: wsSvcVse1k9
+       96: wsx5237
+     Descr="The type of module."
+EDESC
+#
+#
+#
+EVENT moduleDown .1.3.6.1.4.1.9.5.0.4 "Status Events" Normal
+FORMAT ZBXTRAP $aA A moduleDown trap signifies that the agent entity $*
+SDESC
+A moduleDown trap signifies that the agent entity
+has detected that the moduleStatus object in this
+MIB has transitioned out of the ok(2) state for
+one of its modules.
+The generation of this trap can be controlled by
+the sysEnableModuleTraps object in this MIB.
+Variables:
+  1: moduleIndex
+     Syntax="INTEGER"
+     Descr="A unique value for each module within the
+                       chassis."
+  2: moduleType
+     Syntax="INTEGER"
+       1: other
+       1001: wssup720
+       1002: wssup720base
+       1004: m7600Sip600
+       1007: wsx6748getx
+       1008: wsx670410ge
+       1009: wsx6748sfp
+       1010: wsx6724sfp
+       1016: wsx670810ge
+       1021: vss72010g
+       1023: wsx6708a10ge
+       1027: wsx671610ge
+       1031: vssup2t10g
+       1032: wsx6148ege45at
+       1033: wsx671610t
+       1034: wsx690810g
+       1035: wsx690440g
+       1036: wsx6148egetx
+       1037: wsx6848tx
+       1039: wsx6848sfp
+       1040: wsx6824sfp
+       1042: wsx681610ge
+       1043: wsx681610t
+       11: wsc1200
+       1101: wsx65822pa
+       1102: m7600Sip200
+       1103: m7600Sip400
+       1104: c7600ssc400
+       1105: c7600ssc600
+       1106: esm2x10ge
+       12: wsc1400
+       13: wsx1441
+       14: wsx1444
+       15: wsx1450
+       16: wsx1483
+       17: wsx1454
+       18: wsx1455
+       1800: rsp720
+       1801: rsp720base
+       1805: c7600msfc4
+       19: wsx1431
+       2: empty
+       20: wsx1465
+       200: wsx6ksup12ge
+       201: wsx6408gbic
+       202: wsx6224mmmt
+       203: wsx6248rj45
+       204: wsx6248tel
+       206: wsx6302msm
+       207: wsf6kmsfc
+       208: wsx6024flmt
+       209: wsx6101oc12mmf
+       21: wsx1436
+       210: wsx6101oc12smf
+       211: wsx6416gemt
+       212: wsx61822pa
+       213: osm2oc12AtmMM
+       214: osm2oc12AtmSI
+       216: osm4oc12PosMM
+       217: osm4oc12PosSI
+       218: osm4oc12PosSL
+       219: wsx6ksup1a2ge
+       22: wsx1434
+       220: wsx6302amsm
+       221: wsx6416gbic
+       222: wsx6224ammmt
+       223: wsx6380nam
+       224: wsx6248arj45
+       225: wsx6248atel
+       226: wsx6408agbic
+       229: wsx6608t1
+       23: wsx5009
+       230: wsx6608e1
+       231: wsx6624fxs
+       233: wsx6316getx
+       234: wsf6kmsfc2
+       235: wsx6324mmmt
+       236: wsx6348rj45
+       237: wsx6ksup22ge
+       238: wsx6324sm
+       239: wsx6516gbic
+       24: wsx5013
+       240: osm4geWanGbic
+       241: osm1oc48PosSS
+       242: osm1oc48PosSI
+       243: osm1oc48PosSL
+       244: wsx6381ids
+       245: wsc6500sfm
+       246: osm16oc3PosMM
+       247: osm16oc3PosSI
+       248: osm16oc3PosSL
+       249: osm2oc12PosMM
+       25: wsx5011
+       250: osm2oc12PosSI
+       251: osm2oc12PosSL
+       252: wsx650210ge
+       253: osm8oc3PosMM
+       254: osm8oc3PosSI
+       255: osm8oc3PosSL
+       258: wsx6548rj45
+       259: wsx6524mmmt
+       26: wsx5010
+       260: wsx6066SlbApc
+       261: wsx6516getx
+       265: osm2oc48OneDptSS
+       266: osm2oc48OneDptSI
+       267: osm2oc48OneDptSL
+       268: osm2oc48OneDptSSDual
+       269: osm2oc48OneDptSIDual
+       27: wsx5113
+       270: osm2oc48OneDptSLDual
+       271: wsx6816gbic
+       272: osm4choc12T3MM
+       273: osm4choc12T3SI
+       274: osm8choc12T3MM
+       275: osm8choc12T3SI
+       276: osm1choc48T3SS
+       277: osm2choc48T3SS
+       278: wsx6500sfm2
+       279: osm1choc48T3SI
+       28: wsx5101
+       280: osm2choc48T3SI
+       281: wsx6348rj21
+       282: wsx6548rj21
+       284: wsSvcCmm
+       285: wsx650110gex4
+       286: osm4oc3PosSI
+       289: osm4oc3PosMM
+       29: wsx5103
+       290: wsSvcIdsm2
+       291: wsSvcNam2
+       292: wsSvcFwm1
+       293: wsSvcCe1
+       294: wsSvcSsl1
+       295: osm8choc3DS0SI
+       296: osm4choc3DS0SI
+       297: osm1choc12T1SI
+       3: wsc1000
+       30: wsx5104
+       300: wsx4012
+       301: wsx4148rj
+       302: wsx4232gbrj
+       303: wsx4306gb
+       304: wsx4418gb
+       305: wsx44162gbtx
+       306: wsx4912gb
+       307: wsx2948gbrj
+       309: wsx2948
+       310: wsx4912
+       311: wsx4424sxmt
+       312: wsx4232rjxx
+       313: wsx4148rj21
+       317: wsx4124fxmt
+       318: wsx4013
+       319: wsx4232l3
+       32: wsx5155
+       320: wsx4604gwy
+       321: wsx44122Gbtx
+       322: wsx2980
+       323: wsx2980rj
+       324: wsx2980gbrj
+       325: wsx4019
+       326: wsx4148rj45v
+       33: wsx5154
+       330: wsx4424gbrj45
+       331: wsx4148fxmt
+       332: wsx4448gblx
+       334: wsx4448gbrj45
+       337: wsx4148lxmt
+       339: wsx4548gbrj45
+       34: wsx5153
+       340: wsx4548gbrj45v
+       341: wsx4248rj21v
+       342: wsx4302gb
+       343: wsx4248rj45v
+       345: wsx2948ggetx
+       346: wsx2948ggetxgbrj
+       35: wsx5111
+       36: wsx5213
+       37: wsx5020
+       38: wsx5006
+       39: wsx5005
+       4: wsc1001
+       40: wsx5509
+       41: wsx5506
+       42: wsx5505
+       43: wsx5156
+       44: wsx5157
+       45: wsx5158
+       46: wsx5030
+       47: wsx5114
+       48: wsx5223
+       49: wsx5224
+       5: wsc1100
+       50: wsx5012
+       502: wsx6516aGbic
+       503: wsx6148getx
+       506: wsx6148x2rj45
+       507: wsx6196rj21
+       509: wssup32ge3b
+       510: wssup3210ge3b
+       511: mec6524gs8s
+       512: mec6524gt8s
+       515: wssup32pge
+       516: wssup32p10ge
+       52: wsx5302
+       53: wsx5213a
+       54: wsx5380
+       55: wsx5201
+       56: wsx5203
+       57: wsx5530
+       597: wssvcpisa32
+       598: me6524msfc2a
+       599: wsf6kmsfc2a
+       600: osm12ct3T1
+       601: osm12t3e3
+       602: osm24t3e3
+       603: osm4GeWanGbicPlus
+       604: osm1choc12T3SI
+       605: osm2choc12T3SI
+       606: osm2oc12AtmMMPlus
+       607: osm2oc12AtmSIPlus
+       608: osm2oc12PosMMPlus
+       609: osm2oc12PosSIPlus
+       61: wsx5161
+       610: osm16oc3PosSIPlus
+       611: osm1oc48PosSSPlus
+       612: osm1oc48PosSIPlus
+       613: osm1oc48PosSLPlus
+       614: osm4oc3PosSIPlus
+       615: osm8oc3PosSLPlus
+       616: osm8oc3PosSIPlus
+       617: osm4oc12PosSIPlus
+       618: c7600Es4Tg3cxl
+       62: wsx5162
+       620: c7600Es2Tg3cxl
+       625: c76EsXt4Tg3cxl
+       626: c76EsXt2Tg3cxl
+       627: c7600Es4Tg3c
+       629: c7600Es2Tg3c
+       633: c76EsXt4Tg3c
+       634: c76EsXt2Tg3c
+       65: wsx5165
+       66: wsx5166
+       67: wsx5031
+       68: wsx5410
+       69: wsx5403
+       73: wsx5201r
+       74: wsx5225r
+       75: wsx5014
+       76: wsx5015
+       77: wsx5236
+       78: wsx5540
+       79: wsx5234
+       81: wsx5012a
+       82: wsx5167
+       83: wsx5239
+       84: wsx5168
+       85: wsx5305
+       87: wsx5550
+       88: wsf5541
+       903: wsSvcIpSec1
+       91: wsx5534
+       910: wsSvcMwam1
+       911: wsSvcCsg1
+       912: wsx6148rj45v
+       913: wsx6148rj21v
+       914: wsSvcNam1
+       915: wsx6548getx
+       919: wsSvcPsd1
+       92: wsx5536
+       920: wsx6066SlbSk9
+       921: wsx6148agetx
+       923: wsx6148arj45
+       924: wsSvcWlan1k9
+       925: wsSvcAon1k9
+       926: ace106500k9
+       927: wsSvcWebVpnk9
+       928: wsx6148FeSfp
+       929: wsSvcAdm1k9
+       930: wsSvcAgm1k9
+       936: ace046500k9
+       940: wsSvcSamiBb
+       946: wsSvcWism2k9
+       947: wsSvcAsaSm1
+       949: wsSvcNam3k9
+       950: wsSvcAsaSm1k7
+       951: wsSvcVse1k9
+       96: wsx5237
+     Descr="The type of module."
+EDESC
+#
+#
+#
+EVENT chassisAlarmOn .1.3.6.1.4.1.9.5.0.5 "Status Events" Normal
+FORMAT ZBXTRAP $aA A chassisAlarmOn trap signifies that the agent $*
+SDESC
+A chassisAlarmOn trap signifies that the agent
+entity has detected the chassisTempAlarm,
+chassisMinorAlarm, or chassisMajorAlarm object in
+this MIB has transitioned to the on(2) state.
+The generation of this trap can be controlled by
+the sysEnableChassisTraps object in this MIB.
+Variables:
+  1: chassisTempAlarm
+     Syntax="INTEGER"
+       1: off
+       2: on
+       3: critical
+     Descr="The chassis temperature alarm status."
+  2: chassisMinorAlarm
+     Syntax="INTEGER"
+       1: off
+       2: on
+     Descr="The chassis minor alarm status."
+  3: chassisMajorAlarm
+     Syntax="INTEGER"
+       1: off
+       2: on
+     Descr="The chassis major alarm status."
+EDESC
+#
+#
+#
+EVENT chassisAlarmOff .1.3.6.1.4.1.9.5.0.6 "Status Events" Normal
+FORMAT ZBXTRAP $aA A chassisAlarmOff trap signifies that the agent $*
+SDESC
+A chassisAlarmOff trap signifies that the agent
+entity has detected the chassisTempAlarm,
+chassisMinorAlarm, or chassisMajorAlarm object in
+this MIB has transitioned to the off(1) state.
+The generation of this trap can be controlled by
+the sysEnableChassisTraps object in this MIB.
+Variables:
+  1: chassisTempAlarm
+     Syntax="INTEGER"
+       1: off
+       2: on
+       3: critical
+     Descr="The chassis temperature alarm status."
+  2: chassisMinorAlarm
+     Syntax="INTEGER"
+       1: off
+       2: on
+     Descr="The chassis minor alarm status."
+  3: chassisMajorAlarm
+     Syntax="INTEGER"
+       1: off
+       2: on
+     Descr="The chassis major alarm status."
+EDESC
+#
+#
+#
+EVENT ipPermitDeniedTrap .1.3.6.1.4.1.9.5.0.7 "Status Events" Normal
+FORMAT ZBXTRAP $aA ipPermitDeniedTrap indicates that IP permit $*
+SDESC
+ipPermitDeniedTrap indicates that IP permit
+denied access happens. The generation of this
+trap can be controlled by the
+sysEnableIpPermitTraps object in this MIB.
+Variables:
+  1: ipPermitDeniedAddress
+     Syntax="IPADDR"
+     Descr="The IP address of a IP permit denied access."
+  2: ipPermitDeniedAccess
+     Syntax="INTEGER"
+       1: telnet
+       2: snmp
+       3: ssh
+       4: http
+     Descr="The denied access type."
+EDESC
+#
+#
+#
+EVENT sysConfigChangeTrap .1.3.6.1.4.1.9.5.0.9 "Status Events" Normal
+FORMAT ZBXTRAP $aA A sysConfigChange trap signifies that the system $*
+SDESC
+A sysConfigChange trap signifies that the system
+configuration in NVRAM is changed. The generation
+of this trap can be controlled by the
+sysEnableConfigTraps object in this MIB.
+Variables:
+  1: sysConfigChangeTime
+     Syntax="TICKS"
+     Descr="The time (in hundredths of a second) since the
+                      configuration of the system was last changed."
+  2: sysConfigChangeInfo
+     Syntax="OCTETSTR"
+     Descr="Indicates which NVRAM block is changed by whom."
+EDESC
+#
+#
+#
+EVENT tokenRingSoftErrExceededTrap .1.3.6.1.4.1.9.5.0.10 "Status Events" Normal
+FORMAT ZBXTRAP $aA This trap is generated when a station local to a $*
+SDESC
+This trap is generated when a station local to a
+token ring port exceeds its Soft Error Threshold
+within the configured interval.
+Variables:
+  1: ringStationMacAddress
+     Syntax="OCTETSTR"
+     Descr="The physical address of this station."
+  2: ifIndex
+     Syntax="INTEGER"
+     Descr="A unique value for each interface.  Its value
+            ranges between 1 and the value of ifNumber.  The
+            value for each interface must remain constant at
+            least from one re-initialization of the entity's
+            network management system to the next re-
+            initialization."
+  3: ifName
+     Syntax="OCTETSTR"
+     Descr="The textual name of the interface.  The value of this
+            object should be the name of the interface as assigned by
+            the local device and should be suitable for use in commands
+            entered at the device's `console'.  This might be a text
+            name, such as `le0' or a simple port number, such as `1',
+            depending on the interface naming syntax of the device.  If
+            several entries in the ifTable together represent a single
+            interface as named by the device, then each will have the
+            same value of ifName.  Note that for an agent which responds
+            to SNMP queries concerning an interface on some other
+            (proxied) device, then the value of ifName for such an
+            interface is the proxied device's local name for it.
+
+            If there is no local name, or this object is otherwise not
+            applicable, then this object contains a zero-length string."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-STACKMAKER-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-STACKMAKER-MIB.my) converted on Mon Oct  7 13:50:39 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-STP-EXTENSIONS-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-STP-EXTENSIONS-MIB.my) converted on Mon Oct  7 13:50:39 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT stpxInconsistencyUpdate .1.3.6.1.4.1.9.9.82.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA A stpxPortInconsistencyUpdate notification is sent by a $*
+SDESC
+A stpxPortInconsistencyUpdate notification is sent by a
+bridge when an instance of stpxInconsistentState is 
+created or destroyed.  That is, when an inconsistency is
+discovered in the VLAN's Spanning Tree for a particular 
+port, or when such an inconsistency disappears.  Note 
+that the trap is not sent if the port transitions between
+different types of inconsistency.
+The stpxInconsistentState value indicates the type of
+inconsistency which now exists/no longer exists for the 
+relevant VLAN on the relevant port.
+Variables:
+  1: stpxInconsistentState
+     Syntax="BITS"
+     Descr="The types of inconsistency which have been discovered on
+              this port for this VLAN's Spanning Tree.
+
+              When this object exists, the value of the corresponding
+              instance of the Bridge MIB's dot1dStpPortState object will
+              be 'broken(6)'."
+EDESC
+#
+#
+#
+EVENT stpxRootInconsistencyUpdate .1.3.6.1.4.1.9.9.82.2.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA A stpxRootInconsistencyUpdate notification is sent by a $*
+SDESC
+A stpxRootInconsistencyUpdate notification is sent by a
+bridge when an instance of stpxRootInconsistencyState
+is created or destroyed. That is, when an
+root-inconsistency is discovered in the VLAN's or 
+instance's Spanning Tree for a particular port, or when 
+such an root-inconsistency disappears. For creation, the 
+value of stpxRootInconsistencyState in the notification is
+true(1); for deletion, the value is false(2).
+The object value of stpxSpanningTreeType indicates
+which Spanning Tree protocol is running when an instance 
+of stpxRootInconsistencyState is created or destroyed.  
+Variables:
+  1: stpxRootInconsistencyState
+     Syntax="INTEGER"
+       1: true
+       2: false
+     Descr="Indicates whether the port on a particular Spanning 
+                 Tree instance is currently in root-inconsistent 
+                 state or not."
+  2: stpxSpanningTreeType
+     Syntax="INTEGER"
+       1: pvstPlus
+       2: mistp
+       3: mistpPvstPlus
+       4: mst
+       5: rapidPvstPlus
+     Descr="The actual mode of spanning tree protocol runs
+        on the  device. It can be one of the following:
+
+        pvstPlus -- PVST+ (Per VLAN Spanning Tree+ Protocol).
+
+        mistp -- MISTP (Multi Instance Spanning Tree Protocol).
+
+        mistpPvstPlus --  MISTP with the tunneling scheme
+                             enabled for PVST+.
+
+        mst -- IEEE 802.1s Multiple Spanning Tree (MST)
+               with IEEE 802.1w Rapid Spanning Tree Protocol
+               (RSTP).
+
+        rapidPvstPlus -- IEEE 802.1w Rapid Spanning Tree 
+                Protocol (RSTP) for all vlans in PVST+.
+
+        When the value of this MIB object gets changed, the 
+        network connectivity would be affected and the 
+        connectivity to this device would also be lost 
+        temporarily."
+EDESC
+#
+#
+#
+EVENT stpxLoopInconsistencyUpdate .1.3.6.1.4.1.9.9.82.2.0.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA A stpxLoopInconsistencyUpdate notification is sent by a $*
+SDESC
+A stpxLoopInconsistencyUpdate notification is sent by a
+bridge when an instance of stpxLoopInconsistencyState
+is created or destroyed. That is, when an
+loop-inconsistency is discovered in the VLAN's or 
+instance's Spanning Tree for a particular port, or when 
+such an loop-inconsistency disappears. For creation, 
+the value of stpxLoopInconsistencyState in the 
+notification is true(1); for deletion, the value is 
+false(2).
+The object value of stpxSpanningTreeType indicates
+which Spanning Tree protocol is running when an instance
+of stpxLoopInconsistencyState is created or 
+destroyed.
+Variables:
+  1: stpxLoopInconsistencyState
+     Syntax="INTEGER"
+       1: true
+       2: false
+     Descr="Indicates whether the port on a particular Spanning 
+                 Tree instance is currently in loop-inconsistent 
+                 state or not."
+  2: stpxSpanningTreeType
+     Syntax="INTEGER"
+       1: pvstPlus
+       2: mistp
+       3: mistpPvstPlus
+       4: mst
+       5: rapidPvstPlus
+     Descr="The actual mode of spanning tree protocol runs
+        on the  device. It can be one of the following:
+
+        pvstPlus -- PVST+ (Per VLAN Spanning Tree+ Protocol).
+
+        mistp -- MISTP (Multi Instance Spanning Tree Protocol).
+
+        mistpPvstPlus --  MISTP with the tunneling scheme
+                             enabled for PVST+.
+
+        mst -- IEEE 802.1s Multiple Spanning Tree (MST)
+               with IEEE 802.1w Rapid Spanning Tree Protocol
+               (RSTP).
+
+        rapidPvstPlus -- IEEE 802.1w Rapid Spanning Tree 
+                Protocol (RSTP) for all vlans in PVST+.
+
+        When the value of this MIB object gets changed, the 
+        network connectivity would be affected and the 
+        connectivity to this device would also be lost 
+        temporarily."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-SYSLOG-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-SYSLOG-MIB.my) converted on Mon Oct  7 13:50:39 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT clogMessageGenerated .1.3.6.1.4.1.9.9.41.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA When a syslog message is generated by the device a $*
+SDESC
+When a syslog message is generated by the device a
+clogMessageGenerated notification is sent.  The
+sending of these notifications can be enabled/disabled
+via the clogNotificationsEnabled object.
+Variables:
+  1: clogHistFacility
+     Syntax="OCTETSTR"
+     Descr="Name of the facility that generated this message.
+                 For example: 'SYS'."
+  2: clogHistSeverity
+     Syntax="INTEGER"
+       1: emergency
+       2: alert
+       3: critical
+       4: error
+       5: warning
+       6: notice
+       7: info
+       8: debug
+     Descr="The severity of the message."
+  3: clogHistMsgName
+     Syntax="OCTETSTR"
+     Descr="A textual identification for the message type.
+                 A facility name in conjunction with a message name
+                 uniquely identifies a message type."
+  4: clogHistMsgText
+     Syntax="OCTETSTR"
+     Descr="The text of the message.  If the text of the message
+                 exceeds 255 bytes, the message will be truncated to
+                 254 bytes and a '*' character will be appended -
+                 indicating that the message has been truncated."
+  5: clogHistTimestamp
+     Syntax="TICKS"
+     Descr="The value of sysUpTime when this message was
+                 generated."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-TC (file:/usr/share/snmp/mibs/cisco/CISCO-TC.my) converted on Mon Oct  7 13:50:39 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-TCP-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-TCP-MIB.my) converted on Mon Oct  7 13:50:40 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-UDLDP-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-UDLDP-MIB.my) converted on Mon Oct  7 13:50:40 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT cudldpFastHelloLinkFailRptNotification .1.3.6.1.4.1.9.9.118.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is generated when UDLDP detects $*
+SDESC
+This notification is generated when UDLDP detects
+a link failure on a fast hello UDLD link and the value of
+cudldpFastHelloErrorReportEnable is 'true'. ifName 
+identifies the interface where the link failure is 
+detected.
+Variables:
+  1: ifName
+     Syntax="OCTETSTR"
+     Descr="The textual name of the interface.  The value of this
+            object should be the name of the interface as assigned by
+            the local device and should be suitable for use in commands
+            entered at the device's `console'.  This might be a text
+            name, such as `le0' or a simple port number, such as `1',
+            depending on the interface naming syntax of the device.  If
+            several entries in the ifTable together represent a single
+            interface as named by the device, then each will have the
+            same value of ifName.  Note that for an agent which responds
+            to SNMP queries concerning an interface on some other
+            (proxied) device, then the value of ifName for such an
+            interface is the proxied device's local name for it.
+
+            If there is no local name, or this object is otherwise not
+            applicable, then this object contains a zero-length string."
+EDESC
+#
+#
+#
+EVENT cudldpFastHelloStatusChangeNotification .1.3.6.1.4.1.9.9.118.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA This notification is generated when there is a change $*
+SDESC
+This notification is generated when there is a change
+in the value of cudldpIfFastHelloOperStatus object.
+cudldpHelloInterval provides the hello interval configured
+at the device level. cudldpIfFastHelloInterval provides
+the fast hello interval configured at the interface level.
+cudldpIfOperHelloInterval indicates the hello interval
+that is currently operational at this interface.
+cudldpIfFastHelloOperStatus indicates the operational
+status of UDLD fast hello at this interface. ifName 
+identifies the interface that trigger the generation of
+this notification.
+Variables:
+  1: cudldpHelloInterval
+     Syntax="INTEGER"
+     Descr="Indicates interval in seconds at which each port
+        sends a hello packet to all of its neighbors at
+        steady state when the link has been identified as
+        bidirectional.
+
+        For platforms which support cudldpHelloIntervalExt, when 
+        cudldpHelloIntervalExt reports a value less than the 
+        minimum value reportable by cudldpHelloInterval, then 
+        cudldpHelloInterval should report its minimum value of 7."
+  2: cudldpIfFastHelloInterval
+     Syntax="UNSIGNED32"
+     Descr="This object specifies the fast hello interval at 
+         which each port sends a hello packet to all of its 
+         neighbors at steady state. By setting this object to 
+         a positive value, this interface is enabled to send
+         UDLD hello packet at a fast interval as specified by
+         this object value. 
+
+         Setting this object to zero value, this interface is 
+         disabled to send UDLD hello packet at fast interval.
+         Instead, the interface will send the UDLD hello packet
+         at the interval as specified by cudldpHelloInterval object
+         (or cudldpHelloIntervalExt if a platform supports
+         cudldpHelloIntervalExt)."
+  3: cudldpIfOperHelloInterval
+     Syntax="UNSIGNED32"
+     Descr="This object indicates the operational interval value
+         at which each port sends a hello packet to all of its 
+         neighbors at steady state."
+  4: cudldpIfFastHelloOperStatus
+     Syntax="INTEGER"
+       1: operational
+       2: notOperational
+     Descr="This object indicates the operational status of
+         fast hello UDLD at this interface."
+  5: ifName
+     Syntax="OCTETSTR"
+     Descr="The textual name of the interface.  The value of this
+            object should be the name of the interface as assigned by
+            the local device and should be suitable for use in commands
+            entered at the device's `console'.  This might be a text
+            name, such as `le0' or a simple port number, such as `1',
+            depending on the interface naming syntax of the device.  If
+            several entries in the ifTable together represent a single
+            interface as named by the device, then each will have the
+            same value of ifName.  Note that for an agent which responds
+            to SNMP queries concerning an interface on some other
+            (proxied) device, then the value of ifName for such an
+            interface is the proxied device's local name for it.
+
+            If there is no local name, or this object is otherwise not
+            applicable, then this object contains a zero-length string."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-VLAN-IFTABLE-RELATIONSHIP-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-VLAN-IFTABLE-RELATIONSHIP-MIB.my) converted on Mon Oct  7 13:50:40 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: CISCO-VLAN-MEMBERSHIP-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-VLAN-MEMBERSHIP-MIB.my) converted on Mon Oct  7 13:50:40 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT vmVmpsChange .1.3.6.1.4.1.9.9.68.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA A VMPS change notification is generated whenever $*
+SDESC
+A VMPS change notification is generated whenever
+vmVmpsChanges is incremented. The IP address
+of the new VMPS is sent.
+Variables:
+  1: vmVmpsIpAddress
+     Syntax="IPADDR"
+     Descr="The Ip Address of the VMPS."
+EDESC
+#
+#
+#
+#
+MIB: CISCO-VTP-MIB (file:/usr/share/snmp/mibs/cisco/CISCO-VTP-MIB.my) converted on Mon Oct  7 13:50:40 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT vtpConfigRevNumberError .1.3.6.1.4.1.9.9.46.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA A configuration revision number error notification $*
+SDESC
+A configuration revision number error notification
+signifies that a device has incremented its
+vtpConfigRevNumberErrors counter.
+Generation of this notification is suppressed if the
+vtpNotificationsEnabled has the value 'false'.
+The device must throttle the generation of consecutive
+vtpConfigRevNumberError notifications so that there is at
+least a five-second gap between notification of this type.
+When notification are throttled, they are dropped, not
+queued for sending at a future time.  (Note that
+'generating' a notification means sending to all configured
+recipients.)
+Variables:
+  1: managementDomainConfigRevNumber
+     Syntax="GAUGE"
+     Descr="The current Configuration Revision Number as known by
+        the local device for this management domain when 
+        managementDomainVersionInUse is version1(1) or 
+        version2(2).
+
+        If managementDomainVersionInUse is version3(4), this 
+        object has the same value with vtpDatabaseRevisionNumber 
+        of VLAN database type.
+
+        This value is updated (if necessary) whenever a VTP
+        advertisement is received or generated. When in the
+        'no management-domain' state, this value is 0."
+EDESC
+#
+#
+#
+EVENT vtpConfigDigestError .1.3.6.1.4.1.9.9.46.2.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA A configuration digest error notification signifies that a $*
+SDESC
+A configuration digest error notification signifies that a
+device has incremented its vtpConfigDigestErrors counter.
+Generation of this notification is suppressed if the
+vtpNotificationsEnabled has the value 'false'.
+The device must throttle the generation of consecutive
+vtpConfigDigestError notifications so that there is at least
+a five-second gap between notification of this type.  When
+notification are throttled, they are dropped, not queued for
+sending at a future time.  (Note that 'generating' a
+notification means sending to all configured recipients.)
+Variables:
+  1: managementDomainConfigRevNumber
+     Syntax="GAUGE"
+     Descr="The current Configuration Revision Number as known by
+        the local device for this management domain when 
+        managementDomainVersionInUse is version1(1) or 
+        version2(2).
+
+        If managementDomainVersionInUse is version3(4), this 
+        object has the same value with vtpDatabaseRevisionNumber 
+        of VLAN database type.
+
+        This value is updated (if necessary) whenever a VTP
+        advertisement is received or generated. When in the
+        'no management-domain' state, this value is 0."
+EDESC
+#
+#
+#
+EVENT vtpServerDisabled .1.3.6.1.4.1.9.9.46.2.0.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA A VTP Server disabled notification is generated when the $*
+SDESC
+A VTP Server disabled notification is generated when the
+local system is no longer able to function as a VTP Server
+because the number of defined VLANs is greater than
+vtpMaxVlanStorage or the local system is not able to
+recover complete VTP information after a reboot.
+Generation of this notification is suppressed if the
+vtpNotificationsEnabled has the value 'false'.
+Variables:
+  1: managementDomainConfigRevNumber
+     Syntax="GAUGE"
+     Descr="The current Configuration Revision Number as known by
+        the local device for this management domain when 
+        managementDomainVersionInUse is version1(1) or 
+        version2(2).
+
+        If managementDomainVersionInUse is version3(4), this 
+        object has the same value with vtpDatabaseRevisionNumber 
+        of VLAN database type.
+
+        This value is updated (if necessary) whenever a VTP
+        advertisement is received or generated. When in the
+        'no management-domain' state, this value is 0."
+  2: vtpMaxVlanStorage
+     Syntax="INTEGER32"
+     Descr="An estimate of the maximum number of VLANs about which the
+        local system can recover complete VTP information after a
+        reboot.  If the number of defined VLANs is greater than this
+        value, then the system can not act as a VTP Server. For a
+        device which has no means to calculate the estimated number,
+        this value is -1."
+EDESC
+#
+#
+#
+EVENT vtpMtuTooBig .1.3.6.1.4.1.9.9.46.2.0.4 "Status Events" Normal
+FORMAT ZBXTRAP $aA A VTP MTU tooBig notification is generated when a VLAN's $*
+SDESC
+A VTP MTU tooBig notification is generated when a VLAN's
+MTU size is larger than can be supported either:
+- by one or more of its trunk ports:
+the included vtpVlanState has the value
+'mtuTooBigForTrunk' and the included
+vlanTrunkPortManagementDomain is for the first (or only)
+trunk port,
+or
+- by the device itself:
+vtpVlanState has the value 'mtuTooBigForDevice' and any
+instance of vlanTrunkPortManagementDomain is included.
+Devices which have no trunk ports do not send vtpMtuTooBig
+notifications.
+Generation of this notification is suppressed if the
+vtpNotificationsEnabled has the value 'false'.
+Variables:
+  1: vlanTrunkPortManagementDomain
+     Syntax="INTEGER32"
+     Descr="The value of managementDomainIndex for the management
+        domain on this trunk port.  Devices which support only one
+        management domain will support this object read-only."
+  2: vtpVlanState
+     Syntax="INTEGER"
+       1: operational
+       2: suspended
+       3: mtuTooBigForDevice
+       4: mtuTooBigForTrunk
+     Descr="The state of this VLAN.
+
+        The state 'mtuTooBigForDevice' indicates that this device
+        cannot participate in this VLAN because the VLAN's MTU is
+        larger than the device can support.
+
+        The state 'mtuTooBigForTrunk' indicates that while this
+        VLAN's MTU is supported by this device, it is too large for
+        one or more of the device's trunk ports."
+EDESC
+#
+#
+#
+EVENT vtpVersionOneDeviceDetected .1.3.6.1.4.1.9.9.46.2.0.6 "Status Events" Normal
+FORMAT ZBXTRAP $aA A VTP version one device detected notification is $*
+SDESC
+A VTP version one device detected notification is
+generated by a device when:
+a) a management domain has been put into version 2 mode
+(as accessed by managementDomainVersionInUse).
+b) 15 minutes has passed since a).
+c) a version 1 PDU is detected on a trunk on the device
+that is in that management domain which has a lower
+revision number than the current configuration.
+Variables:
+  1: vlanTrunkPortManagementDomain
+     Syntax="INTEGER32"
+     Descr="The value of managementDomainIndex for the management
+        domain on this trunk port.  Devices which support only one
+        management domain will support this object read-only."
+EDESC
+#
+#
+#
+EVENT vlanTrunkPortDynamicStatusChange .1.3.6.1.4.1.9.9.46.2.0.7 "Status Events" Normal
+FORMAT ZBXTRAP $aA A vlanTrunkPortDynamicStatusChange notification is $*
+SDESC
+A vlanTrunkPortDynamicStatusChange notification is
+generated by a device when the value of
+vlanTrunkPortDynamicStatus object has been changed.
+Variables:
+  1: vlanTrunkPortDynamicStatus
+     Syntax="INTEGER"
+       1: trunking
+       2: notTrunking
+     Descr="Indicates whether the specified interface is either
+        acting as a trunk or not. This is a result of the
+        vlanTrunkPortDynamicState and the ifOperStatus of the
+        trunk port itself."
+EDESC
+#
+#
+#
+EVENT vtpLocalModeChanged .1.3.6.1.4.1.9.9.46.2.0.8 "Status Events" Normal
+FORMAT ZBXTRAP $aA A vtpLocalModeChanged notification is generated $*
+SDESC
+A vtpLocalModeChanged notification is generated
+by a device when the value of the object 
+managementDomainLocalMode is changed.
+Variables:
+  1: managementDomainLocalMode
+     Syntax="INTEGER"
+       1: client
+       2: server
+       3: transparent
+       4: off
+     Descr="The local VTP mode in this management domain when
+        managementDomainVersionInUse is version1(1) or
+        version2(2).
+
+        If managementDomainVersionInUse is version3(4), this 
+        object has the same value with vtpDatabaseLocalMode 
+        of VLAN database type.
+
+        - 'client' indicates that the local system is acting
+          as a VTP client.
+
+        - 'server' indicates that the local system is acting
+          as a VTP server.
+
+        - 'transparent' indicates that the local system does
+          not generate or listen to VTP messages, but forwards
+          messages. This mode can also be set by the device
+          itself when the amount of VLAN information is too
+          large for it to hold in DRAM.
+
+        - 'off' indicates that the local system does not
+          generate, listen to or forward any VTP messages."
+EDESC
+#
+#
+#
+EVENT vtpVersionInUseChanged .1.3.6.1.4.1.9.9.46.2.0.9 "Status Events" Normal
+FORMAT ZBXTRAP $aA A vtpVersionInUseChanged notification is $*
+SDESC
+A vtpVersionInUseChanged notification is
+generated by a device when the value of the  
+object managementDomainVersionInUse is 
+changed.
+Variables:
+  1: managementDomainVersionInUse
+     Syntax="INTEGER"
+       1: version1
+       2: version2
+       3: none
+       4: version3
+     Descr="The current version of the VTP that is in use by the
+        designated management domain. 
+
+        This object can be set to none(3) only when 
+        vtpVersion is none(3)."
+EDESC
+#
+#
+#
+EVENT vtpVlanCreated .1.3.6.1.4.1.9.9.46.2.0.10 "Status Events" Normal
+FORMAT ZBXTRAP $aA A vtpVlanCreated notification is generated by a $*
+SDESC
+A vtpVlanCreated notification is generated by a
+device when a VLAN is created.
+Variables:
+  1: vtpVlanName
+     Syntax="OCTETSTR"
+     Descr="The name of this VLAN.  This name is used as the ELAN-name
+        for an ATM LAN-Emulation segment of this VLAN."
+EDESC
+#
+#
+#
+EVENT vtpVlanDeleted .1.3.6.1.4.1.9.9.46.2.0.11 "Status Events" Normal
+FORMAT ZBXTRAP $aA A vtpVlanDeleted notification is generated by a $*
+SDESC
+A vtpVlanDeleted notification is generated by a
+device when a VLAN is deleted.
+Variables:
+  1: vtpVlanName
+     Syntax="OCTETSTR"
+     Descr="The name of this VLAN.  This name is used as the ELAN-name
+        for an ATM LAN-Emulation segment of this VLAN."
+EDESC
+#
+#
+#
+EVENT vtpVlanRingNumberConflict .1.3.6.1.4.1.9.9.46.2.0.12 "Status Events" Normal
+FORMAT ZBXTRAP $aA A VTP ring number configuration conflict notification is $*
+SDESC
+A VTP ring number configuration conflict notification is
+generated if, and only at the time when, a device learns of
+a conflict between:
+a) the ring number (vtpVlanPortLocalSegment) being used on a
+token ring segment attached to the port identified by
+ifIndex, and
+b) the VTP-obtained ring number (vtpVlanRingNumber) for the
+VLAN identified by vtpVlanIndex.
+When such a conflict occurs, the bridge port is put into an
+administrative down position until the conflict is resolved
+through local/network management intervention.
+This notification is only applicable to VLANs of type
+'tokenRing'.
+Variables:
+  1: vtpVlanRingNumber
+     Syntax="INTEGER32"
+     Descr="The ring number of this VLAN.  This object is only
+        instantiated when the value of the corresponding instance of
+        vtpVlanType has a value of 'fddi' or 'tokenRing' and Source
+        Routing is in use on this VLAN."
+  2: ifIndex
+     Syntax="INTEGER32"
+     Descr="A unique value, greater than zero, for each interface.  It
+            is recommended that values are assigned contiguously
+            starting from 1.  The value for each interface sub-layer
+            must remain constant at least from one re-initialization of
+            the entity's network management system to the next re-
+            initialization."
+  3: vtpVlanPortLocalSegment
+     Syntax="INTEGER32"
+     Descr="The ring (segment) number in use on a 802.5 ring.  For
+        bridges supporting RFC 1525, this value is the same as given
+        by dot1dSrPortLocalSegment for the bridge port attached to
+        that ring.  When tokenRing VLANs are in use, each 'trNet'
+        VLAN can/does have a different instance of
+        dot1dSrPortLocalSegment for each physical port.  Note that
+        access to the particuler instance of dot1dSrPortLocalSegment
+        requires knowledge of how the agent supports the multiple
+        'contexts' required to implement RFC 1525 for multiple
+        VLANs; also note that the assignment of ifIndex values may
+        be different in different 'contexts'."
+EDESC
+#
+#
+#
+EVENT vtpPruningStateOperChange .1.3.6.1.4.1.9.9.46.2.0.13 "Status Events" Normal
+FORMAT ZBXTRAP $aA A vtpPruningStateOperChange notification is generated $*
+SDESC
+A vtpPruningStateOperChange notification is generated
+by the device when the instance value of
+managementDomainPruningStateOper is changed.
+Variables:
+  1: managementDomainPruningStateOper
+     Syntax="INTEGER"
+       1: enabled
+       2: disabled
+     Descr="Indicates whether VTP pruning is operationally enabled or
+        disabled in this managament domain."
+EDESC
+#
+#
+#
+#
+MIB: DIFFSERV-DSCP-TC (file:/usr/share/snmp/mibs/cisco/DIFFSERV-DSCP-TC.my) converted on Mon Oct  7 13:50:41 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: ENTITY-MIB (file:/usr/share/snmp/mibs/cisco/ENTITY-MIB.my) converted on Mon Oct  7 13:50:41 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT entConfigChange .1.3.6.1.2.1.47.2.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA An entConfigChange notification is generated when the value $*
+SDESC
+An entConfigChange notification is generated when the value
+of entLastChangeTime changes.  It can be utilized by an NMS
+to trigger logical/physical entity table maintenance polls.
+An agent should not generate more than one entConfigChange
+'notification-event' in a given time interval (five seconds
+is the suggested default).  A 'notification-event' is the
+transmission of a single trap or inform PDU to a list of
+notification destinations.
+If additional configuration changes occur within the
+throttling period, then notification-events for these
+changes should be suppressed by the agent until the current
+throttling period expires.  At the end of a throttling
+period, one notification-event should be generated if any
+configuration changes occurred since the start of the
+throttling period.  In such a case, another throttling
+period is started right away.
+An NMS should periodically check the value of
+entLastChangeTime to detect any missed entConfigChange
+notification-events, e.g., due to throttling or transmission
+loss.
+EDESC
+#
+#
+#
+#
+MIB: EtherLike-MIB (file:/usr/share/snmp/mibs/cisco/EtherLike-MIB.my) converted on Mon Oct  7 13:50:41 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: FDDI-SMT73-MIB (file:/usr/share/snmp/mibs/cisco/FDDI-SMT73-MIB.my) converted on Mon Oct  7 13:50:41 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IEEE8021-PAE-MIB (file:/usr/share/snmp/mibs/cisco/IEEE8021-PAE-MIB.my) converted on Mon Oct  7 13:50:41 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IEEE8023-LAG-MIB (file:/usr/share/snmp/mibs/cisco/IEEE8023-LAG-MIB.my) converted on Mon Oct  7 13:50:42 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IF-MIB (file:/usr/share/snmp/mibs/cisco/IF-MIB.my) converted on Mon Oct  7 13:50:42 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT linkDown .1.3.6.1.6.3.1.1.5.3 "Status Events" Normal
+FORMAT ZBXTRAP $aA A linkDown trap signifies that the SNMP entity, acting in $*
+SDESC
+A linkDown trap signifies that the SNMP entity, acting in
+an agent role, has detected that the ifOperStatus object for
+one of its communication links is about to enter the down
+state from some other state (but not from the notPresent
+state).  This other state is indicated by the included value
+of ifOperStatus.
+Variables:
+  1: ifIndex
+     Syntax="INTEGER32"
+     Descr="A unique value, greater than zero, for each interface.  It
+            is recommended that values are assigned contiguously
+            starting from 1.  The value for each interface sub-layer
+            must remain constant at least from one re-initialization of
+            the entity's network management system to the next re-
+            initialization."
+  2: ifAdminStatus
+     Syntax="INTEGER"
+       1: up
+       2: down
+       3: testing
+     Descr="The desired state of the interface.  The testing(3) state
+            indicates that no operational packets can be passed.  When a
+            managed system initializes, all interfaces start with
+            ifAdminStatus in the down(2) state.  As a result of either
+            explicit management action or per configuration information
+            retained by the managed system, ifAdminStatus is then
+            changed to either the up(1) or testing(3) states (or remains
+            in the down(2) state)."
+  3: ifOperStatus
+     Syntax="INTEGER"
+       1: up
+       2: down
+       3: testing
+       4: unknown
+       5: dormant
+       6: notPresent
+       7: lowerLayerDown
+     Descr="The current operational state of the interface.  The
+            testing(3) state indicates that no operational packets can
+            be passed.  If ifAdminStatus is down(2) then ifOperStatus
+            should be down(2).  If ifAdminStatus is changed to up(1)
+            then ifOperStatus should change to up(1) if the interface is
+            ready to transmit and receive network traffic; it should
+            change to dormant(5) if the interface is waiting for
+            external actions (such as a serial line waiting for an
+            incoming connection); it should remain in the down(2) state
+            if and only if there is a fault that prevents it from going
+            to the up(1) state; it should remain in the notPresent(6)
+            state if the interface has missing (typically, hardware)
+            components."
+EDESC
+#
+#
+#
+EVENT linkUp .1.3.6.1.6.3.1.1.5.4 "Status Events" Normal
+FORMAT ZBXTRAP $aA A linkUp trap signifies that the SNMP entity, acting in an $*
+SDESC
+A linkUp trap signifies that the SNMP entity, acting in an
+agent role, has detected that the ifOperStatus object for
+one of its communication links left the down state and
+transitioned into some other state (but not into the
+notPresent state).  This other state is indicated by the
+included value of ifOperStatus.
+Variables:
+  1: ifIndex
+     Syntax="INTEGER32"
+     Descr="A unique value, greater than zero, for each interface.  It
+            is recommended that values are assigned contiguously
+            starting from 1.  The value for each interface sub-layer
+            must remain constant at least from one re-initialization of
+            the entity's network management system to the next re-
+            initialization."
+  2: ifAdminStatus
+     Syntax="INTEGER"
+       1: up
+       2: down
+       3: testing
+     Descr="The desired state of the interface.  The testing(3) state
+            indicates that no operational packets can be passed.  When a
+            managed system initializes, all interfaces start with
+            ifAdminStatus in the down(2) state.  As a result of either
+            explicit management action or per configuration information
+            retained by the managed system, ifAdminStatus is then
+            changed to either the up(1) or testing(3) states (or remains
+            in the down(2) state)."
+  3: ifOperStatus
+     Syntax="INTEGER"
+       1: up
+       2: down
+       3: testing
+       4: unknown
+       5: dormant
+       6: notPresent
+       7: lowerLayerDown
+     Descr="The current operational state of the interface.  The
+            testing(3) state indicates that no operational packets can
+            be passed.  If ifAdminStatus is down(2) then ifOperStatus
+            should be down(2).  If ifAdminStatus is changed to up(1)
+            then ifOperStatus should change to up(1) if the interface is
+            ready to transmit and receive network traffic; it should
+            change to dormant(5) if the interface is waiting for
+            external actions (such as a serial line waiting for an
+            incoming connection); it should remain in the down(2) state
+            if and only if there is a fault that prevents it from going
+            to the up(1) state; it should remain in the notPresent(6)
+            state if the interface has missing (typically, hardware)
+            components."
+EDESC
+#
+#
+#
+#
+MIB: IGMP-MIB (file:/usr/share/snmp/mibs/cisco/IGMP-MIB.my) converted on Mon Oct  7 13:50:42 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: INET-ADDRESS-MIB (file:/usr/share/snmp/mibs/cisco/INET-ADDRESS-MIB.my) converted on Mon Oct  7 13:50:42 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IPMROUTE-MIB (file:/usr/share/snmp/mibs/cisco/IPMROUTE-MIB.my) converted on Mon Oct  7 13:50:42 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: IPMROUTE-STD-MIB (file:/usr/share/snmp/mibs/cisco/IPMROUTE-STD-MIB.my) converted on Mon Oct  7 13:50:42 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: OLD-CISCO-CHASSIS-MIB (file:/usr/share/snmp/mibs/cisco/OLD-CISCO-CHASSIS-MIB.my) converted on Mon Oct  7 13:50:42 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: OSPF-MIB (file:/usr/share/snmp/mibs/cisco/OSPF-MIB.my) converted on Mon Oct  7 13:50:43 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: P-BRIDGE-MIB (file:/usr/share/snmp/mibs/cisco/P-BRIDGE-MIB.my) converted on Mon Oct  7 13:50:43 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: P-BRIDGE-MIB (file:/usr/share/snmp/mibs/cisco/P-BRIDGE.my) converted on Mon Oct  7 13:50:43 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: PIM-MIB (file:/usr/share/snmp/mibs/cisco/PIM-MIB.my) converted on Mon Oct  7 13:50:43 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT pimNeighborLoss .1.3.6.1.3.61.1.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA A pimNeighborLoss trap signifies the loss of an adjacency $*
+SDESC
+A pimNeighborLoss trap signifies the loss of an adjacency
+with a neighbor.  This trap should be generated when the
+neighbor timer expires, and the router has no other
+neighbors on the same interface with a lower IP address than
+itself.
+Variables:
+  1: pimNeighborIfIndex
+     Syntax="INTEGER32"
+     Descr="The value of ifIndex for the interface used to reach this
+            PIM neighbor."
+EDESC
+#
+#
+#
+#
+MIB: Q-BRIDGE-MIB (file:/usr/share/snmp/mibs/cisco/Q-BRIDGE-MIB.my) converted on Mon Oct  7 13:50:43 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: RMON-MIB (file:/usr/share/snmp/mibs/cisco/RMON-MIB.my) converted on Mon Oct  7 13:50:43 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT risingAlarm .1.3.6.1.2.1.16.0.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA The SNMP trap that is generated when an alarm $*
+SDESC
+The SNMP trap that is generated when an alarm
+entry crosses its rising threshold and generates
+an event that is configured for sending SNMP
+traps.
+Variables:
+  1: alarmIndex
+     Syntax="INTEGER32"
+     Descr="An index that uniquely identifies an entry in the
+         alarm table.  Each such entry defines a
+         diagnostic sample at a particular interval
+         for an object on the device."
+  2: alarmVariable
+     Syntax="OBJECTID"
+     Descr="The object identifier of the particular variable to be
+         sampled.  Only variables that resolve to an ASN.1 primitive
+         type of INTEGER (INTEGER, Integer32, Counter32, Counter64,
+         Gauge, or TimeTicks) may be sampled.
+
+         Because SNMP access control is articulated entirely
+         in terms of the contents of MIB views, no access
+         control mechanism exists that can restrict the value of
+         this object to identify only those objects that exist
+         in a particular MIB view.  Because there is thus no
+         acceptable means of restricting the read access that
+         could be obtained through the alarm mechanism, the
+         probe must only grant write access to this object in
+         those views that have read access to all objects on
+         the probe.
+
+         During a set operation, if the supplied variable name is
+         not available in the selected MIB view, a badValue error
+         must be returned.  If at any time the variable name of
+         an established alarmEntry is no longer available in the
+         selected MIB view, the probe must change the status of
+         this alarmEntry to invalid(4).
+
+         This object may not be modified if the associated
+         alarmStatus object is equal to valid(1)."
+  3: alarmSampleType
+     Syntax="INTEGER"
+       1: absoluteValue
+       2: deltaValue
+     Descr="The method of sampling the selected variable and
+         calculating the value to be compared against the
+         thresholds.  If the value of this object is
+         absoluteValue(1), the value of the selected variable
+         will be compared directly with the thresholds at the
+         end of the sampling interval.  If the value of this
+         object is deltaValue(2), the value of the selected
+         variable at the last sample will be subtracted from
+         the current value, and the difference compared with
+         the thresholds.
+
+         This object may not be modified if the associated
+         alarmStatus object is equal to valid(1)."
+  4: alarmValue
+     Syntax="INTEGER32"
+     Descr="The value of the statistic during the last sampling
+         period.  For example, if the sample type is deltaValue,
+         this value will be the difference between the samples
+         at the beginning and end of the period.  If the sample
+         type is absoluteValue, this value will be the sampled
+         value at the end of the period.
+         This is the value that is compared with the rising and
+         falling thresholds.
+
+         The value during the current sampling period is not
+         made available until the period is completed and will
+         remain available until the next period completes."
+  5: alarmRisingThreshold
+     Syntax="INTEGER32"
+     Descr="A threshold for the sampled statistic.  When the current
+         sampled value is greater than or equal to this threshold,
+         and the value at the last sampling interval was less than
+         this threshold, a single event will be generated.
+         A single event will also be generated if the first
+         sample after this entry becomes valid is greater than or
+         equal to this threshold and the associated
+         alarmStartupAlarm is equal to risingAlarm(1) or
+         risingOrFallingAlarm(3).
+
+         After a rising event is generated, another such event
+         will not be generated until the sampled value
+         falls below this threshold and reaches the
+         alarmFallingThreshold.
+
+         This object may not be modified if the associated
+         alarmStatus object is equal to valid(1)."
+EDESC
+#
+#
+#
+EVENT fallingAlarm .1.3.6.1.2.1.16.0.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA The SNMP trap that is generated when an alarm $*
+SDESC
+The SNMP trap that is generated when an alarm
+entry crosses its falling threshold and generates
+an event that is configured for sending SNMP
+traps.
+Variables:
+  1: alarmIndex
+     Syntax="INTEGER32"
+     Descr="An index that uniquely identifies an entry in the
+         alarm table.  Each such entry defines a
+         diagnostic sample at a particular interval
+         for an object on the device."
+  2: alarmVariable
+     Syntax="OBJECTID"
+     Descr="The object identifier of the particular variable to be
+         sampled.  Only variables that resolve to an ASN.1 primitive
+         type of INTEGER (INTEGER, Integer32, Counter32, Counter64,
+         Gauge, or TimeTicks) may be sampled.
+
+         Because SNMP access control is articulated entirely
+         in terms of the contents of MIB views, no access
+         control mechanism exists that can restrict the value of
+         this object to identify only those objects that exist
+         in a particular MIB view.  Because there is thus no
+         acceptable means of restricting the read access that
+         could be obtained through the alarm mechanism, the
+         probe must only grant write access to this object in
+         those views that have read access to all objects on
+         the probe.
+
+         During a set operation, if the supplied variable name is
+         not available in the selected MIB view, a badValue error
+         must be returned.  If at any time the variable name of
+         an established alarmEntry is no longer available in the
+         selected MIB view, the probe must change the status of
+         this alarmEntry to invalid(4).
+
+         This object may not be modified if the associated
+         alarmStatus object is equal to valid(1)."
+  3: alarmSampleType
+     Syntax="INTEGER"
+       1: absoluteValue
+       2: deltaValue
+     Descr="The method of sampling the selected variable and
+         calculating the value to be compared against the
+         thresholds.  If the value of this object is
+         absoluteValue(1), the value of the selected variable
+         will be compared directly with the thresholds at the
+         end of the sampling interval.  If the value of this
+         object is deltaValue(2), the value of the selected
+         variable at the last sample will be subtracted from
+         the current value, and the difference compared with
+         the thresholds.
+
+         This object may not be modified if the associated
+         alarmStatus object is equal to valid(1)."
+  4: alarmValue
+     Syntax="INTEGER32"
+     Descr="The value of the statistic during the last sampling
+         period.  For example, if the sample type is deltaValue,
+         this value will be the difference between the samples
+         at the beginning and end of the period.  If the sample
+         type is absoluteValue, this value will be the sampled
+         value at the end of the period.
+         This is the value that is compared with the rising and
+         falling thresholds.
+
+         The value during the current sampling period is not
+         made available until the period is completed and will
+         remain available until the next period completes."
+  5: alarmFallingThreshold
+     Syntax="INTEGER32"
+     Descr="A threshold for the sampled statistic.  When the current
+         sampled value is less than or equal to this threshold,
+         and the value at the last sampling interval was greater than
+         this threshold, a single event will be generated.
+         A single event will also be generated if the first
+         sample after this entry becomes valid is less than or
+         equal to this threshold and the associated
+         alarmStartupAlarm is equal to fallingAlarm(2) or
+         risingOrFallingAlarm(3).
+
+         After a falling event is generated, another such event
+         will not be generated until the sampled value
+         rises above this threshold and reaches the
+         alarmRisingThreshold.
+
+         This object may not be modified if the associated
+         alarmStatus object is equal to valid(1)."
+EDESC
+#
+#
+#
+#
+MIB: RMON2-MIB (file:/usr/share/snmp/mibs/cisco/RMON2-MIB.my) converted on Mon Oct  7 13:50:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-FRAMEWORK-MIB (file:/usr/share/snmp/mibs/cisco/SNMP-FRAMEWORK-MIB.my) converted on Mon Oct  7 13:50:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-MPD-MIB (file:/usr/share/snmp/mibs/cisco/SNMP-MPD-MIB.my) converted on Mon Oct  7 13:50:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-NOTIFICATION-MIB (file:/usr/share/snmp/mibs/cisco/SNMP-NOTIFICATION-MIB.my) converted on Mon Oct  7 13:50:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMP-TARGET-MIB (file:/usr/share/snmp/mibs/cisco/SNMP-TARGET-MIB.my) converted on Mon Oct  7 13:50:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: SNMPv2-MIB (file:/usr/share/snmp/mibs/cisco/SNMPv2-MIB.my) converted on Mon Oct  7 13:50:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+EVENT coldStart .1.3.6.1.6.3.1.1.5.1 "Status Events" Normal
+FORMAT ZBXTRAP $aA A coldStart trap signifies that the SNMP entity, $*
+SDESC
+A coldStart trap signifies that the SNMP entity,
+supporting a notification originator application, is
+reinitializing itself and that its configuration may
+have been altered.
+EDESC
+#
+#
+#
+EVENT warmStart .1.3.6.1.6.3.1.1.5.2 "Status Events" Normal
+FORMAT ZBXTRAP $aA A warmStart trap signifies that the SNMP entity, $*
+SDESC
+A warmStart trap signifies that the SNMP entity,
+supporting a notification originator application,
+is reinitializing itself such that its configuration
+is unaltered.
+EDESC
+#
+#
+#
+EVENT authenticationFailure .1.3.6.1.6.3.1.1.5.5 "Status Events" Normal
+FORMAT ZBXTRAP $aA An authenticationFailure trap signifies that the SNMP $*
+SDESC
+An authenticationFailure trap signifies that the SNMP
+entity has received a protocol message that is not
+properly authenticated.  While all implementations
+of SNMP entities MAY be capable of generating this
+trap, the snmpEnableAuthenTraps object indicates
+whether this trap will be generated.
+EDESC
+#
+#
+#
+#
+MIB: TCP-MIB (file:/usr/share/snmp/mibs/cisco/TCP-MIB.my) converted on Mon Oct  7 13:50:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: TOKEN-RING-RMON-MIB (file:/usr/share/snmp/mibs/cisco/TOKEN-RING-RMON-MIB.my) converted on Mon Oct  7 13:50:44 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: TOKENRING-MIB (file:/usr/share/snmp/mibs/cisco/TOKENRING-MIB.my) converted on Mon Oct  7 13:50:45 2013 using snmpttconvertmib v1.3
+#
+#
+#
+#
+MIB: UDP-MIB (file:/usr/share/snmp/mibs/cisco/UDP-MIB.my) converted on Mon Oct  7 13:50:45 2013 using snmpttconvertmib v1.3
