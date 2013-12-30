@@ -288,6 +288,7 @@ StartDiscoverers=5
 # Mandatory: no
 # Default:
 # JavaGateway=
+JavaGateway=127.0.0.1
 
 ### Option: JavaGatewayPort
 #	Port that Zabbix Java gateway listens on.
@@ -304,6 +305,33 @@ StartDiscoverers=5
 # Range: 0-1000
 # Default:
 # StartJavaPollers=0
+
+### Option: StartVMwareCollectors
+#	Number of pre-forked vmware collector instances.
+#
+# Mandatory: no
+# Range: 0-250
+# Default:
+# StartVMwareCollectors=0
+StartVMwareCollectors=3
+
+### Option: VMwareFrequency
+#	How often Zabbix will connect to VMware service to obtain a new data.
+#
+# Mandatory: no
+# Range: 10-86400
+# Default:
+# VMwareFrequency=60
+
+### Option: VMwareCacheSize
+#	Size of VMware cache, in bytes.
+#	Shared memory size for storing VMware data.
+#	Only used if VMware collectors are started.
+#
+# Mandatory: no
+# Range: 256K-2G
+# Default:
+# VMwareCacheSize=8M
 
 ### Option: SNMPTrapperFile
 #	Temporary file used for passing data from SNMP trap daemon to the proxy.
@@ -443,7 +471,7 @@ ExternalScripts=/usr/lib/zabbix/externalscripts
 # Fping6Location=/usr/sbin/fping6
 
 ### Option: SSHKeyLocation
-#	Location of public and private keys for SSH checks and actions
+#	Location of public and private keys for SSH checks and actions.
 #
 # Mandatory: no
 # Default:
@@ -451,6 +479,7 @@ ExternalScripts=/usr/lib/zabbix/externalscripts
 
 ### Option: LogSlowQueries
 #	How long a database query may take before being logged (in milliseconds).
+#	Only works if DebugLevel set to 3 or 4.
 #	0 - don't log slow queries.
 #
 # Mandatory: no
@@ -465,6 +494,16 @@ ExternalScripts=/usr/lib/zabbix/externalscripts
 # Default:
 # TmpDir=/tmp
 
+### Option: AllowRoot
+#	Allow the proxy to run as 'root'. If disabled and the proxy is started by 'root', the proxy
+#	will try to switch to user 'zabbix' instead. Has no effect if started under a regular user.
+#	0 - do not allow
+#	1 - allow
+#
+# Mandatory: no
+# Default:
+# AllowRoot=0
+
 ### Option: Include
 #	You may include individual files or all files in a directory in the configuration file.
 #	Installing Zabbix will create include directory in /usr/local/etc, unless modified during the compile time.
@@ -475,3 +514,23 @@ ExternalScripts=/usr/lib/zabbix/externalscripts
 
 # Include=/usr/local/etc/zabbix_proxy.general.conf
 # Include=/usr/local/etc/zabbix_proxy.conf.d/
+
+####### LOADABLE MODULES #######
+
+### Option: LoadModulePath
+#	Full path to location of proxy modules.
+#	Default depends on compilation options.
+#
+# Mandatory: no
+# Default:
+# LoadModulePath=${libdir}/modules
+
+### Option: LoadModule
+#	Module to load at proxy startup. Modules are used to extend functionality of the proxy.
+#	Format: LoadModule=<module.so>
+#	The modules must be located in directory specified by LoadModulePath.
+#	It is allowed to include multiple LoadModule parameters.
+#
+# Mandatory: no
+# Default:
+# LoadModule=

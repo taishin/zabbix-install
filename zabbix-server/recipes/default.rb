@@ -7,14 +7,14 @@
 # All rights reserved - Do Not Redistribute
 #
 
-remote_file "#{Chef::Config[:file_cache_path]}/zabbix-release-2.0-1.noarch.rpm" do
-  source "http://repo.zabbix.com/zabbix/2.0/rhel/#{node[:platform_version].to_i}/#{node[:kernel][:machine]}/zabbix-release-2.0-1.el#{node[:platform_version].to_i}.noarch.rpm"
+remote_file "#{Chef::Config[:file_cache_path]}/zabbix-release-#{node['zabbix']['version']['major']}-1.noarch.rpm" do
+  source "http://repo.zabbix.com/zabbix/#{node['zabbix']['version']['major']}/rhel/#{node[:platform_version].to_i}/#{node[:kernel][:machine]}/zabbix-release-#{node['zabbix']['version']['major']}-1.el#{node[:platform_version].to_i}.noarch.rpm"
 end
 
 
 package "zabbix-release" do
   action :install
-  source "#{Chef::Config[:file_cache_path]}/zabbix-release-2.0-1.noarch.rpm"
+  source "#{Chef::Config[:file_cache_path]}/zabbix-release-#{node['zabbix']['version']['major']}-1.noarch.rpm"
   provider Chef::Provider::Package::Rpm
 end
 
@@ -110,7 +110,7 @@ template "/etc/cron.d/postgresql_maintenance" do
 end
 
 template "/etc/zabbix/zabbix_server.conf" do
-  source "zabbix_server.conf.erb"
+  source "zabbix_server.conf-#{node['zabbix']['version']['major']}.erb"
   owner "root"
   notifies :restart, "service[zabbix-server]"
   mode 0640
@@ -207,9 +207,9 @@ script "install_mib" do
   interpreter "bash"
   user "root"
   code <<-EOL
-    tar xzvf #{Chef::Config[:file_cache_path]}/vendor-mib.tar.gz -C /usr/share/snmp/mibs
+    tar --no-same-owner -xzvf #{Chef::Config[:file_cache_path]}/vendor-mib.tar.gz -C /usr/share/snmp/mibs
   EOL
-  not_if {::File.exists?("/usr/share/snmp/mibs/cisco")}
+  not_if {::File.exists?("/usr/share/snmp/mibs/vendor")}
 end
 
 # script "install_snmpttconf" do

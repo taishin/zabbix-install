@@ -7,14 +7,14 @@
 # All rights reserved - Do Not Redistribute
 #
 
-remote_file "#{Chef::Config[:file_cache_path]}/zabbix-release-2.0-1.noarch.rpm" do
-  source "http://repo.zabbix.com/zabbix/2.0/rhel/#{node[:platform_version].to_i}/#{node[:kernel][:machine]}/zabbix-release-2.0-1.el#{node[:platform_version].to_i}.noarch.rpm"
+remote_file "#{Chef::Config[:file_cache_path]}/zabbix-release-#{node['zabbix']['version']['major']}-1.noarch.rpm" do
+  source "http://repo.zabbix.com/zabbix/#{node['zabbix']['version']['major']}/rhel/#{node[:platform_version].to_i}/#{node[:kernel][:machine]}/zabbix-release-#{node['zabbix']['version']['major']}-1.el#{node[:platform_version].to_i}.noarch.rpm"
 end
 
 
 package "zabbix-release" do
   action :install
-  source "#{Chef::Config[:file_cache_path]}/zabbix-release-2.0-1.noarch.rpm"
+  source "#{Chef::Config[:file_cache_path]}/zabbix-release-#{node['zabbix']['version']['major']}-1.noarch.rpm"
   provider Chef::Provider::Package::Rpm
 end
 
@@ -92,16 +92,14 @@ execute "create-database" do
   not_if exists
 end
 
-#script "create_zabbix_table" do
-#  interpreter "bash"
-#  user "root"
-#  code <<-EOH
-#  psql -f /usr/share/doc/`rpm -q zabbix-proxy-pgsql | sed -e s/-.\.el.\.x86_64//`/create/schema.sql -U zabbix zabbix_proxy
-#  EOH
-#end
-#  psql -f /usr/share/doc/`rpm -q zabbix-proxy-pgsql | sed -e s/-.\.el.\.x86_64//`/create/images.sql -U zabbix zabbix_proxy
-#  psql -f /usr/share/doc/`rpm -q zabbix-proxy-pgsql | sed -e s/-.\.el.\.x86_64//`/create/data.sql -U zabbix zabbix_proxy
-
+script "create_zabbix_table" do
+ interpreter "bash"
+ user "root"
+ code <<-EOH
+ psql -f /usr/share/doc/`rpm -q zabbix-proxy-pgsql | sed -e s/-.\.el.\.x86_64//`/create/schema.sql -U zabbix zabbix_proxy
+ EOH
+end
+ 
 template "/etc/cron.d/postgresql_maintenance" do
   source "postgresql_maintenance.erb"
   owner "root"
@@ -109,7 +107,7 @@ template "/etc/cron.d/postgresql_maintenance" do
 end
 
 template "/etc/zabbix/zabbix_proxy.conf" do
-  source "zabbix_proxy.conf.erb"
+  source "zabbix_proxy.conf-#{node['zabbix']['version']['major']}.erb"
   owner "root"
   notifies :restart, 'service[zabbix-proxy]'
   mode 0640
